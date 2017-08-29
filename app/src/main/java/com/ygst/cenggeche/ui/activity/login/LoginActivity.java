@@ -127,6 +127,18 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         final String username = TextViewUtils.getText(mEtUserName);
         final String pwdOrCode = TextViewUtils.getText(mEtPwdCode);
 
+        JMessageClient.login(username, JMessageUtils.JMESSAGE_LOGIN_PASSWROD, new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String LoginDesc) {
+                if (responseCode == 0) {
+                    LogUtils.i(TAG, "极光登录成功了");
+                } else {
+                    CommonUtils.startActivity(LoginActivity.this, MainActivity.class);
+                    finish();
+                }
+            }
+        });
+
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(pwdOrCode)) {
             //先校验账号是否被注册,成功后在获取验证码
             try {

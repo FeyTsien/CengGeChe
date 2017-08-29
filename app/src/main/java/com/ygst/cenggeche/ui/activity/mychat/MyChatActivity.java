@@ -1,50 +1,153 @@
 package com.ygst.cenggeche.ui.activity.mychat;
 
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jarek.imageselect.activity.FolderListActivity;
+import com.jarek.imageselect.bean.ImageFolderBean;
 import com.lqr.emoji.EmotionKeyboard;
 import com.lqr.emoji.EmotionLayout;
 import com.lqr.emoji.IEmotionExtClickListener;
 import com.lqr.emoji.IEmotionSelectedListener;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.addfriend.AddFriendActivity;
+import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.TextViewUtils;
+import com.ygst.cenggeche.utils.ToastUtil;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jmessage.android.uikit.chatting.ChatActivity;
+import cn.jmessage.android.uikit.chatting.DropDownListView;
+import cn.jmessage.android.uikit.chatting.MsgListAdapter;
+import cn.jmessage.android.uikit.chatting.RecordVoiceButton;
+import cn.jmessage.android.uikit.chatting.utils.BitmapLoader;
+import cn.jmessage.android.uikit.chatting.utils.DialogCreator;
+import cn.jmessage.android.uikit.chatting.utils.Event;
+import cn.jmessage.android.uikit.chatting.utils.FileHelper;
+import cn.jmessage.android.uikit.chatting.utils.IdHelper;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetGroupInfoCallback;
+import cn.jpush.im.android.api.content.EventNotificationContent;
+import cn.jpush.im.android.api.content.ImageContent;
+import cn.jpush.im.android.api.content.TextContent;
+import cn.jpush.im.android.api.enums.ContentType;
+import cn.jpush.im.android.api.enums.ConversationType;
+import cn.jpush.im.android.api.event.MessageEvent;
+import cn.jpush.im.android.api.model.Conversation;
+import cn.jpush.im.android.api.model.GroupInfo;
 import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.android.eventbus.EventBus;
 import cn.jpush.im.api.BasicCallback;
 
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
-public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatPresenter> implements MyChatContract.View,IEmotionSelectedListener {
+public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatPresenter> implements MyChatContract.View, IEmotionSelectedListener, View.OnClickListener {
 
-    private String targetUserName;
+    private String TAG = "MyChatActivity";
+
+    private static final String MEMBERS_COUNT = "membersCount";
+    private static final String GROUP_NAME = "groupName";
+    private static final String DRAFT = "draft";
+    private static final String MsgIDs = "msgIDs";
+    private static final String NAME = "name";
+    public static final String NICKNAME = "nickname";
+    private static final String PICTURE_PATH = "picturePath";
+    private static final String TARGET_APP_KEY = "";
+    private static final int REQUEST_CODE_TAKE_PHOTO = 4;
+    private static final int REQUEST_CODE_SELECT_PICTURE = 6;
+    private static final int RESULT_CODE_SELECT_PICTURE = 8;
+    private static final int REQUEST_CODE_CHAT_DETAIL = 14;
+    private static final int RESULT_CODE_CHAT_DETAIL = 15;
+    private static final int RESULT_CODE_FRIEND_INFO = 17;
+    private static final int REFRESH_LAST_PAGE = 0x1023;
+    private static final int REFRESH_CHAT_TITLE = 0x1024;
+    private static final int REFRESH_GROUP_NAME = 0x1025;
+    private static final int REFRESH_GROUP_NUM = 0x1026;
+
+
+    //录音权限
+    String[] permission_record_audio = {"android.permission.RECORD_AUDIO"};
+    private static final int REQUEST_PERMISSION_RECORD_AUDIO = 1001;
+    //读取存储器和相机权限
+    String[] permission_read_camera = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.CAMERA"};
+    private static final int REQUEST_PERMISSION_READ_CAMERA = 1002;
+
+    private Context mContext;
+    private boolean mIsSingle = true;
+    private boolean mShowSoftInput = false;
+    private String targetUserName = "18601995150";
     private String targetAppKey;
+    private long mGroupId;
+    private String mGroupName;
+    private GroupInfo mGroupInfo;
+    private Conversation mConversation;
+    private MsgListAdapter mChatAdapter;
+    private Dialog mDialog;
+    private MyReceiver mReceiver;
 
+    private String mPhotoPath;
+
+    private final UIHandler mUIHandler = new UIHandler(this);
+    InputMethodManager mImm;
+
+    @BindView(R.id.list_view_chat)
+    DropDownListView mChatListView;
+
+    @BindView(R.id.tv_title)
+    TextView mTvTitle;
+    @BindView(R.id.iv_back)
+    ImageView mIvBack;
+    @BindView(R.id.iv_right)
+    ImageView mIvRight;
     @BindView(R.id.llContent)
     LinearLayout mLlContent;
-
     @BindView(R.id.ivAudio)
     ImageView mIvAudio;
     @BindView(R.id.btnAudio)
@@ -57,6 +160,16 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     ImageView mIvMore;
     @BindView(R.id.btnSend)
     Button mBtnSend;
+
+    //相册
+    @BindView(R.id.ivAlbum)
+    ImageView mIvAlbum;
+    //相机
+    @BindView(R.id.ivShot)
+    ImageView mIvShot;
+    //定位
+    @BindView(R.id.ivLocation)
+    ImageView mIvLocation;
 
     @BindView(R.id.flEmotionView)
     FrameLayout mFlEmotionView;
@@ -71,11 +184,14 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     protected int getLayoutId() {
         return R.layout.activity_wx_session;
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        mContext = this;
 
+        initReceiver();
         initView();
         initListener();
     }
@@ -84,14 +200,138 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     protected void onResume() {
         super.onResume();
         mEtContent.clearFocus();
+        String targetId = getIntent().getStringExtra(JMessageUtils.TARGET_USERNAME);
+        if (!mIsSingle) {
+            long groupId = getIntent().getLongExtra(JMessageUtils.GROUP_ID_KEY, 0);
+            if (groupId != 0) {
+                JMessageClient.enterGroupConversation(groupId);
+            }
+        } else if (null != targetId) {
+            String appKey = getIntent().getStringExtra(TARGET_APP_KEY);
+            JMessageClient.enterSingleConversation(targetId, appKey);
+        }
+        mChatAdapter.initMediaPlayer();
+        Log.i(TAG, "[Life cycle] - onResume");
+    }
+
+    /**
+     * 释放资源
+     */
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mReceiver);
+        mChatAdapter.releaseMediaPlayer();
+        mUIHandler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        RecordVoiceButton.mIsPressed = false;
+        JMessageClient.exitConversation();
+        Log.i(TAG, "[Life cycle] - onPause");
+        super.onPause();
     }
 
     public void initView() {
         mElEmotion.attachEditText(mEtContent);
         initEmotionKeyboard();
+
+        Intent intent = getIntent();
+//        targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
+        targetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
+        if (!TextUtils.isEmpty(targetUserName)) {
+            //单聊
+            mIsSingle = true;
+            mConversation = JMessageClient.getSingleConversation(targetUserName, targetAppKey);
+            if (mConversation != null) {
+                mTvTitle.setText(mConversation.getTitle());
+            } else {
+                mConversation = Conversation.createSingleConversation(targetUserName, targetAppKey);
+                mTvTitle.setText(mConversation.getTitle());
+            }
+            mChatAdapter = new MsgListAdapter(this, targetUserName, targetAppKey, longClickListener);
+        } else {
+            //群聊
+            mIsSingle = false;
+            mGroupId = intent.getLongExtra(JMessageUtils.GROUP_ID_KEY, 0);
+            mConversation = JMessageClient.getGroupConversation(mGroupId);
+            if (mConversation != null) {
+                mTvTitle.setText(mConversation.getTitle());
+            } else {
+                mConversation = Conversation.createGroupConversation(mGroupId);
+                mTvTitle.setText(mConversation.getTitle());
+            }
+            mChatAdapter = new MsgListAdapter(mContext, mGroupId, longClickListener);
+        }
+
+        mChatListView.setAdapter(mChatAdapter);
+        //单条消息点击事件
+        mChatListView.setOnItemClickListener(mOnItemClickListener);
+        mChatAdapter.initMediaPlayer();
+        //下拉刷新
+        mChatListView.setOnDropDownListener(new DropDownListView.OnDropDownListener() {
+            @Override
+            public void onDropDown() {
+                mUIHandler.sendEmptyMessageDelayed(REFRESH_LAST_PAGE, 1000);
+            }
+        });
+        //滑到底部
+        setToBottom();
+    }
+
+    /**
+     * 滑到底部
+     */
+    public void setToBottom() {
+        mChatListView.clearFocus();
+        mChatListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mChatListView.setSelection(mChatListView.getAdapter().getCount() - 1);
+            }
+        });
+    }
+
+    // 监听耳机插入
+    private void initReceiver() {
+        mReceiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(mReceiver, filter);
+    }
+
+    private class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent data) {
+            if (data != null) {
+                //插入了耳机
+                if (data.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+                    mChatAdapter.setAudioPlayByEarPhone(data.getIntExtra("state", 0));
+                }
+            }
+        }
+
+    }
+
+
+    private void setListeners() {
+        mIvBack.setOnClickListener(this);
+        mIvRight.setOnClickListener(this);
+        mIvAudio.setOnClickListener(this);
+        mBtnSend.setOnClickListener(this);
+        mIvAlbum.setOnClickListener(this);
+        mIvShot.setOnClickListener(this);
+        mIvLocation.setOnClickListener(this);
+    }
+
+    private void setOnTouchListener() {
+
     }
 
     public void initListener() {
+        setListeners();
+        setOnTouchListener();
         mElEmotion.setEmotionSelectedListener(this);
         mElEmotion.setEmotionAddVisiable(true);
         mElEmotion.setEmotionSettingVisiable(true);
@@ -117,22 +357,6 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 return false;
             }
         });
-        mIvAudio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBtnAudio.isShown()) {
-                    hideAudioButton();
-                    mEtContent.requestFocus();
-                    if (mEmotionKeyboard != null) {
-                        mEmotionKeyboard.showSoftInput();
-                    }
-                } else {
-                    showAudioButton();
-                    hideEmotionLayout();
-                    hideMoreLayout();
-                }
-            }
-        });
         mEtContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -155,44 +379,213 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
             }
         });
-        //发送文字消息
-        mBtnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String  text = TextViewUtils.getText(mEtContent);
-                /**
-                 * 创建一条单聊文本消息，此方法是创建message的快捷接口，对于不需要关注会话实例的开发者可以使用此方法
-                 * 快捷的创建一条消息。其他的情况下推荐使用{@link Conversation#createSendMessage(MessageContent)}
-                 * 接口来创建消息
-                 *
-                 * @param username 聊天对象用户名
-                 * @param appKey   聊天对象所属应用的appKey
-                 * @param text     文本内容
-                 * @return 消息对象
-                 */
-                Message message = JMessageClient.createSingleTextMessage(targetUserName,targetAppKey,text);
-                sendMessage(message);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+
+            case R.id.iv_back: //返回按钮
+                mConversation.resetUnreadCount();
+                dismissSoftInput();
+                JMessageClient.exitConversation();
+                //发送保存为草稿事件到会话列表
+                if (mIsSingle) {
+                    EventBus.getDefault().post(new Event.DraftEvent(targetUserName, targetAppKey,
+                            getChatInput()));
+                } else {
+                    EventBus.getDefault().post(new Event.DraftEvent(mGroupId, getChatInput()));
+                }
+                finish();
+                break;
+
+            case R.id.iv_right://标题栏右边按钮
+                Intent intent = new Intent();
+                intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUserName);
+                intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
+                intent.setClass(this, AddFriendActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.btnSend://发送文字消息
+                String msgContent = TextViewUtils.getText(mEtContent);
+                if (msgContent.equals("")) {
+                    return;
+                }
+                TextContent content = new TextContent(msgContent);
+                final Message msg = mConversation.createSendMessage(content);
+                mChatAdapter.addMsgToList(msg);
+                JMessageClient.sendMessage(msg);
+                mEtContent.setText("");
+                setToBottom();
                 Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ivAudio://切换语言
+                // 开启权限
+                if (ContextCompat.checkSelfPermission(this, permission_record_audio[0]) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, permission_record_audio, REQUEST_PERMISSION_RECORD_AUDIO);
+                } else {
+                    if (mBtnAudio.isShown()) {
+                        hideAudioButton();
+                        mEtContent.requestFocus();
+                        if (mEmotionKeyboard != null) {
+                            mEmotionKeyboard.showSoftInput();
+                        }
+                    } else {
+                        showAudioButton();
+                        hideEmotionLayout();
+                        hideMoreLayout();
+                    }
+                }
+                break;
+            case R.id.ivAlbum://去选择图片
+                //开启读取文件，相机权限
+                if (ContextCompat.checkSelfPermission(this, permission_read_camera[0]) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, permission_read_camera, REQUEST_PERMISSION_READ_CAMERA);
+                } else {
+                    onMultiClick();
+                }
+                break;
+            case R.id.ivShot: //去拍摄照片
+                //开启读取文件，相机权限
+                if (ContextCompat.checkSelfPermission(this, permission_read_camera[0]) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, permission_read_camera, REQUEST_PERMISSION_READ_CAMERA);
+                } else {
+                    takePhoto();
+                }
+                break;
+            case R.id.ivLocation:
+                ToastUtil.show(this,"功能开发中...");
+                break;
+        }
+    }
+
+    private void dismissSoftInput() {
+        if (mShowSoftInput) {
+            if (mImm != null) {
+                mImm.hideSoftInputFromWindow(mEtContent.getWindowToken(), 0);
+                mShowSoftInput = false;
             }
-        });
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String getChatInput() {
+        return mEtContent.getText().toString();
     }
 
     /**
-     * 发送消息
-     * @param message
+     * 多选图片（进入图片选择器）
      */
-    private void sendMessage(Message message){
-        message.setOnSendCompleteCallback(new BasicCallback() {
-            @Override
-            public void gotResult(int responseCode, String responseDesc) {
-                if (responseCode == 0) {
-                    // 消息发送成功
+    public void onMultiClick() {
+        FolderListActivity.startFolderListActivity(this, RESULT_CODE_SELECT_PICTURE, null, 9);
+    }
+
+    private void takePhoto() {
+        if (FileHelper.isSdCardExist()) {
+            mPhotoPath = FileHelper.createAvatarPath(null);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mPhotoPath)));
+            try {
+                startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
+            } catch (ActivityNotFoundException anf) {
+                Toast.makeText(mContext, IdHelper.getString(mContext, "camera_not_prepared"),
+                        Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(mContext, IdHelper.getString(mContext, "sdcard_not_exist_toast"),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_PERMISSION_RECORD_AUDIO:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 权限被用户同意，可以去放肆了
+                    ToastUtil.show(this, "拥有录音功能啦，快去发语音吧。");
                 } else {
-                    // 消息发送失败
+                    // 权限被用户拒绝了，洗洗睡吧。
+                    ToastUtil.show(this, "还没有录音功能，请去设置中开启。");
+                }
+                break;
+            case REQUEST_PERMISSION_READ_CAMERA:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 权限被用户同意，可以去放肆了
+                    ToastUtil.show(this, "拥有发照片功能啦，快去发照片吧。");
+                } else {
+                    // 权限被用户拒绝了，洗洗睡吧。
+                    ToastUtil.show(this, "还没有查看照片功能，请去设置中开启。");
+                }
+                break;
+        }
+    }
+
+    /**
+     * 用于处理拍照发送图片返回结果以及从其他界面回来后刷新聊天标题
+     * 或者聊天消息
+     *
+     * @param requestCode 请求码
+     * @param resultCode  返回码
+     * @param data        intent
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case RESULT_CODE_SELECT_PICTURE:
+                    try {
+                        List<ImageFolderBean> list = (List<ImageFolderBean>) data.getSerializableExtra("list");
+                        if (list == null) {
+                            return;
+                        }
+                        for (ImageFolderBean string : list) {
+                            handleImgRefresh(string.path);
+                        }
+                    } catch (NullPointerException e) {
+                        Log.i(TAG, "onActivityResult unexpected result");
+                    }
+                    break;
+                case REQUEST_CODE_TAKE_PHOTO:
+                    try {
+                        handleImgRefresh(mPhotoPath);
+                    } catch (NullPointerException e) {
+                        Log.i(TAG, "onActivityResult unexpected result");
+                    }
+                    break;
+
+            }
+        }
+    }
+
+    /**
+     * 处理发送图片，刷新界面
+     */
+    private void handleImgRefresh(String path) {
+        Bitmap bitmap = BitmapLoader.getBitmapFromFile(path, 720, 1280);
+        ImageContent.createImageContentAsync(bitmap, new ImageContent.CreateImageContentCallback() {
+            @Override
+            public void gotResult(int status, String desc, ImageContent imageContent) {
+                if (status == 0) {
+                    Message msg = mConversation.createSendMessage(imageContent);
+                    Intent intent = new Intent();
+                    intent.putExtra(MsgIDs, new int[]{msg.getId()});
+                    mChatAdapter.setSendImg(intent.getIntArrayExtra(MsgIDs));
                 }
             }
         });
-        JMessageClient.sendMessage(message);    // 之后再调用发送消息 API
     }
 
     private void initEmotionKeyboard() {
@@ -293,6 +686,15 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         if (mElEmotion.isShown() || mLlMore.isShown()) {
             mEmotionKeyboard.interceptBackPress();
         } else {
+            mConversation.resetUnreadCount();
+            dismissSoftInput();
+            JMessageClient.exitConversation();
+            //发送保存为草稿事件到会话列表界面,作为UIKit使用可以去掉
+            if (mIsSingle) {
+                EventBus.getDefault().post(new Event.DraftEvent(targetUserName, targetAppKey, getChatInput()));
+            } else {
+                EventBus.getDefault().post(new Event.DraftEvent(mGroupId,getChatInput()));
+            }
             super.onBackPressed();
         }
     }
@@ -307,42 +709,203 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         //返回点击的表情路径
         Toast.makeText(getApplicationContext(), stickerBitmapPath, Toast.LENGTH_SHORT).show();
         Log.e("CSDN_LQR", "stickerBitmapPath : " + stickerBitmapPath);
-
-        /**
-         * 创建一条单聊图片信息，此方法是创建message的快捷接口，对于不需要关注会话实例的开发者可以使用此方法
-         * 快捷的创建一条消息。其他的情况下推荐使用{@link Conversation#createSendMessage(MessageContent)}
-         * 接口来创建消息
-         *
-         * @param username  聊天对象的用户名
-         * @param appKey    聊天对象所属应用的appKey
-         * @param imageFile 图片文件
-         * @return 消息对象
-         * @throws FileNotFoundException
-         */
-
-//        try {
-//            JMessageClient.createSingleImageMessage(targetUserName, targetAppKey, File imageFile);
-//        }catch(FileNotFoundException exception){
-//
-//        }
-
+        handleImgRefresh(stickerBitmapPath);
     }
+
+
+    private MsgListAdapter.ContentLongClickListener longClickListener = new MsgListAdapter.ContentLongClickListener() {
+        @Override
+        public void onContentLongClick(final int position, View view) {
+            Log.i(TAG, "long click position" + position);
+            final Message msg = mChatAdapter.getMessage(position);
+            UserInfo userInfo = msg.getFromUser();
+            if (msg.getContentType() != ContentType.image) {
+                // 长按文本弹出菜单
+                String name = userInfo.getNickname();
+                View.OnClickListener listener = new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (v.getId() == IdHelper.getViewID(mContext, "jmui_copy_msg_btn")) {
+                            if (msg.getContentType() == ContentType.text) {
+                                final String content = ((TextContent) msg.getContent()).getText();
+                                if (Build.VERSION.SDK_INT > 11) {
+                                    ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("Simple text", content);
+                                    clipboard.setPrimaryClip(clip);
+                                } else {
+                                    ClipboardManager clipboard = (ClipboardManager) mContext
+                                            .getSystemService(Context.CLIPBOARD_SERVICE);
+                                    clipboard.getText();// 设置Clipboard 的内容
+                                    if (clipboard.hasText()) {
+                                        clipboard.getText();
+                                    }
+                                }
+
+                                Toast.makeText(mContext, IdHelper.getString(mContext, "jmui_copy_toast"),
+                                        Toast.LENGTH_SHORT).show();
+                                mDialog.dismiss();
+                            }
+                        } else if (v.getId() == IdHelper.getViewID(mContext, "jmui_forward_msg_btn")) {
+                            mDialog.dismiss();
+                        } else {
+                            mConversation.deleteMessage(msg.getId());
+                            mChatAdapter.removeMessage(position);
+                            mDialog.dismiss();
+                        }
+                    }
+                };
+                boolean hide = msg.getContentType() == ContentType.voice;
+                mDialog = DialogCreator.createLongPressMessageDialog(mContext, name, hide, listener);
+                mDialog.show();
+                mDialog.getWindow().setLayout((int) (0.8 * mWidth), WindowManager.LayoutParams.WRAP_CONTENT);
+            } else {
+                String name = msg.getFromUser().getNickname();
+                View.OnClickListener listener = new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (v.getId() == IdHelper.getViewID(mContext, "jmui_delete_msg_btn")) {
+                            mConversation.deleteMessage(msg.getId());
+                            mChatAdapter.removeMessage(position);
+                            mDialog.dismiss();
+                        } else if (v.getId() == IdHelper.getViewID(mContext, "jmui_forward_msg_btn")) {
+                            mDialog.dismiss();
+                        }
+                    }
+                };
+                mDialog = DialogCreator.createLongPressMessageDialog(mContext, name, true, listener);
+                mDialog.show();
+                mDialog.getWindow().setLayout((int) (0.8 * mWidth), WindowManager.LayoutParams.WRAP_CONTENT);
+            }
+        }
+    };
+
+    AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        }
+    };
+
+
+    private static class UIHandler extends Handler {
+        private final WeakReference<MyChatActivity> mActivity;
+
+        public UIHandler(MyChatActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            MyChatActivity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case REFRESH_LAST_PAGE:
+                        activity.mChatAdapter.dropDownToRefresh();
+                        activity.mChatListView.onDropDownComplete();
+                        if (activity.mChatAdapter.isHasLastPage()) {
+                            if (Build.VERSION.SDK_INT >= 21) {
+                                activity.mChatListView.setSelectionFromTop(activity.mChatAdapter.getOffset(),
+                                        activity.mChatListView.getHeaderHeight());
+                            } else {
+                                activity.mChatListView.setSelection(activity.mChatAdapter
+                                        .getOffset());
+                            }
+                            activity.mChatAdapter.refreshStartPosition();
+                        } else {
+                            activity.mChatListView.setSelection(0);
+                        }
+                        activity.mChatListView.setOffset(activity.mChatAdapter.getOffset());
+                        break;
+                }
+            }
+        }
+    }
+
     /**
-     * 处理发送图片，刷新界面
+     * 接收消息类事件
+     *
+     * @param event 消息事件
      */
-    private void handleImgRefresh(String path) {
-//        Bitmap bitmap = BitmapLoader.getBitmapFromFile(path, 720, 1280);
-//        ImageContent.createImageContentAsync(bitmap, new ImageContent.CreateImageContentCallback() {
-//            @Override
-//            public void gotResult(int status, String desc, ImageContent imageContent) {
-//                if (status == 0) {
-//                    Message msg = mConv.createSendMessage(imageContent);
-//                    Intent intent = new Intent();
-//                    intent.putExtra(MsgIDs, new int[]{msg.getId()});
-//                    mChatAdapter.setSendImg(intent.getIntArrayExtra(MsgIDs));
-//                    mChatView.setToBottom();
-//                }
-//            }
-//        });
+    public void onEvent(MessageEvent event) {
+        final Message msg = event.getMessage();
+        //刷新消息
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //收到消息的类型为单聊
+                if (msg.getTargetType() == ConversationType.single) {
+                    UserInfo userInfo = (UserInfo) msg.getTargetInfo();
+                    String targetId = userInfo.getUserName();
+                    String appKey = userInfo.getAppKey();
+                    //判断消息是否在当前会话中
+                    if (mIsSingle && targetId.equals(targetUserName) && appKey.equals(targetAppKey)) {
+                        Message lastMsg = mChatAdapter.getLastMsg();
+                        //收到的消息和Adapter中最后一条消息比较，如果最后一条为空或者不相同，则加入到MsgList
+                        if (lastMsg == null || msg.getId() != lastMsg.getId()) {
+                            mChatAdapter.addMsgToList(msg);
+                        } else {
+                            mChatAdapter.notifyDataSetChanged();
+                        }
+                    }
+                } else {
+                    long groupId = ((GroupInfo) msg.getTargetInfo()).getGroupID();
+                    if (groupId == mGroupId) {
+                        Message lastMsg = mChatAdapter.getLastMsg();
+                        if (lastMsg == null || msg.getId() != lastMsg.getId()) {
+                            mChatAdapter.addMsgToList(msg);
+                        } else {
+                            mChatAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+        });
+
+        //若为群聊相关事件，如添加、删除群成员
+        Log.i(TAG, event.getMessage().toString());
+        if (msg.getContentType() == ContentType.eventNotification) {
+            GroupInfo groupInfo = (GroupInfo) msg.getTargetInfo();
+            long groupId = groupInfo.getGroupID();
+            UserInfo myInfo = JMessageClient.getMyInfo();
+            EventNotificationContent.EventNotificationType type = ((EventNotificationContent) msg
+                    .getContent()).getEventNotificationType();
+            if (groupId == mGroupId) {
+                switch (type) {
+                    case group_member_added:
+                        //添加群成员事件
+                        break;
+                    case group_member_removed:
+                        //删除群成员事件
+                        break;
+                    case group_member_exit:
+                        refreshGroupNum();
+                        break;
+                }
+            }
+        }
     }
+    private void refreshGroupNum() {
+        Conversation conv = JMessageClient.getGroupConversation(mGroupId);
+        GroupInfo groupInfo = (GroupInfo) conv.getTargetInfo();
+        if (!TextUtils.isEmpty(groupInfo.getGroupName())) {
+            android.os.Message handleMessage = mUIHandler.obtainMessage();
+            handleMessage.what = REFRESH_GROUP_NAME;
+            Bundle bundle = new Bundle();
+            bundle.putString(GROUP_NAME, groupInfo.getGroupName());
+            bundle.putInt(MEMBERS_COUNT, groupInfo.getGroupMembers().size());
+            handleMessage.setData(bundle);
+            handleMessage.sendToTarget();
+        } else {
+            android.os.Message handleMessage = mUIHandler.obtainMessage();
+            handleMessage.what = REFRESH_GROUP_NUM;
+            Bundle bundle = new Bundle();
+            bundle.putInt(MEMBERS_COUNT, groupInfo.getGroupMembers().size());
+            handleMessage.setData(bundle);
+            handleMessage.sendToTarget();
+        }
+    }
+
 }

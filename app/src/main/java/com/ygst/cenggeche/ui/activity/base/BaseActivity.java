@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -33,6 +34,11 @@ public abstract class BaseActivity extends AppCompatActivity implements LifeSubs
     public final static List<AppCompatActivity> mActivities = new LinkedList<AppCompatActivity>();
 
     public static BaseActivity activity;
+    protected float mDensity;
+    protected int mDensityDpi;
+    protected int mAvatarSize;
+    protected int mWidth;
+    protected int mHeight;
 
     //一下变量用于从左边滑动到右边关闭的变量   类似ios自带的关闭效果
     private int endX;
@@ -79,8 +85,18 @@ public abstract class BaseActivity extends AppCompatActivity implements LifeSubs
         synchronized (mActivities) {
             mActivities.add(this);
         }
+        getDM();
     }
 
+    protected void getDM(){
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        mDensity = dm.density;
+        mDensityDpi = dm.densityDpi;
+        mWidth = dm.widthPixels;
+        mHeight = dm.heightPixels;
+        mAvatarSize = (int) (50 * mDensity);
+    }
 
     /**
      * 子类可以直接用
