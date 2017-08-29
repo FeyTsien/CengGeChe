@@ -21,9 +21,15 @@ import com.lqr.emoji.IEmotionExtClickListener;
 import com.lqr.emoji.IEmotionSelectedListener;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.utils.TextViewUtils;
+
+import java.io.FileNotFoundException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.api.BasicCallback;
 
 
 /**
@@ -33,7 +39,8 @@ import butterknife.ButterKnife;
 
 public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatPresenter> implements MyChatContract.View,IEmotionSelectedListener {
 
-
+    private String targetUserName;
+    private String targetAppKey;
 
     @BindView(R.id.llContent)
     LinearLayout mLlContent;
@@ -148,13 +155,44 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
             }
         });
+        //发送文字消息
         mBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEtContent.setText("");
+                String  text = TextViewUtils.getText(mEtContent);
+                /**
+                 * 创建一条单聊文本消息，此方法是创建message的快捷接口，对于不需要关注会话实例的开发者可以使用此方法
+                 * 快捷的创建一条消息。其他的情况下推荐使用{@link Conversation#createSendMessage(MessageContent)}
+                 * 接口来创建消息
+                 *
+                 * @param username 聊天对象用户名
+                 * @param appKey   聊天对象所属应用的appKey
+                 * @param text     文本内容
+                 * @return 消息对象
+                 */
+                Message message = JMessageClient.createSingleTextMessage(targetUserName,targetAppKey,text);
+                sendMessage(message);
                 Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * 发送消息
+     * @param message
+     */
+    private void sendMessage(Message message){
+        message.setOnSendCompleteCallback(new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseDesc) {
+                if (responseCode == 0) {
+                    // 消息发送成功
+                } else {
+                    // 消息发送失败
+                }
+            }
+        });
+        JMessageClient.sendMessage(message);    // 之后再调用发送消息 API
     }
 
     private void initEmotionKeyboard() {
@@ -269,5 +307,42 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         //返回点击的表情路径
         Toast.makeText(getApplicationContext(), stickerBitmapPath, Toast.LENGTH_SHORT).show();
         Log.e("CSDN_LQR", "stickerBitmapPath : " + stickerBitmapPath);
+
+        /**
+         * 创建一条单聊图片信息，此方法是创建message的快捷接口，对于不需要关注会话实例的开发者可以使用此方法
+         * 快捷的创建一条消息。其他的情况下推荐使用{@link Conversation#createSendMessage(MessageContent)}
+         * 接口来创建消息
+         *
+         * @param username  聊天对象的用户名
+         * @param appKey    聊天对象所属应用的appKey
+         * @param imageFile 图片文件
+         * @return 消息对象
+         * @throws FileNotFoundException
+         */
+
+//        try {
+//            JMessageClient.createSingleImageMessage(targetUserName, targetAppKey, File imageFile);
+//        }catch(FileNotFoundException exception){
+//
+//        }
+
+    }
+    /**
+     * 处理发送图片，刷新界面
+     */
+    private void handleImgRefresh(String path) {
+//        Bitmap bitmap = BitmapLoader.getBitmapFromFile(path, 720, 1280);
+//        ImageContent.createImageContentAsync(bitmap, new ImageContent.CreateImageContentCallback() {
+//            @Override
+//            public void gotResult(int status, String desc, ImageContent imageContent) {
+//                if (status == 0) {
+//                    Message msg = mConv.createSendMessage(imageContent);
+//                    Intent intent = new Intent();
+//                    intent.putExtra(MsgIDs, new int[]{msg.getId()});
+//                    mChatAdapter.setSendImg(intent.getIntArrayExtra(MsgIDs));
+//                    mChatView.setToBottom();
+//                }
+//            }
+//        });
     }
 }

@@ -1,4 +1,6 @@
-package com.ygst.cenggeche.ui.activity.addfriend;
+package com.ygst.cenggeche.ui.activity.newfriendlist;
+
+import android.content.Context;
 
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
@@ -8,13 +10,12 @@ import com.ygst.cenggeche.mvp.BaseView;
  *  邮箱 784787081@qq.com
  */
 
-public class AddFriendContract {
+public class NewFriendListContract {
     interface View extends BaseView {
-        void sendSucceed();
-        void sendFail();
+        
     }
 
     interface  Presenter extends BasePresenter<View> {
-       void sendAddFriend(String targetUserName,String targetAppKey,String reason);
+        
     }
 }

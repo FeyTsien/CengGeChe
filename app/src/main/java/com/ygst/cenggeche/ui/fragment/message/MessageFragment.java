@@ -30,11 +30,14 @@ import java.util.List;
 import butterknife.ButterKnife;
 import cn.jmessage.android.uikit.chatting.ChatActivity;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.enums.ConversationType;
+import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.GroupInfo;
 import cn.jpush.im.android.api.model.UserInfo;
+import im.sdk.debug.activity.friend.ShowFriendReasonActivity;
 
 /**
  * Created by Administrator on 2017/8/16.
@@ -248,5 +251,51 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
      */
     public void onEventMainThread(MessageEvent event) {
         initConversationListView();
+    }
+    /**
+     * 新增联系人相关通知事件ContactNotifyEvent
+     *
+     * @param event
+     */
+    public void onEvent(ContactNotifyEvent event) {
+        LogUtils.i(TAG,"onEvent-----新增联系人相关通知事件ContactNotifyEvent");
+        String reason = event.getReason();
+        String fromUsername = event.getFromUsername();
+        String appkey = event.getfromUserAppKey();
+        JMessageClient.getUserInfo(fromUsername, new GetUserInfoCallback() {
+            @Override
+            public void gotResult(int i, String s, UserInfo userInfo) {
+
+            }
+        });
+
+        Intent intent = new Intent(getActivity(), ShowFriendReasonActivity.class);
+
+        switch (event.getType()) {
+            case invite_received://收到好友邀请
+                intent.putExtra("invite_received", "fromUsername = " + fromUsername + "\nfromUserAppKey" + appkey + "\nreason = " + reason);
+                intent.putExtra("username", fromUsername);
+                intent.putExtra("appkey", appkey);
+                intent.setFlags(1);
+                startActivity(intent);
+                break;
+            case invite_accepted://对方接收了你的好友邀请
+                intent.putExtra("invite_accepted", "对方接受了你的好友邀请");
+                intent.setFlags(2);
+                startActivity(intent);
+                break;
+            case invite_declined://对方拒绝了你的好友邀请
+                intent.putExtra("invite_declined", "对方拒绝了你的好友邀请\n拒绝原因:" + event.getReason());
+                intent.setFlags(3);
+                startActivity(intent);
+                break;
+            case contact_deleted://对方将你从好友中删除
+                intent.putExtra("contact_deleted", "对方将你从好友中删除");
+                intent.setFlags(4);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 }

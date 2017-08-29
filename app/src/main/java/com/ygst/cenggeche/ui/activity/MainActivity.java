@@ -48,7 +48,6 @@ import cn.jpush.im.android.api.content.MessageContent;
 import cn.jpush.im.android.api.content.TextContent;
 import cn.jpush.im.android.api.content.VoiceContent;
 import cn.jpush.im.android.api.enums.ConversationType;
-import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.ConversationRefreshEvent;
 import cn.jpush.im.android.api.event.LoginStateChangeEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
@@ -63,7 +62,6 @@ import im.sdk.debug.activity.createmessage.CreateSigTextMessageActivity;
 import im.sdk.debug.activity.createmessage.ShowCustomMessageActivity;
 import im.sdk.debug.activity.createmessage.ShowDownloadVoiceInfoActivity;
 import im.sdk.debug.activity.createmessage.ShowMessageActivity;
-import im.sdk.debug.activity.friend.ShowFriendReasonActivity;
 import im.sdk.debug.activity.imagecontent.ShowDownloadPathActivity;
 import im.sdk.debug.activity.notify.ShowGroupNotificationActivity;
 import im.sdk.debug.activity.setting.ShowLogoutReasonActivity;
@@ -135,7 +133,7 @@ public class MainActivity extends BaseActivity {
     //消息点击事件
     @OnClick(R.id.rl_message)
     public void onClickMessage() {
-        if(MyApplication.isLoginEd()) {
+        if(MyApplication.isLoginEd()&&JMessageClient.getMyInfo()!=null) {
             setOnClickMenu(R.id.rl_message);
         }else{
             CommonUtils.startActivity(this, LoginActivity.class);
@@ -151,7 +149,7 @@ public class MainActivity extends BaseActivity {
     //我的点击事件
     @OnClick(R.id.rl_me)
     public void onClickMe() {
-        if(MyApplication.isLoginEd()) {
+        if(MyApplication.isLoginEd()&&JMessageClient.getMyInfo()!=null) {
             setOnClickMenu(R.id.rl_me);
         }else{
             CommonUtils.startActivity(this, LoginActivity.class);
@@ -554,47 +552,6 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 });
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * 新增联系人相关通知事件ContactNotifyEvent
-     *
-     * @param event
-     */
-    public void onEvent(ContactNotifyEvent event) {
-        LogUtils.i(TAG,"onEvent-----新增联系人相关通知事件ContactNotifyEvent");
-        String reason = event.getReason();
-        String fromUsername = event.getFromUsername();
-        String appkey = event.getfromUserAppKey();
-
-        Intent intent = new Intent(getApplicationContext(), ShowFriendReasonActivity.class);
-
-        switch (event.getType()) {
-            case invite_received://收到好友邀请
-                intent.putExtra("invite_received", "fromUsername = " + fromUsername + "\nfromUserAppKey" + appkey + "\nreason = " + reason);
-                intent.putExtra("username", fromUsername);
-                intent.putExtra("appkey", appkey);
-                intent.setFlags(1);
-                startActivity(intent);
-                break;
-            case invite_accepted://对方接收了你的好友邀请
-                intent.putExtra("invite_accepted", "对方接受了你的好友邀请");
-                intent.setFlags(2);
-                startActivity(intent);
-                break;
-            case invite_declined://对方拒绝了你的好友邀请
-                intent.putExtra("invite_declined", "对方拒绝了你的好友邀请\n拒绝原因:" + event.getReason());
-                intent.setFlags(3);
-                startActivity(intent);
-                break;
-            case contact_deleted://对方将你从好友中删除
-                intent.putExtra("contact_deleted", "对方将你从好友中删除");
-                intent.setFlags(4);
-                startActivity(intent);
                 break;
             default:
                 break;

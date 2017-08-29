@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.jarek.imageselect.activity.FolderListActivity;
 import com.jarek.imageselect.bean.ImageFolderBean;
+import com.ygst.cenggeche.ui.activity.addfriend.AddFriendActivity;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
@@ -105,7 +106,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
     private long mGroupId;
     private String mGroupName;
     private GroupInfo mGroupInfo;
-    private String mTargetUserName;
+    private String targetUserName;
     private String mTargetAppKey;
     private String mPhotoPath = null;
 
@@ -134,11 +135,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         initReceiver();
 
         Intent intent = getIntent();
-        mTargetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
-        mTargetAppKey = intent.getStringExtra(TARGET_APP_KEY);
-        if (!TextUtils.isEmpty(mTargetUserName)) {
+        targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
+        mTargetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
+        if (!TextUtils.isEmpty(targetUserName)) {
             mIsSingle = true;
-            mConv = JMessageClient.getSingleConversation(mTargetUserName, mTargetAppKey);
+            mConv = JMessageClient.getSingleConversation(targetUserName, mTargetAppKey);
             if (mConv != null) {
                 UserInfo userInfo = (UserInfo) mConv.getTargetInfo();
                 if (TextUtils.isEmpty(userInfo.getNickname())) {
@@ -147,7 +148,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     mChatView.setChatTitle(userInfo.getNickname());
                 }
             } else {
-                mConv = Conversation.createSingleConversation(mTargetUserName, mTargetAppKey);
+                mConv = Conversation.createSingleConversation(targetUserName, mTargetAppKey);
                 UserInfo userInfo = (UserInfo) mConv.getTargetInfo();
                 if (TextUtils.isEmpty(userInfo.getNickname())) {
                     mChatView.setChatTitle(userInfo.getUserName());
@@ -155,7 +156,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     mChatView.setChatTitle(userInfo.getNickname());
                 }
             }
-            mChatAdapter = new MsgListAdapter(mContext, mTargetUserName, mTargetAppKey, longClickListener);
+            mChatAdapter = new MsgListAdapter(mContext, targetUserName, mTargetAppKey, longClickListener);
         } else {
             mIsSingle = false;
             mGroupId = intent.getLongExtra(JMessageUtils.GROUP_ID_KEY, 0);
@@ -228,17 +229,22 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
             JMessageClient.exitConversation();
             //发送保存为草稿事件到会话列表
             if (mIsSingle) {
-                EventBus.getDefault().post(new Event.DraftEvent(mTargetUserName, mTargetAppKey,
+                EventBus.getDefault().post(new Event.DraftEvent(targetUserName, mTargetAppKey,
                         mChatView.getChatInput()));
             } else {
                 EventBus.getDefault().post(new Event.DraftEvent(mGroupId, mChatView.getChatInput()));
             }
             finish();
         } else if (v.getId() == IdHelper.getViewID(mContext, "jmui_right_btn")) {
-            if (mChatView.getMoreMenu().getVisibility() == View.VISIBLE) {
-                mChatView.dismissMoreMenu();
-            }
-            dismissSoftInput();
+            Intent intent = new Intent();
+            intent.putExtra(JMessageUtils.TARGET_USERNAME,targetUserName);
+            intent.putExtra(JMessageUtils.TARGET_APP_KEY,mTargetAppKey);
+            intent.setClass(this, AddFriendActivity.class);
+            startActivity(intent);
+//            if (mChatView.getMoreMenu().getVisibility() == View.VISIBLE) {
+//                mChatView.dismissMoreMenu();
+//            }
+//            dismissSoftInput();
             //TODO
 //            startChatDetailActivity(mTargetId, mTargetAppKey, mGroupId);
             // 切换输入
@@ -392,7 +398,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
         }
         //发送保存为草稿事件到会话列表界面,作为UIKit使用可以去掉
         if (mIsSingle) {
-            EventBus.getDefault().post(new Event.DraftEvent(mTargetUserName, mTargetAppKey, mChatView.getChatInput()));
+            EventBus.getDefault().post(new Event.DraftEvent(targetUserName, mTargetAppKey, mChatView.getChatInput()));
         } else {
             EventBus.getDefault().post(new Event.DraftEvent(mGroupId, mChatView.getChatInput()));
         }
@@ -461,7 +467,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // 权限被用户同意，可以去放肆了
-                    ToastUtil.show(this, "拥有录音功能啦，快去试试录音吧。");
+                    ToastUtil.show(this, "拥有录音功能啦，快去发语音吧。");
                 } else {
                     // 权限被用户拒绝了，洗洗睡吧。
                     ToastUtil.show(this, "还没有录音功能，请去设置中开启。");
@@ -787,7 +793,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener, 
                     String targetId = userInfo.getUserName();
                     String appKey = userInfo.getAppKey();
                     //判断消息是否在当前会话中
-                    if (mIsSingle && targetId.equals(mTargetUserName) && appKey.equals(mTargetAppKey)) {
+                    if (mIsSingle && targetId.equals(targetUserName) && appKey.equals(mTargetAppKey)) {
                         Message lastMsg = mChatAdapter.getLastMsg();
                         //收到的消息和Adapter中最后一条消息比较，如果最后一条为空或者不相同，则加入到MsgList
                         if (lastMsg == null || msg.getId() != lastMsg.getId()) {
