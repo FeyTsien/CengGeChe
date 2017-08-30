@@ -3,6 +3,8 @@ package com.ygst.cenggeche.ui.activity.addfriend;
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
+import java.util.Map;
+
 /**
  * MVPPlugin
  *  邮箱 784787081@qq.com
@@ -15,6 +17,6 @@ public class AddFriendContract {
     }
 
     interface  Presenter extends BasePresenter<View> {
-       void sendAddFriend(String targetUserName,String targetAppKey,String reason);
+       void sendAddFriend(Map<String, String> map);
     }
 }

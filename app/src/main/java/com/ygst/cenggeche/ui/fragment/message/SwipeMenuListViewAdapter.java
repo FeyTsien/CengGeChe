@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.ui.widget.ColorGenerator;
+import com.ygst.cenggeche.ui.widget.TextDrawable;
 
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
 
     List<Conversation> mListConversation;
     Context mContext;
+    private TextDrawable.IBuilder mDrawableBuilder = TextDrawable.builder().round();
+    private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
 
     public SwipeMenuListViewAdapter(Context context, List<Conversation> list) {
         mContext = context;
@@ -143,12 +147,16 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                         if (status == 0) {
                             holder.mIVavatar.setImageBitmap(bitmap);
                         } else {
-                            holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
+                            TextDrawable drawable = mDrawableBuilder.build(String.valueOf(convItem.getTitle().charAt(0)), mColorGenerator.getColor(convItem.getTitle()));
+                            holder.mIVavatar.setImageDrawable(drawable);
+//                            holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
                         }
                     }
                 });
             } else {
-                holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
+                TextDrawable drawable = mDrawableBuilder.build(String.valueOf(convItem.getTitle().charAt(0)), mColorGenerator.getColor(convItem.getTitle()));
+                holder.mIVavatar.setImageDrawable(drawable);
+//                holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
             }
         } else {
             GroupInfo mGroupInfo = (GroupInfo) convItem.getTargetInfo();

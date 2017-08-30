@@ -6,13 +6,11 @@ import android.os.SystemClock;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
@@ -31,7 +29,6 @@ import com.ygst.cenggeche.utils.ToastUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,8 +37,6 @@ import cn.jiguang.api.JCoreInterface;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.DownloadCompletionCallback;
 import cn.jpush.im.android.api.callback.ProgressUpdateCallback;
-import cn.jpush.im.android.api.content.CustomContent;
-import cn.jpush.im.android.api.content.EventNotificationContent;
 import cn.jpush.im.android.api.content.ImageContent;
 import cn.jpush.im.android.api.content.LocationContent;
 import cn.jpush.im.android.api.content.MessageContent;
@@ -50,20 +45,14 @@ import cn.jpush.im.android.api.content.VoiceContent;
 import cn.jpush.im.android.api.enums.ConversationType;
 import cn.jpush.im.android.api.event.ConversationRefreshEvent;
 import cn.jpush.im.android.api.event.LoginStateChangeEvent;
-import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.MyInfoUpdatedEvent;
 import cn.jpush.im.android.api.event.NotificationClickEvent;
 import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
-import im.sdk.debug.activity.createmessage.CreateGroupTextMsgActivity;
 import im.sdk.debug.activity.createmessage.CreateSigTextMessageActivity;
-import im.sdk.debug.activity.createmessage.ShowCustomMessageActivity;
-import im.sdk.debug.activity.createmessage.ShowDownloadVoiceInfoActivity;
 import im.sdk.debug.activity.createmessage.ShowMessageActivity;
-import im.sdk.debug.activity.imagecontent.ShowDownloadPathActivity;
-import im.sdk.debug.activity.notify.ShowGroupNotificationActivity;
 import im.sdk.debug.activity.setting.ShowLogoutReasonActivity;
 import im.sdk.debug.activity.showinfo.ShowMyInfoUpdateActivity;
 
@@ -167,8 +156,10 @@ public class MainActivity extends BaseActivity {
     public void onClickToolbarCengChe(){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        mBtnCengChe.setTextColor(getResources().getColor(R.color.colorSub2));
-        mBtnShaoRen.setTextColor(getResources().getColor(R.color.gray));
+        mBtnCengChe.setTextColor(getResources().getColor(R.color.colorTheme));
+        mBtnCengChe.setBackgroundResource(R.drawable.button_cengche1);
+        mBtnShaoRen.setTextColor(getResources().getColor(R.color.white));
+        mBtnShaoRen.setBackgroundResource(R.drawable.button_shaoren2);
         if (mCengCheFragment == null) {
             mCengCheFragment = new CengCheFragment();
         }
@@ -182,8 +173,10 @@ public class MainActivity extends BaseActivity {
     public void onClickToolbarShaoRen(){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        mBtnShaoRen.setTextColor(getResources().getColor(R.color.colorSub2));
-        mBtnCengChe.setTextColor(getResources().getColor(R.color.gray));
+        mBtnShaoRen.setTextColor(getResources().getColor(R.color.colorTheme));
+        mBtnShaoRen.setBackgroundResource(R.drawable.button_shaoren1);
+        mBtnCengChe.setTextColor(getResources().getColor(R.color.white));
+        mBtnCengChe.setBackgroundResource(R.drawable.button_cengche2);
         if (mShaoRenFragment == null) {
             mShaoRenFragment = new ShaoRenFragment();
         }
@@ -463,100 +456,100 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 消息事件实体类 MessageEvent
-     *(之前是onEvent(),改成了onEventMainThread()主线程模式)
-     * @param event
-     */
-    public void onEventMainThread(MessageEvent event) {
-        showAllUnReadMsgCount();
-        Message msg = event.getMessage();
-        switch (msg.getContentType()) {
-            case custom:
-                final ConversationType targetType = event.getMessage().getTargetType();
-                final Intent intent = new Intent(getApplicationContext(), ShowCustomMessageActivity.class);
-                CustomContent customContent = (CustomContent) msg.getContent();
-                Map allStringValues = customContent.getAllStringValues();
-                if (targetType.equals(ConversationType.group)) {
-                    intent.putExtra(CREATE_GROUP_CUSTOM_KEY, allStringValues.toString());
-                    intent.setFlags(1);
-
-                } else if (targetType.equals(ConversationType.single)) {
-                    intent.putExtra(CUSTOM_MESSAGE_STRING, allStringValues.toString());
-                    UserInfo fromUser = msg.getFromUser();
-                    intent.putExtra(CUSTOM_FROM_NAME, fromUser.getUserName());
-                    intent.setFlags(2);
-                }
-                startActivity(intent);
-                break;
-            //其实sdk是会自动下载语音的.本方法是当sdk自动下载失败时可以手动调用进行下载而设计的.同理于缩略图下载
-            case voice:
-                final Intent intentVoice = new Intent(getApplicationContext(), ShowDownloadVoiceInfoActivity.class);
-                final VoiceContent voiceContent = (VoiceContent) msg.getContent();
-                final int duration = voiceContent.getDuration();
-                final String format = voiceContent.getFormat();
-                /**=================     下载语音文件    =================*/
-                voiceContent.downloadVoiceFile(msg, new DownloadCompletionCallback() {
-                    @Override
-                    public void onComplete(int i, String s, File file) {
-                        if (i == 0) {
-                            Toast.makeText(getApplicationContext(), "下载成功", Toast.LENGTH_SHORT).show();
-                            intentVoice.putExtra(DOWNLOAD_INFO, "path = " + file.getPath() + "\n" + "duration = " + duration + "\n" + "format = " + format + "\n");
-                            startActivity(intentVoice);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "下载失败", Toast.LENGTH_SHORT).show();
-                            Log.i(TAG, "downloadVoiceFile" + ", responseCode = " + i + " ; desc = " + s);
-                        }
-                    }
-                });
-                break;
-            case eventNotification:
-                String eventText = ((EventNotificationContent) msg.getContent()).getEventText();
-                Intent intentNotification = new Intent(getApplicationContext(), ShowGroupNotificationActivity.class);
-                intentNotification.putExtra(CreateGroupTextMsgActivity.GROUP_NOTIFICATION, eventText);
-
-                List<String> userNames = ((EventNotificationContent) msg.getContent()).getUserNames();
-                intentNotification.putExtra(CreateGroupTextMsgActivity.GROUP_NOTIFICATION_LIST, userNames.toString());
-                startActivity(intentNotification);
-                break;
-            case image:
-                final Intent intentImage = new Intent(getApplicationContext(), ShowDownloadPathActivity.class);
-                final ImageContent imageContent = (ImageContent) msg.getContent();
-                //其实sdk是会自动下载缩略图的.本方法是当sdk自动下载失败时可以手动调用进行下载而设计的.同理于语音下载
-                /**=================     下载图片信息中的缩略图    =================*/
-                imageContent.downloadThumbnailImage(msg, new DownloadCompletionCallback() {
-                    @Override
-                    public void onComplete(int i, String s, File file) {
-                        if (i == 0) {
-                            Toast.makeText(getApplicationContext(), "下载成功", Toast.LENGTH_SHORT).show();
-                            intentImage.putExtra(DOWNLOAD_THUMBNAIL_IMAGE, file.getPath());
-                        } else {
-                            Toast.makeText(getApplicationContext(), "下载缩略图失败", Toast.LENGTH_SHORT).show();
-                            Log.i(TAG, "downloadThumbnailImage" + ", responseCode = " + i + " ; desc = " + s);
-                        }
-                    }
-                });
-
-                /**=================     下载图片消息中的原图    =================*/
-                imageContent.downloadOriginImage(msg, new DownloadCompletionCallback() {
-                    @Override
-                    public void onComplete(int i, String s, File file) {
-                        if (i == 0) {
-                            Toast.makeText(getApplicationContext(), "下载原图成功", Toast.LENGTH_SHORT).show();
-                            intentImage.putExtra(IS_UPLOAD, imageContent.isFileUploaded() + "");
-                            intentImage.putExtra(DOWNLOAD_ORIGIN_IMAGE, file.getPath());
-                            startActivity(intentImage);
-                        } else {
-                            Toast.makeText(getApplicationContext(), "下载原图失败", Toast.LENGTH_SHORT).show();
-                            Log.i(TAG, "downloadOriginImage" + ", responseCode = " + i + " ; desc = " + s);
-                        }
-                    }
-                });
-                break;
-            default:
-                break;
-        }
-    }
+//    /**
+//     * 消息事件实体类 MessageEvent
+//     *(之前是onEvent(),改成了onEventMainThread()主线程模式)
+//     * @param event
+//     */
+//    public void onEventMainThread(MessageEvent event) {
+//        showAllUnReadMsgCount();
+//        Message msg = event.getMessage();
+//        switch (msg.getContentType()) {
+//            case custom:
+//                final ConversationType targetType = event.getMessage().getTargetType();
+//                final Intent intent = new Intent(getApplicationContext(), ShowCustomMessageActivity.class);
+//                CustomContent customContent = (CustomContent) msg.getContent();
+//                Map allStringValues = customContent.getAllStringValues();
+//                if (targetType.equals(ConversationType.group)) {
+//                    intent.putExtra(CREATE_GROUP_CUSTOM_KEY, allStringValues.toString());
+//                    intent.setFlags(1);
+//
+//                } else if (targetType.equals(ConversationType.single)) {
+//                    intent.putExtra(CUSTOM_MESSAGE_STRING, allStringValues.toString());
+//                    UserInfo fromUser = msg.getFromUser();
+//                    intent.putExtra(CUSTOM_FROM_NAME, fromUser.getUserName());
+//                    intent.setFlags(2);
+//                }
+//                startActivity(intent);
+//                break;
+//            //其实sdk是会自动下载语音的.本方法是当sdk自动下载失败时可以手动调用进行下载而设计的.同理于缩略图下载
+//            case voice:
+//                final Intent intentVoice = new Intent(getApplicationContext(), ShowDownloadVoiceInfoActivity.class);
+//                final VoiceContent voiceContent = (VoiceContent) msg.getContent();
+//                final int duration = voiceContent.getDuration();
+//                final String format = voiceContent.getFormat();
+//                /**=================     下载语音文件    =================*/
+//                voiceContent.downloadVoiceFile(msg, new DownloadCompletionCallback() {
+//                    @Override
+//                    public void onComplete(int i, String s, File file) {
+//                        if (i == 0) {
+//                            Toast.makeText(getApplicationContext(), "下载成功", Toast.LENGTH_SHORT).show();
+//                            intentVoice.putExtra(DOWNLOAD_INFO, "path = " + file.getPath() + "\n" + "duration = " + duration + "\n" + "format = " + format + "\n");
+//                            startActivity(intentVoice);
+//                        } else {
+//                            Toast.makeText(getApplicationContext(), "下载失败", Toast.LENGTH_SHORT).show();
+//                            Log.i(TAG, "downloadVoiceFile" + ", responseCode = " + i + " ; desc = " + s);
+//                        }
+//                    }
+//                });
+//                break;
+//            case eventNotification:
+//                String eventText = ((EventNotificationContent) msg.getContent()).getEventText();
+//                Intent intentNotification = new Intent(getApplicationContext(), ShowGroupNotificationActivity.class);
+//                intentNotification.putExtra(CreateGroupTextMsgActivity.GROUP_NOTIFICATION, eventText);
+//
+//                List<String> userNames = ((EventNotificationContent) msg.getContent()).getUserNames();
+//                intentNotification.putExtra(CreateGroupTextMsgActivity.GROUP_NOTIFICATION_LIST, userNames.toString());
+//                startActivity(intentNotification);
+//                break;
+//            case image:
+//                final Intent intentImage = new Intent(getApplicationContext(), ShowDownloadPathActivity.class);
+//                final ImageContent imageContent = (ImageContent) msg.getContent();
+//                //其实sdk是会自动下载缩略图的.本方法是当sdk自动下载失败时可以手动调用进行下载而设计的.同理于语音下载
+//                /**=================     下载图片信息中的缩略图    =================*/
+//                imageContent.downloadThumbnailImage(msg, new DownloadCompletionCallback() {
+//                    @Override
+//                    public void onComplete(int i, String s, File file) {
+//                        if (i == 0) {
+//                            Toast.makeText(getApplicationContext(), "下载成功", Toast.LENGTH_SHORT).show();
+//                            intentImage.putExtra(DOWNLOAD_THUMBNAIL_IMAGE, file.getPath());
+//                        } else {
+//                            Toast.makeText(getApplicationContext(), "下载缩略图失败", Toast.LENGTH_SHORT).show();
+//                            Log.i(TAG, "downloadThumbnailImage" + ", responseCode = " + i + " ; desc = " + s);
+//                        }
+//                    }
+//                });
+//
+//                /**=================     下载图片消息中的原图    =================*/
+//                imageContent.downloadOriginImage(msg, new DownloadCompletionCallback() {
+//                    @Override
+//                    public void onComplete(int i, String s, File file) {
+//                        if (i == 0) {
+//                            Toast.makeText(getApplicationContext(), "下载原图成功", Toast.LENGTH_SHORT).show();
+//                            intentImage.putExtra(IS_UPLOAD, imageContent.isFileUploaded() + "");
+//                            intentImage.putExtra(DOWNLOAD_ORIGIN_IMAGE, file.getPath());
+//                            startActivity(intentImage);
+//                        } else {
+//                            Toast.makeText(getApplicationContext(), "下载原图失败", Toast.LENGTH_SHORT).show();
+//                            Log.i(TAG, "downloadOriginImage" + ", responseCode = " + i + " ; desc = " + s);
+//                        }
+//                    }
+//                });
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     /**
      * 用户下线事件UserLogoutEvent (已过时，请使用LoginStateChangeEvent代替)

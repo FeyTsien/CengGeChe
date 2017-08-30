@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient
-        android:endColor="@color/colorSub2"
-        android:startColor="@color/colorTheme"
-        android:type="linear" />
-    <corners android:radius="21dp" />
+    <solid android:color="@color/colorTheme" />
+    <corners android:radius="22dp" />
     <padding
         android:bottom="0dp"
         android:left="0dp"

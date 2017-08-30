@@ -18,6 +18,7 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
 import com.ygst.cenggeche.ui.activity.MainActivity;
+import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenu;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuCreator;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuItem;
@@ -179,12 +180,12 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
                     String targetId = ((UserInfo) conversation.getTargetInfo()).getUserName();
                     intent.putExtra(JMessageUtils.TARGET_USERNAME, targetId);
                     intent.putExtra(JMessageUtils.TARGET_APP_KEY, conversation.getTargetAppKey());
-                    intent.setClass(mContext, ChatActivity.class);
+                    intent.setClass(mContext, MyChatActivity.class);
                     startActivity(intent);
                 } else{
                     long groupId = ((GroupInfo) conversation.getTargetInfo()).getGroupID();
                     intent.putExtra(JMessageUtils.GROUP_ID_KEY, groupId);
-                    intent.setClass(mContext, ChatActivity.class);
+                    intent.setClass(mContext, MyChatActivity.class);
                     startActivity(intent);
                 }
 
@@ -268,6 +269,7 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
 
             }
         });
+
 
         Intent intent = new Intent(getActivity(), ShowFriendReasonActivity.class);
 

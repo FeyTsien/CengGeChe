@@ -6,7 +6,8 @@ package com.ygst.cenggeche.utils;
 
 public class UrlUtils {
     //BaseUrl本地
-     public static String BASEURl_BENDI = "http://192.168.0.133";
+    public static String BASEURl_BENDI = "http://192.168.0.133";
+//    public static String BASEURl_BENDI = "http://192.168.0.200";
     // BaseUrl测试(暂时没有)
 //     public static String BASEURl_TEST = "http://192.168.1.147:8080";
     //BaseUrl线上（暂时没有）
@@ -23,7 +24,7 @@ public class UrlUtils {
 //    public static String URL_H5="http://m.1yongche.com";
 
     //MD5加密Key
-    public static String KEY="A4G6GH71B28D205SFD7655H785ABE1F6";
+    public static String KEY = "A4G6GH71B28D205SFD7655H785ABE1F6";
 
     //校验用户帐号是否已被注册接口
     public static String CHECK_IS_REGIST = "/user/checkIsRegist.do";
@@ -37,8 +38,12 @@ public class UrlUtils {
     public static String LOGIN = "/user/login.do";
     //重置密码接口
     public static String RESET_PASS = "/user/resetPass.do";
+    //申请好友
+    public static String APPLY_FRIEND = "/friend/applyFriend.do";
+    //验证消息列表
+    public static String APPLY_LIST="/friend/applyList.do";
 
     // 刷新token
-    public static String REFRESHTOKEN = "login/refreshToken.do";
+    public static String REFRESHTOKEN = "/login/refreshToken.do";
 
 }

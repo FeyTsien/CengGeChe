@@ -60,11 +60,13 @@
         <activity android:name=".ui.activity.MainActivity" />
         <!--自定义的聊天页-->
         <activity android:name=".ui.activity.mychat.MyChatActivity"
-            android:theme="@style/BaseAppTheme" />
+            android:theme="@style/ChatTheme" />
         <!--添加好友-->
         <activity android:name=".ui.activity.addfriend.AddFriendActivity" />
         <!--联系人列表-->
         <activity android:name=".ui.activity.friendlist.FriendListActivity" />
+        <!--新的朋友（好友申请）列表-->
+        <activity android:name=".ui.activity.newfriendlist.NewFriendListActivity" />
         <!--好友详细信息-->
         <activity android:name=".ui.activity.friendinfo.FriendInfoActivity" />
 
@@ -141,7 +143,7 @@
         <activity
             android:name="cn.jmessage.android.uikit.chatting.ChatActivity"
             android:windowSoftInputMode="adjustPan"
-            android:theme="@style/JchatTheme" />
+            android:theme="@style/ChatTheme" />
 
 <!--============================图片选择器================================-->
         <activity android:name="com.jarek.imageselect.activity.MainActivity"/>

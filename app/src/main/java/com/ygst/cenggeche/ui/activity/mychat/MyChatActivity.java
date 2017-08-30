@@ -1,7 +1,6 @@
 package com.ygst.cenggeche.ui.activity.mychat;
 
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -29,7 +28,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -38,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.jarek.imageselect.activity.FolderListActivity;
 import com.jarek.imageselect.bean.ImageFolderBean;
 import com.lqr.emoji.EmotionKeyboard;
@@ -52,23 +51,18 @@ import com.ygst.cenggeche.utils.TextViewUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.jmessage.android.uikit.chatting.ChatActivity;
 import cn.jmessage.android.uikit.chatting.DropDownListView;
-import cn.jmessage.android.uikit.chatting.MsgListAdapter;
-import cn.jmessage.android.uikit.chatting.RecordVoiceButton;
 import cn.jmessage.android.uikit.chatting.utils.BitmapLoader;
 import cn.jmessage.android.uikit.chatting.utils.DialogCreator;
 import cn.jmessage.android.uikit.chatting.utils.Event;
 import cn.jmessage.android.uikit.chatting.utils.FileHelper;
 import cn.jmessage.android.uikit.chatting.utils.IdHelper;
 import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetGroupInfoCallback;
 import cn.jpush.im.android.api.content.EventNotificationContent;
 import cn.jpush.im.android.api.content.ImageContent;
 import cn.jpush.im.android.api.content.TextContent;
@@ -80,7 +74,6 @@ import cn.jpush.im.android.api.model.GroupInfo;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.android.eventbus.EventBus;
-import cn.jpush.im.api.BasicCallback;
 
 
 /**
@@ -94,20 +87,11 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
     private static final String MEMBERS_COUNT = "membersCount";
     private static final String GROUP_NAME = "groupName";
-    private static final String DRAFT = "draft";
     private static final String MsgIDs = "msgIDs";
-    private static final String NAME = "name";
-    public static final String NICKNAME = "nickname";
-    private static final String PICTURE_PATH = "picturePath";
     private static final String TARGET_APP_KEY = "";
     private static final int REQUEST_CODE_TAKE_PHOTO = 4;
-    private static final int REQUEST_CODE_SELECT_PICTURE = 6;
     private static final int RESULT_CODE_SELECT_PICTURE = 8;
-    private static final int REQUEST_CODE_CHAT_DETAIL = 14;
-    private static final int RESULT_CODE_CHAT_DETAIL = 15;
-    private static final int RESULT_CODE_FRIEND_INFO = 17;
     private static final int REFRESH_LAST_PAGE = 0x1023;
-    private static final int REFRESH_CHAT_TITLE = 0x1024;
     private static final int REFRESH_GROUP_NAME = 0x1025;
     private static final int REFRESH_GROUP_NUM = 0x1026;
 
@@ -122,7 +106,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     private Context mContext;
     private boolean mIsSingle = true;
     private boolean mShowSoftInput = false;
-    private String targetUserName = "18601995150";
+    private String targetUserName;
     private String targetAppKey;
     private long mGroupId;
     private String mGroupName;
@@ -137,30 +121,48 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     private final UIHandler mUIHandler = new UIHandler(this);
     InputMethodManager mImm;
 
-    @BindView(R.id.list_view_chat)
-    DropDownListView mChatListView;
-
+    //标题名称
     @BindView(R.id.tv_title)
     TextView mTvTitle;
+    //标题栏左侧返回按钮
     @BindView(R.id.iv_back)
     ImageView mIvBack;
+    //标题栏右侧按钮
     @BindView(R.id.iv_right)
     ImageView mIvRight;
+    //展示内容栏
     @BindView(R.id.llContent)
     LinearLayout mLlContent;
+    //展示聊天内容的listView
+    @BindView(R.id.list_view_chat)
+    DropDownListView mChatListView;
+    //切换成发语音模式
     @BindView(R.id.ivAudio)
     ImageView mIvAudio;
-    @BindView(R.id.btnAudio)
-    Button mBtnAudio;
+    //按住录音
+    @BindView(R.id.record_voice_button)
+    RecordVoiceButton mVoiceBtn;
+    //消息输入框
     @BindView(R.id.etContent)
     EditText mEtContent;
+    //点击展示表情包按钮
     @BindView(R.id.ivEmo)
     ImageView mIvEmo;
+    //小加号，点击可以展示更多
     @BindView(R.id.ivMore)
     ImageView mIvMore;
+    //发送消息按钮
     @BindView(R.id.btnSend)
     Button mBtnSend;
-
+    //更多功能栏（包含着表情包和其他功能）
+    @BindView(R.id.flEmotionView)
+    FrameLayout mFlEmotionView;
+    //表情包展示栏
+    @BindView(R.id.elEmotion)
+    EmotionLayout mElEmotion;
+    //其他功能展示栏（相册，相机，定位等）
+    @BindView(R.id.llMore)
+    LinearLayout mLlMore;
     //相册
     @BindView(R.id.ivAlbum)
     ImageView mIvAlbum;
@@ -170,13 +172,6 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     //定位
     @BindView(R.id.ivLocation)
     ImageView mIvLocation;
-
-    @BindView(R.id.flEmotionView)
-    FrameLayout mFlEmotionView;
-    @BindView(R.id.elEmotion)
-    EmotionLayout mElEmotion;
-    @BindView(R.id.llMore)
-    LinearLayout mLlMore;
 
     private EmotionKeyboard mEmotionKeyboard;
 
@@ -200,6 +195,9 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     protected void onResume() {
         super.onResume();
         mEtContent.clearFocus();
+        if (!RecordVoiceButton.mIsPressed) {
+            mVoiceBtn.dismissDialog();
+        }
         String targetId = getIntent().getStringExtra(JMessageUtils.TARGET_USERNAME);
         if (!mIsSingle) {
             long groupId = getIntent().getLongExtra(JMessageUtils.GROUP_ID_KEY, 0);
@@ -237,11 +235,12 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         mElEmotion.attachEditText(mEtContent);
         initEmotionKeyboard();
 
+        //接受到传过来的Username和appkey
         Intent intent = getIntent();
-//        targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
+        targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
         targetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
         if (!TextUtils.isEmpty(targetUserName)) {
-            //单聊
+            //==========单聊
             mIsSingle = true;
             mConversation = JMessageClient.getSingleConversation(targetUserName, targetAppKey);
             if (mConversation != null) {
@@ -252,7 +251,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             }
             mChatAdapter = new MsgListAdapter(this, targetUserName, targetAppKey, longClickListener);
         } else {
-            //群聊
+            //==========群聊
             mIsSingle = false;
             mGroupId = intent.getLongExtra(JMessageUtils.GROUP_ID_KEY, 0);
             mConversation = JMessageClient.getGroupConversation(mGroupId);
@@ -266,8 +265,8 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         }
 
         mChatListView.setAdapter(mChatAdapter);
-        //单条消息点击事件
-        mChatListView.setOnItemClickListener(mOnItemClickListener);
+//        //单条消息点击事件
+//        mChatListView.setOnItemClickListener(mOnItemClickListener);
         mChatAdapter.initMediaPlayer();
         //下拉刷新
         mChatListView.setOnDropDownListener(new DropDownListView.OnDropDownListener() {
@@ -280,18 +279,6 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         setToBottom();
     }
 
-    /**
-     * 滑到底部
-     */
-    public void setToBottom() {
-        mChatListView.clearFocus();
-        mChatListView.post(new Runnable() {
-            @Override
-            public void run() {
-                mChatListView.setSelection(mChatListView.getAdapter().getCount() - 1);
-            }
-        });
-    }
 
     // 监听耳机插入
     private void initReceiver() {
@@ -314,6 +301,52 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
     }
 
+    private void initEmotionKeyboard() {
+        mEmotionKeyboard = EmotionKeyboard.with(this);
+        mEmotionKeyboard.bindToEditText(mEtContent);
+        mEmotionKeyboard.bindToContent(mLlContent);
+        mEmotionKeyboard.setEmotionLayout(mFlEmotionView);
+        mEmotionKeyboard.bindToEmotionButton(mIvEmo, mIvMore);
+        mEmotionKeyboard.setOnEmotionButtonOnClickListener(new EmotionKeyboard.OnEmotionButtonOnClickListener() {
+            @Override
+            public boolean onEmotionButtonOnClickListener(View view) {
+                switch (view.getId()) {
+                    case R.id.ivEmo:
+                        setToBottom();
+                        if (!mElEmotion.isShown()) {
+                            if (mLlMore.isShown()) {
+                                showEmotionLayout();
+                                hideMoreLayout();
+                                hideAudioButton();
+                                return true;
+                            }
+                        } else if (mElEmotion.isShown() && !mLlMore.isShown()) {
+                            mIvEmo.setImageResource(R.mipmap.ic_cheat_emo);
+                            return false;
+                        }
+                        showEmotionLayout();
+                        hideMoreLayout();
+                        hideAudioButton();
+                        break;
+                    case R.id.ivMore:
+                        setToBottom();
+                        if (!mLlMore.isShown()) {
+                            if (mElEmotion.isShown()) {
+                                showMoreLayout();
+                                hideEmotionLayout();
+                                hideAudioButton();
+                                return true;
+                            }
+                        }
+                        showMoreLayout();
+                        hideEmotionLayout();
+                        hideAudioButton();
+                        break;
+                }
+                return false;
+            }
+        });
+    }
 
     private void setListeners() {
         mIvBack.setOnClickListener(this);
@@ -346,17 +379,23 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT).show();
             }
         });
-        mLlContent.setOnTouchListener(new View.OnTouchListener() {
+
+        mChatListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        LogUtils.i(TAG,"mChatListView触摸了内容区");
                         closeBottomAndKeyboard();
+//                        if (mElEmotion.isShown() || mLlMore.isShown()) {
+//                            mEmotionKeyboard.interceptBackPress();
+//                        }
                         break;
                 }
                 return false;
             }
         });
+
         mEtContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -388,19 +427,8 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         switch (v.getId()) {
 
             case R.id.iv_back: //返回按钮
-                mConversation.resetUnreadCount();
-                dismissSoftInput();
-                JMessageClient.exitConversation();
-                //发送保存为草稿事件到会话列表
-                if (mIsSingle) {
-                    EventBus.getDefault().post(new Event.DraftEvent(targetUserName, targetAppKey,
-                            getChatInput()));
-                } else {
-                    EventBus.getDefault().post(new Event.DraftEvent(mGroupId, getChatInput()));
-                }
-                finish();
+                onBackPressed();
                 break;
-
             case R.id.iv_right://标题栏右边按钮
                 Intent intent = new Intent();
                 intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUserName);
@@ -408,7 +436,6 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 intent.setClass(this, AddFriendActivity.class);
                 startActivity(intent);
                 break;
-
             case R.id.btnSend://发送文字消息
                 String msgContent = TextViewUtils.getText(mEtContent);
                 if (msgContent.equals("")) {
@@ -427,7 +454,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 if (ContextCompat.checkSelfPermission(this, permission_record_audio[0]) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, permission_record_audio, REQUEST_PERMISSION_RECORD_AUDIO);
                 } else {
-                    if (mBtnAudio.isShown()) {
+                    if (mVoiceBtn.isShown()) {
                         hideAudioButton();
                         mEtContent.requestFocus();
                         if (mEmotionKeyboard != null) {
@@ -457,22 +484,8 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 }
                 break;
             case R.id.ivLocation:
-                ToastUtil.show(this,"功能开发中...");
+                ToastUtil.show(this, "功能开发中...");
                 break;
-        }
-    }
-
-    private void dismissSoftInput() {
-        if (mShowSoftInput) {
-            if (mImm != null) {
-                mImm.hideSoftInputFromWindow(mEtContent.getWindowToken(), 0);
-                mShowSoftInput = false;
-            }
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -588,53 +601,10 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         });
     }
 
-    private void initEmotionKeyboard() {
-        mEmotionKeyboard = EmotionKeyboard.with(this);
-        mEmotionKeyboard.bindToEditText(mEtContent);
-        mEmotionKeyboard.bindToContent(mLlContent);
-        mEmotionKeyboard.setEmotionLayout(mFlEmotionView);
-        mEmotionKeyboard.bindToEmotionButton(mIvEmo, mIvMore);
-        mEmotionKeyboard.setOnEmotionButtonOnClickListener(new EmotionKeyboard.OnEmotionButtonOnClickListener() {
-            @Override
-            public boolean onEmotionButtonOnClickListener(View view) {
-                switch (view.getId()) {
-                    case R.id.ivEmo:
-                        if (!mElEmotion.isShown()) {
-                            if (mLlMore.isShown()) {
-                                showEmotionLayout();
-                                hideMoreLayout();
-                                hideAudioButton();
-                                return true;
-                            }
-                        } else if (mElEmotion.isShown() && !mLlMore.isShown()) {
-                            mIvEmo.setImageResource(R.mipmap.ic_cheat_emo);
-                            return false;
-                        }
-                        showEmotionLayout();
-                        hideMoreLayout();
-                        hideAudioButton();
-                        break;
-                    case R.id.ivMore:
-                        if (!mLlMore.isShown()) {
-                            if (mElEmotion.isShown()) {
-                                showMoreLayout();
-                                hideEmotionLayout();
-                                hideAudioButton();
-                                return true;
-                            }
-                        }
-                        showMoreLayout();
-                        hideEmotionLayout();
-                        hideAudioButton();
-                        break;
-                }
-                return false;
-            }
-        });
-    }
 
     private void showAudioButton() {
-        mBtnAudio.setVisibility(View.VISIBLE);
+        mVoiceBtn.setVisibility(View.VISIBLE);
+        mVoiceBtn.initConv(mConversation, mChatAdapter, this);
         mEtContent.setVisibility(View.GONE);
         mIvAudio.setImageResource(R.mipmap.ic_cheat_keyboard);
 
@@ -650,7 +620,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     }
 
     private void hideAudioButton() {
-        mBtnAudio.setVisibility(View.GONE);
+        mVoiceBtn.setVisibility(View.GONE);
         mEtContent.setVisibility(View.VISIBLE);
         mIvAudio.setImageResource(R.mipmap.ic_cheat_voice);
     }
@@ -676,13 +646,20 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     private void closeBottomAndKeyboard() {
         mElEmotion.setVisibility(View.GONE);
         mLlMore.setVisibility(View.GONE);
+        dismissSoftInput();
         if (mEmotionKeyboard != null) {
+            LogUtils.i(TAG,"mEmotionKeyboard");
             mEmotionKeyboard.interceptBackPress();
         }
     }
 
     @Override
     public void onBackPressed() {
+        if (RecordVoiceButton.mIsPressed) {
+            mVoiceBtn.dismissDialog();
+            mVoiceBtn.releaseRecorder();
+            RecordVoiceButton.mIsPressed = false;
+        }
         if (mElEmotion.isShown() || mLlMore.isShown()) {
             mEmotionKeyboard.interceptBackPress();
         } else {
@@ -693,9 +670,27 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             if (mIsSingle) {
                 EventBus.getDefault().post(new Event.DraftEvent(targetUserName, targetAppKey, getChatInput()));
             } else {
-                EventBus.getDefault().post(new Event.DraftEvent(mGroupId,getChatInput()));
+                EventBus.getDefault().post(new Event.DraftEvent(mGroupId, getChatInput()));
             }
             super.onBackPressed();
+        }
+    }
+
+
+    /**
+     * 收起虚拟键盘
+     */
+    private void dismissSoftInput() {
+        if (mShowSoftInput) {
+            if (mImm != null) {
+                mImm.hideSoftInputFromWindow(mEtContent.getWindowToken(), 0);
+                mShowSoftInput = false;
+            }
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -781,13 +776,25 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         }
     };
 
-    AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//    AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        }
+//    };
 
-        }
-    };
 
+    /**
+     * 滑到底部
+     */
+    public void setToBottom() {
+        mChatListView.clearFocus();
+        mChatListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mChatListView.setSelection(mChatListView.getAdapter().getCount() - 1);
+            }
+        });
+    }
 
     private static class UIHandler extends Handler {
         private final WeakReference<MyChatActivity> mActivity;
@@ -887,6 +894,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             }
         }
     }
+
     private void refreshGroupNum() {
         Conversation conv = JMessageClient.getGroupConversation(mGroupId);
         GroupInfo groupInfo = (GroupInfo) conv.getTargetInfo();

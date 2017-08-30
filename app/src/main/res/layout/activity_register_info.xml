@@ -20,8 +20,8 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_bg"
             android:hint="请输入您的昵称"
-            android:textColor="@color/colorEditTextFont"
-            android:textColorHint="@color/colorEditTextFont"
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorHint"
             android:textSize="13sp" />
 
 
@@ -37,7 +37,7 @@
                 android:layout_toLeftOf="@+id/tl_gender"
                 android:background="@drawable/edit_bg"
                 android:gravity="center"
-                android:textColor="@color/colorEditTextFont"
+                android:textColor="@color/black"
                 android:textSize="13sp" />
 
             <TableLayout
@@ -76,8 +76,8 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_bg"
             android:hint="添加登录密码"
-            android:textColor="@color/colorEditTextFont"
-            android:textColorHint="@color/colorEditTextFont"
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorHint"
             android:textSize="13sp" />
 
         <EditText
@@ -87,8 +87,8 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_bg"
             android:hint="重复输入密码"
-            android:textColor="@color/colorEditTextFont"
-            android:textColorHint="@color/colorEditTextFont"
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorHint"
             android:textSize="13sp" />
 
         <RelativeLayout
@@ -112,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="《蹭个车服务条款》"
-                android:textColor="@color/colorSub"
+                android:textColor="@color/blue"
                 android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
@@ -13,6 +14,8 @@ import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.recycle.contacts_recycle.CustomItemDecoration;
 import com.ygst.cenggeche.recycle.contacts_recycle.SideBar;
 import com.ygst.cenggeche.recycle.contacts_recycle.itemAnimator.SlideInOutLeftItemAnimator;
+import com.ygst.cenggeche.ui.activity.newfriendlist.NewFriendListActivity;
+import com.ygst.cenggeche.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +41,12 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
-
+    @BindView(R.id.ll_newfriend)
+    LinearLayout mLlNewFriend;
+    @OnClick(R.id.ll_newfriend)
+    public void goToNewFriendList(){
+        CommonUtils.startActivity(this, NewFriendListActivity.class);
+    }
     /**
      * 返回
      */
@@ -61,7 +69,7 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
     }
 
     public void initViews() {
-        mTvTitle.setText("登录");
+        mTvTitle.setText("好友");
         mAdapter = new ContactAdapter(this);
         rl_recycle_view = (RecyclerView) findViewById(R.id.rl_recycle_view);
         //侧边导航栏

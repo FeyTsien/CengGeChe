@@ -7,11 +7,37 @@
         android:id="@+id/apptoolbar"
         layout="@layout/app_toolbar" />
 
+    <LinearLayout
+        android:id="@+id/ll_newfriend"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/apptoolbar"
+        android:layout_marginBottom="2dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/icon_me" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="验证消息"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rl_recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/apptoolbar"
+        android:layout_below="@+id/ll_newfriend"
         android:background="@color/white" />
 
     <com.ygst.cenggeche.recycle.contacts_recycle.IndexBar

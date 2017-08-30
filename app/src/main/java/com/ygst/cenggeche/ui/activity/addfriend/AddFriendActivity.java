@@ -9,13 +9,19 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.ContactManager;
+import cn.jpush.im.api.BasicCallback;
 
 
 /**
@@ -48,11 +54,27 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
     @OnClick(R.id.bt_submit)
     public void addFriendSubmit(){
         Intent intent = this.getIntent();
-        String targetUserName=intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
-        String targetAppKey = intent.getStringExtra( JMessageUtils.TARGET_APP_KEY);
-        String reason = mEditTextReason.getText().toString();
-        LogUtils.i(TAG,targetUserName+targetAppKey+reason);
-        mPresenter.sendAddFriend(targetUserName,targetAppKey,reason);
+        final String targetUserName=intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
+        final String targetAppKey = intent.getStringExtra( JMessageUtils.TARGET_APP_KEY);
+        final String reason = mEditTextReason.getText().toString();
+        ContactManager.sendInvitationRequest(targetUserName,targetAppKey, reason, new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+                LogUtils.i(TAG,"responseMessage: "+responseMessage);
+                if (0 == responseCode) {
+                    //好友请求请求发送成功
+                    Map<String, String> map = new HashMap<>();
+                    map.put("myusername",MyApplication.getUserName());
+                    map.put("fusername",targetUserName);
+                    map.put("appkey",targetAppKey);
+                    map.put("applyInfo",reason);
+                    mPresenter.sendAddFriend(map);
+                } else {
+                    //好友请求发送失败
+                    ToastUtil.show(AddFriendActivity.this,"申请好友发送失败");
+                }
+            }
+        });
     }
 
     @Override
@@ -74,6 +96,6 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
 
     @Override
     public void sendFail() {
-        ToastUtil.show(this,"申请好友发送失败");
+        ToastUtil.show(this,"申请好友发送失败了");
     }
 }

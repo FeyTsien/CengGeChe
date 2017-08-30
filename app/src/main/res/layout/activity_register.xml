@@ -37,8 +37,8 @@
                 android:hint="请输入手机号"
                 android:inputType="phone"
                 android:maxLength="11"
-                android:textColor="@color/colorEditTextFont"
-                android:textColorHint="@color/colorEditTextFont"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorHint"
                 android:textSize="13sp" />
 
         </RelativeLayout>
@@ -52,23 +52,20 @@
                 android:id="@+id/et_sms_code"
                 android:layout_width="match_parent"
                 android:layout_height="43dp"
-                android:layout_alignBottom="@+id/btn_get_sms_code"
-                android:layout_alignTop="@+id/btn_get_sms_code"
-                android:layout_toLeftOf="@+id/btn_get_sms_code"
                 android:drawablePadding="10dp"
-                android:background="@drawable/edit_bg_code"
+                android:background="@drawable/edit_bg"
                 android:digits="1234567890"
                 android:drawableLeft="@mipmap/icon_code"
                 android:hint="请输入验证码"
                 android:inputType="numberDecimal"
-                android:textColor="@color/colorEditTextFont"
-                android:textColorHint="@color/colorEditTextFont"
+                android:textColor="@color/black"
+                android:textColorHint="@color/colorHint"
                 android:textSize="13sp" />
 
             <Button
                 android:id="@+id/btn_get_sms_code"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
+                android:layout_height="43dp"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/button_selector_code"
                 android:text="立即获取"
