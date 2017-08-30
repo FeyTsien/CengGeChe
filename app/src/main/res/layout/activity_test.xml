@@ -1,58 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="#fff"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <FrameLayout
+        android:id="@+id/Container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></FrameLayout>
+
 
     <TextView
-        android:id="@+id/tv1"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#FFFF6702"
-        android:fitsSystemWindows="true"
-        android:gravity="center"
-        android:text="Custom ActionBar"
-        android:textColor="@android:color/white"
-        android:layout_alignParentTop="true"
-        android:textSize="20sp" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/et1"
-        android:layout_below="@+id/tv1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#FF33B5E5"
-                android:gravity="center"
-                android:text="Content"
-                android:textColor="@android:color/white"
-                android:textSize="50sp" />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#FF33B5E5"
-                android:gravity="center"
-                android:text="Content"
-                android:textColor="@android:color/white"
-                android:textSize="50sp" />
-
-        </LinearLayout>
-    </ScrollView>
-
-    <EditText
-        android:id="@+id/et1"
+        android:id="@+id/textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="EditText"
-        android:layout_alignParentBottom="true"/>
+        android:layout_below="@+id/Container"
+        android:layout_marginTop="20dp"
+        android:textColor="#383838"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textview"
+        android:layout_marginTop="20dp"
+        android:textColor="#383838"
+        android:textSize="16sp" />
 </RelativeLayout>

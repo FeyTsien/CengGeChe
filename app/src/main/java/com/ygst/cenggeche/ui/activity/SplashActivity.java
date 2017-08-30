@@ -88,7 +88,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void toIMActivity(){
-        CommonUtils.startActivity(this, MyChatActivity.class);
+        CommonUtils.startActivity(this, TestActivity.class);
         finish();
     }
 

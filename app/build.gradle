@@ -178,6 +178,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     //一个表情包库
     compile 'com.lqr.emoji:library:1.0.2'
+    //有一个表情包库
+    compile 'com.tb.emoji:yykEmoji:1.0.0'
 
     //3D地图so及jar
     compile 'com.amap.api:3dmap:latest.integration'
