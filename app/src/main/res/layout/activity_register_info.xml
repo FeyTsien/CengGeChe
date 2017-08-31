@@ -103,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/button_selector"
+            android:background="@drawable/button_bg"
             android:text="确认注册"
             android:textColor="@color/white"
             android:textSize="13sp" />

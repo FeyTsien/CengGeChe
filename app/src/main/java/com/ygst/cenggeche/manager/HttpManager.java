@@ -1,6 +1,7 @@
 package com.ygst.cenggeche.manager;
 
 
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.interfaces.ProjectAPI;
 import com.ygst.cenggeche.utils.RSAUtil;
@@ -64,11 +65,11 @@ public class HttpManager {
     public void postMethod(String url, Observer<String> observer, Map map) {
         String deviceId = "";
         String uid = "";
-        if (MyApplication.getAndroidId() != null) {
-            deviceId = MyApplication.getAndroidId();
+        if (AppData.getAndroidId() != null) {
+            deviceId = AppData.getAndroidId();
         }
-        if (MyApplication.getUid() != null) {
-            uid = MyApplication.getUid();
+        if (AppData.getUid() != null) {
+            uid = AppData.getUid();
         }
         String sign = getSign(map);
         Observable<String> observable = RetrofitUtil.getInstance().get(ProjectAPI.class).postMethod(deviceId, uid, sign, url, map);
@@ -96,12 +97,12 @@ public class HttpManager {
      * @param observer
      */
     public void postMethod2(String url, Observer<String> observer, Map map) {
-        if (MyApplication.getToken() != null)
-            map.put("accessToken", MyApplication.getToken());
-        if (MyApplication.getUid() != null)
-            map.put("userId", MyApplication.getUid());
-        if (MyApplication.getAndroidId() != null) {
-            map.put("deviceId", MyApplication.getAndroidId());
+        if (AppData.getToken() != null)
+            map.put("accessToken", AppData.getToken());
+        if (AppData.getUid() != null)
+            map.put("userId", AppData.getUid());
+        if (AppData.getAndroidId() != null) {
+            map.put("deviceId", AppData.getAndroidId());
         }
         map.put("os", "android");
         Observable<String> observable = RetrofitUtil.getInstance().get(ProjectAPI.class).postMethod(url, map);
@@ -122,9 +123,9 @@ public class HttpManager {
     public void upLoadIcon(String url, String path, Map map, String picname, Observer<ResponseBody> observer) {
         File file = new File(path);
         RequestBody requestbody = RequestBody.create(MediaType.parse("image/jpg"), file);
-        RequestBody assboy = RequestBody.create(MediaType.parse("text/plain"), MyApplication.getToken());
-        RequestBody userboy = RequestBody.create(MediaType.parse("text/plain"), MyApplication.getUid());
-        RequestBody dvice_id = RequestBody.create(MediaType.parse("text/plain"), MyApplication.getAndroidId());
+        RequestBody assboy = RequestBody.create(MediaType.parse("text/plain"), AppData.getToken());
+        RequestBody userboy = RequestBody.create(MediaType.parse("text/plain"), AppData.getUid());
+        RequestBody dvice_id = RequestBody.create(MediaType.parse("text/plain"), AppData.getAndroidId());
         RequestBody os = RequestBody.create(MediaType.parse("text/plain"), "android");
         MultipartBody.Part body = MultipartBody.Part.createFormData(picname, file.getName(), requestbody);
         Observable<ResponseBody> responseBodyObservable;

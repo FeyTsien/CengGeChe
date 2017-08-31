@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
-import com.ygst.cenggeche.bean.NewFriendBean;
+import com.ygst.cenggeche.bean.ApplyBean;
 
 import java.util.List;
 
@@ -19,22 +19,22 @@ import java.util.List;
 
 public class SwipeMenuListViewAdapter extends BaseAdapter {
 
-    List<NewFriendBean> mListNewFriendBean;
+    List<ApplyBean.DataBean> mListDataBean;
     Context mContext;
 
-    public SwipeMenuListViewAdapter(Context context, List<NewFriendBean> list) {
+    public SwipeMenuListViewAdapter(Context context, List<ApplyBean.DataBean> list) {
         mContext = context;
-        this.mListNewFriendBean = list;
+        this.mListDataBean = list;
     }
 
     @Override
     public int getCount() {
-        return mListNewFriendBean.size();
+        return mListDataBean.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mListNewFriendBean.get(position);
+        return mListDataBean.get(position);
     }
 
     @Override
@@ -45,38 +45,74 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(mContext.getApplicationContext(),
-                    R.layout.item_list_conversation, null);
+            convertView = View.inflate(mContext.getApplicationContext(), R.layout.item_list_newfriend, null);
             new ViewHolder(convertView);
         }
-        ViewHolder holder = (ViewHolder) convertView.getTag();
-        NewFriendBean newFriend = mListNewFriendBean.get(position);
+        final ViewHolder holder = (ViewHolder) convertView.getTag();
+        final ApplyBean.DataBean newFriend = mListDataBean.get(position);
+
+        if (newFriend != null) {
+            holder.mTvTargetName.setText(newFriend.getFusername());
+            holder.mTvLatestMessage.setText(newFriend.getApplyInfo());
+            if (newFriend.getIsAgree() == 1) {
+                holder.mTvIsAgree.setText("已同意");
+            } else if (newFriend.getIsAgree() == 2) {
+                holder.mTvIsAgree.setText("已拒绝");
+            } else {
+                holder.mBtnYes.setVisibility(View.VISIBLE);
+                holder.mBtnNo.setVisibility(View.VISIBLE);
+            }
+        }
+
+        holder.mBtnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newFriend.setIsAgree(1);
+                holder.mTvIsAgree.setText("已同意");
+                holder.mBtnYes.setVisibility(View.GONE);
+                holder.mBtnNo.setVisibility(View.GONE);
+            }
+        });
+        holder.mBtnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newFriend.setIsAgree(2);
+                holder.mTvIsAgree.setText("已拒绝");
+                holder.mBtnNo.setVisibility(View.GONE);
+                holder.mBtnYes.setVisibility(View.GONE);
+            }
+        });
+
+
         return convertView;
     }
 
     class ViewHolder {
 
         //头像
-        ImageView mIVavatar;
+        ImageView mIvAvatar;
         //性别
-        ImageView mIVgender;
+        ImageView mIvGender;
         //目标用户名称
-        TextView mTVtargetName;
+        TextView mTvTargetName;
         //申请理由
-        TextView mTVlatestMessage;
+        TextView mTvLatestMessage;
         //同意
         Button mBtnYes;
         //拒绝
         Button mBtnNo;
+        //已同意或拒绝的状态
+        TextView mTvIsAgree;
 
 
         public ViewHolder(View view) {
-            mIVavatar = (ImageView) view.findViewById(R.id.iv_avatar);
-            mIVgender = (ImageView) view.findViewById(R.id.iv_gender);
-            mTVtargetName = (TextView) view.findViewById(R.id.tv_target_name);
-            mTVlatestMessage = (TextView) view.findViewById(R.id.tv_latest_message);
+            mIvAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
+            mIvGender = (ImageView) view.findViewById(R.id.iv_gender);
+            mTvTargetName = (TextView) view.findViewById(R.id.tv_target_name);
+            mTvLatestMessage = (TextView) view.findViewById(R.id.tv_reason);
             mBtnYes = (Button) view.findViewById(R.id.btn_yes);
             mBtnNo = (Button) view.findViewById(R.id.btn_no);
+            mTvIsAgree = (TextView) view.findViewById(R.id.tv_isagree);
             view.setTag(this);
         }
     }

@@ -57,7 +57,7 @@
         <!--重置密码页-->
         <activity android:name=".ui.activity.resetpwd.ResetPwdActivity" />
         <!--主界面-->
-        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.main.MainActivity" />
         <!--自定义的聊天页-->
         <activity android:name=".ui.activity.mychat.MyChatActivity"
             android:theme="@style/ChatTheme" />

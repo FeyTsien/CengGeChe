@@ -2,6 +2,7 @@ package com.ygst.cenggeche.ui.activity.login;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,11 +14,11 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.LogUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.bean.LoginBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.MainActivity;
 import com.ygst.cenggeche.ui.activity.register.RegisterActivity;
 import com.ygst.cenggeche.ui.widget.TimeCount;
 import com.ygst.cenggeche.utils.CommonUtils;
@@ -64,7 +65,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      * 返回
      */
     @OnClick(R.id.iv_back)
-    public void goBack(){
+    public void goBack() {
         finish();
     }
 
@@ -119,6 +120,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             ToastUtil.show(this, "请输入您的手机号码");
         }
     }
+
     /**
      * 去登录
      */
@@ -126,19 +128,6 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     public void login() {
         final String username = TextViewUtils.getText(mEtUserName);
         final String pwdOrCode = TextViewUtils.getText(mEtPwdCode);
-
-        JMessageClient.login(username, JMessageUtils.JMESSAGE_LOGIN_PASSWROD, new BasicCallback() {
-            @Override
-            public void gotResult(int responseCode, String LoginDesc) {
-                if (responseCode == 0) {
-                    LogUtils.i(TAG, "极光登录成功了");
-                } else {
-                    CommonUtils.startActivity(LoginActivity.this, MainActivity.class);
-                    finish();
-                }
-            }
-        });
-
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(pwdOrCode)) {
             //先校验账号是否被注册,成功后在获取验证码
             try {
@@ -161,11 +150,12 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     /**
      * 去注册账号
      */
-    @OnClick(R.id.tv_register)
+    @OnClick(R.id.rl_register)
     public void register() {
         timeCount.cancel();
         timeCount.onFinish();
         CommonUtils.startActivity(this, RegisterActivity.class);
+        finish();
     }
 
     @Override
@@ -183,6 +173,9 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
 
     private void initView() {
         mTvTitle.setText("登录");
+        Intent intent = getIntent();
+        mEtUserName.setText(intent.getStringExtra("username"));
+        mEtPwdCode.setText(intent.getStringExtra("password"));
         timeCount = new TimeCount(60000, 1000);
         timeCount.setButton(mBtnGetCode);
     }
@@ -193,12 +186,12 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      */
     @Override
     public void unregistered() {
-        CommonUtils.showInfoDialog(this, "账号未注册，请先注册","小蹭提示","前往","不去",new DialogInterface.OnClickListener(){
+        CommonUtils.showInfoDialog(this, "账号未注册，请先注册", "小蹭提示", "前往", "不去", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 CommonUtils.startActivity(LoginActivity.this, RegisterActivity.class);
             }
-        },null);
+        }, null);
     }
 
     /**
@@ -212,21 +205,19 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             @Override
             public void gotResult(int responseCode, String LoginDesc) {
                 if (responseCode == 0) {
-                    LogUtils.i(TAG,"极光登录成功了");
+                    LogUtils.i(TAG, "极光登录成功了");
                     Map<String, String> map = new HashMap<>();
                     map.put("username", username);
-                    map.put("checkType",checkType);
-                    if(checkType.equals("1")){
+                    map.put("checkType", checkType);
+                    if (checkType.equals("1")) {
                         //密码登录
                         String password = MD5Util.string2MD5(pwdOrCode);
-                        map.put("password",password);
-                    }else{
+                        map.put("password", password);
+                    } else {
                         //验证码登录
-                        map.put("smsCode",pwdOrCode);
+                        map.put("smsCode", pwdOrCode);
                     }
                     mPresenter.login(map);
-//                                CommonUtils.startActivity(LoginActivity.this, MainActivity.class);
-//                                LoginActivity.this.finish();
                 } else {
                     ToastUtil.show(LoginActivity.this, "登录失败");
                 }
@@ -254,21 +245,20 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         timeCount.onFinish();
         MyApplication.clearLogin();
         // 储存登陆状态
-        MyApplication.setIsLoginEd(true);
+        AppData.setIsLoginEd(true);
         // 保存 uid
-        MyApplication.saveUid(loginBean.getData().getId() + "");
+        AppData.saveUid(loginBean.getData().getId() + "");
         // 保存 username
-        MyApplication.saveUserName(loginBean.getData().getUsername());
+        AppData.saveUserName(loginBean.getData().getUsername());
         // 保存 nickname
-        MyApplication.saveUserName(loginBean.getData().getUsername());
+        AppData.saveUserName(loginBean.getData().getUsername());
         // 保存昵称 nickname
-        MyApplication.saveNickname(loginBean.getData().getNickname());
+        AppData.saveNickname(loginBean.getData().getNickname());
 
 
         //开启友盟账号统计
         //（如果是使用第三方账号登录时，如新浪微博：MobclickAgent.onProfileSignIn("WB"，"userID")）;
         MobclickAgent.onProfileSignIn(loginBean.getData().getId() + "");
-        CommonUtils.startActivity(this, MainActivity.class);
         CommonUtils.finishActivity(this);
     }
 

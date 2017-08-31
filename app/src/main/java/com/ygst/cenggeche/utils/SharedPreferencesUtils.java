@@ -50,6 +50,24 @@ public class SharedPreferencesUtils {
         }
         return sp.getString(key, defValue);
     }
+    /**
+     * SharedPreferences 保存int类型数据
+     *
+     * @param key
+     * @param value
+     */
+    public static void saveInt(String key, int value) {
+        if (sp == null) {
+            sp = MyApplication.getContext().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        }
+        sp.edit().putInt(key, value).commit();
+    }
 
+    public static int getInt(String key, int defValue) {
+        if (sp == null) {
+            sp = MyApplication.getContext().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
+        }
+        return sp.getInt(key, defValue);
+    }
 
 }

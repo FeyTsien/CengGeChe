@@ -3,6 +3,7 @@ package com.ygst.cenggeche.interfaces;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.bean.CodeMsg;
 import com.ygst.cenggeche.bean.RefreshTokenBean;
@@ -117,9 +118,9 @@ public class TokenInterceptor implements Interceptor {
     private String getNewToken() throws IOException {
         Log.i("TAG", "getNewToken: +++++++++++++++");
         Map map = new HashMap();
-        map.put("uid", MyApplication.getUid());
-        if (MyApplication.getAndroidId() != null) {
-            map.put("deviceId", MyApplication.getAndroidId());
+        map.put("uid", AppData.getUid());
+        if (AppData.getAndroidId() != null) {
+            map.put("deviceId", AppData.getAndroidId());
         }
         map.put("os", "android");
         Call<String> call = RetrofitUtil.getInstance().get(ProjectAPI.class).refrshToken(UrlUtils.REFRESHTOKEN, map);
@@ -127,7 +128,7 @@ public class TokenInterceptor implements Interceptor {
         //  re = gson.fromJson(, RefreshTokenBean.class);
         String re = call.execute().body();
         RefreshTokenBean rrr = gson.fromJson(re, RefreshTokenBean.class);
-        MyApplication.saveToken(rrr.getAccessToken());
+        AppData.saveToken(rrr.getAccessToken());
         Log.i("TAG", "getNewToken:++++++++++++ " + rrr.getAccessToken());
         return rrr.getAccessToken();
     }

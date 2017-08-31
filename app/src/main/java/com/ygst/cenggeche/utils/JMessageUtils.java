@@ -15,6 +15,8 @@ public class JMessageUtils {
     public static final String TARGET_USERNAME = "targetUsername";
     //获取会话对象
     public static final String CONVERSATION = "conversation";
+    //消息
+    public static final String MESSAGE = "message";
     //获取会话对象的Info
     public static final String TARGET_INFO_KEY = "targetInfo";
     //群组ID

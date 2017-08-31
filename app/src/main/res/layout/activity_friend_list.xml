@@ -7,7 +7,7 @@
         android:id="@+id/apptoolbar"
         layout="@layout/app_toolbar" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_newfriend"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -18,20 +18,38 @@
         android:padding="10dp">
 
         <ImageView
+            android:id="@+id/iv_tu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:src="@mipmap/icon_me" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/iv_tu"
             android:text="验证消息"
             android:textColor="@color/black"
             android:textSize="14sp" />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_unread_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@mipmap/icon_circle_red"
+            android:gravity="center"
+            android:text="12"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rl_recycle_view"

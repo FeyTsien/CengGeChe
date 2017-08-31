@@ -11,7 +11,6 @@ import com.ygst.cenggeche.manager.GsonManger;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.HashMap;
@@ -43,7 +42,6 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
             @Override
             public void onError(Throwable e) {
                 progressDialog.dismiss();
-                ToastUtil.show(mView.getContext(), "请求失败，请重试");
             }
 
             @Override
@@ -79,8 +77,6 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
             @Override
             public void onError(Throwable e) {
                 Log.i("LoginPresenter", "onError:++++++++++++ " + e.getMessage());
-                if (mView != null)
-                    mView.getSMSCodeError();
 
             }
 
@@ -93,7 +89,9 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
                     if (mView != null)
                         mView.getSMSCodeSuccess(o);
                 } else {
-                    ToastUtil.show(mView.getContext(), o.getMsg());
+                    if (mView != null)
+                        mView.getSMSCodeError();
+//                    ToastUtil.show(mView.getContext(), o.getMsg());
                 }
 
             }
@@ -116,8 +114,6 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
             @Override
             public void onError(Throwable e) {
                 progressDialog.dismiss();
-                if (mView != null)
-                    mView.loginError();
                 Log.i("checkSMSCodeError", "onError:+ ++++++++++++++" + e.toString());
             }
 
@@ -134,7 +130,9 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
                     if (mView != null)
                         mView.loginSuccess(loginBean);
                 } else {
-                    ToastUtil.show(mView.getContext(), loginBean.getMsg());
+                    if (mView != null)
+                        mView.loginError();
+//                    ToastUtil.show(mView.getContext(), loginBean.getMsg());
                 }
             }
         }, map);

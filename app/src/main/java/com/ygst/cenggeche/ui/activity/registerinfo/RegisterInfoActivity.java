@@ -12,11 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
-import com.ygst.cenggeche.app.MyApplication;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.utils.JMessageUtils;
+import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.utils.MD5Util;
 import com.ygst.cenggeche.utils.TextViewUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
@@ -28,8 +27,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.api.BasicCallback;
 
 
 /**
@@ -118,12 +115,12 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         } else if (!pwd.equals(confirmPWD)) {
             ToastUtil.show(this, "两次密码输入不一致");
         } else {
-            JMessageClient.register(userName, JMessageUtils.JMESSAGE_LOGIN_PASSWROD, new BasicCallback() {
-                @Override
-                public void gotResult(int responseCode, String s) {
-                    LogUtils.i(TAG, "s:" + s);
-                    if (responseCode == 0) {
-                        LogUtils.i(TAG, "极光注册成功了");
+//            JMessageClient.register(userName, JMessageUtils.JMESSAGE_LOGIN_PASSWROD, new BasicCallback() {
+//                @Override
+//                public void gotResult(int responseCode, String responseMessage) {
+//                    LogUtils.i(TAG, "s:" + responseMessage+" code:"+responseCode);
+//                    if (responseCode == 0) {
+//                        LogUtils.i(TAG, "极光注册成功了");
                         String password = MD5Util.string2MD5(pwd);
                         Map<String, String> map = new HashMap<>();
                         map.put("username", userName);
@@ -131,13 +128,14 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
                         map.put("nickname", nickname);
                         map.put("birthday", birthday);
                         map.put("gender", gender + "");
-                        map.put("registrationId", MyApplication.getRegistrationId());
+                        map.put("registrationId", AppData.getRegistrationId());
                         mPresenter.registrationConfirm(map);
-                    } else {
-                        ToastUtil.show(RegisterInfoActivity.this, "极光注册失败");
-                    }
-                }
-            });
+//                    } else {
+//
+//                        ToastUtil.show(RegisterInfoActivity.this, "极光注册失败"+responseMessage);
+//                    }
+//                }
+//            });
 
         }
     }
@@ -208,7 +206,12 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
 
     @Override
     public void registrationSuccess() {
-
+        Intent intent = new Intent();
+        intent.putExtra("username",userName);
+        intent.putExtra("password",pwd);
+        intent.setClass(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
         ToastUtil.show(this, "欢迎您的加入");
     }
 

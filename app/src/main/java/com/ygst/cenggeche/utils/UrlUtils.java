@@ -42,6 +42,8 @@ public class UrlUtils {
     public static String APPLY_FRIEND = "/friend/applyFriend.do";
     //验证消息列表
     public static String APPLY_LIST="/friend/applyList.do";
+    //验证消息列表
+    public static String DELETE_APPLY="/friend/realDelapplyFriend.do";
 
     // 刷新token
     public static String REFRESHTOKEN = "/login/refreshToken.do";

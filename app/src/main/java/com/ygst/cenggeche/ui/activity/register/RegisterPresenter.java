@@ -9,7 +9,6 @@ import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.HashMap;
@@ -26,6 +25,7 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
 
     @Override
     public void checkIsRegist(String username) {
+        final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "检测手机号是否可用");
         Map<String, String> map = new HashMap<>();
         map.put("username", username);
         HttpManager.getHttpManager().postMethod(UrlUtils.CHECK_IS_REGIST, new Observer<String>() {
@@ -36,11 +36,12 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
 
             @Override
             public void onError(Throwable e) {
-
+                progressDialog.dismiss();
             }
 
             @Override
             public void onNext(String s) {
+                progressDialog.dismiss();
                 LogUtils.i("HttpManager", "ssss:" + s);
                 Gson gson = new Gson();
                 CodeBean codeBean = gson.fromJson(s, CodeBean.class);
@@ -50,6 +51,9 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
                     }
 //                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 } else {
+                    if (mView != null) {
+                        mView.checkIsRegistError();
+                    }
 //                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 }
             }
@@ -69,8 +73,6 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
 
             @Override
             public void onError(Throwable e) {
-                if (mView != null)
-                    mView.getSMSCodeError();
                 Log.i("checkSMSCodeError", "onError:+ ++++++++++++++" + e.toString());
             }
 
@@ -82,9 +84,11 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
                 if ("0000".equals(codeBean.getCode())) {
                     if (mView != null)
                         mView.getSMSCodeSuccess(codeBean);
-                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
+//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 } else {
-                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
+                    if (mView != null)
+                        mView.getSMSCodeError();
+//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 }
             }
         }, map);
@@ -123,7 +127,9 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
                     if (mView != null)
                         mView.checkSMSCodeSuccess(codeBean);
                 } else {
-                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
+                    if (mView != null)
+                        mView.checkSMSCodeError();
+//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 }
             }
         }, map);

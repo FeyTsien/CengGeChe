@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.FriendBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.recycle.contacts_recycle.CustomItemDecoration;
@@ -41,8 +43,10 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
+    @BindView(R.id.tv_unread_count)
+    TextView mTvUnreadCount;
     @BindView(R.id.ll_newfriend)
-    LinearLayout mLlNewFriend;
+    RelativeLayout mLlNewFriend;
     @OnClick(R.id.ll_newfriend)
     public void goToNewFriendList(){
         CommonUtils.startActivity(this, NewFriendListActivity.class);
@@ -63,13 +67,24 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-//        JMessageClient.registerEventReceiver(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initViews();
         initEvents();
     }
 
     public void initViews() {
-        mTvTitle.setText("好友");
+        mTvTitle.setText("好友"); //右上角未读的验证消息数量
+        if(AppData.getUnReadApplyCount()>0){
+            mTvUnreadCount.setVisibility(View.VISIBLE);
+            mTvUnreadCount.setText(""+AppData.getUnReadApplyCount());
+        }else{
+            mTvUnreadCount.setVisibility(View.GONE);
+        }
+
         mAdapter = new ContactAdapter(this);
         rl_recycle_view = (RecyclerView) findViewById(R.id.rl_recycle_view);
         //侧边导航栏

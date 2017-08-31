@@ -8,7 +8,6 @@ import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.Map;
@@ -38,8 +37,6 @@ public class RegisterInfoPresenter extends BasePresenterImpl<RegisterInfoContrac
             @Override
             public void onError(Throwable e) {
                 progressDialog.dismiss();
-                if (mView != null)
-                    mView.registrationError();
                 LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
             }
 
@@ -53,7 +50,9 @@ public class RegisterInfoPresenter extends BasePresenterImpl<RegisterInfoContrac
                     if (mView != null)
                         mView.registrationSuccess();
                 } else {
-                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
+                    if (mView != null)
+                        mView.registrationError();
+//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 }
             }
         }, map);

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
-import com.ygst.cenggeche.app.MyApplication;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
@@ -64,8 +64,8 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
                 if (0 == responseCode) {
                     //好友请求请求发送成功
                     Map<String, String> map = new HashMap<>();
-                    map.put("myusername",MyApplication.getUserName());
-                    map.put("fusername",targetUserName);
+                    map.put("myusername",targetUserName);
+                    map.put("fusername", AppData.getUserName());
                     map.put("appkey",targetAppKey);
                     map.put("applyInfo",reason);
                     mPresenter.sendAddFriend(map);

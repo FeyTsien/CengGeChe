@@ -6,13 +6,13 @@ import java.util.List;
  * Created by Administrator on 2017/8/29.
  */
 
-public class NewFriendBean {
+public class ApplyBean {
 
 
     /**
-     * data : [{"uid":123,"id":1,"fusername":"123456","applyInfo":"sdfa","appkey":"","applyTime":"2017-08-30 11:28:51","isAgree":3},"......"]
+     * data : [{"applyInfo":"sdfa","fusername":"123456","id":1,"uid":123,"appkey":"","applyTime":"2017-08-30 11:28:51","isAgree":3},{"applyInfo":"4123213","fusername":"1234564","id":3,"uid":123,"appkey":"","applyTime":"2017-08-30 11:11:12","isAgree":3},{"applyInfo":"sdfa","fusername":"123456","id":4,"uid":123,"appkey":"","applyTime":"2017-08-30 14:44:16","isAgree":3}]
      * code : 0000
-     * msg : 返回成功
+     * msg : 成功
      */
 
     private String code;
@@ -45,37 +45,29 @@ public class NewFriendBean {
 
     public static class DataBean {
         /**
-         * uid : 123
-         * id : 1
-         * fusername : 123456
          * applyInfo : sdfa
+         * fusername : 123456
+         * id : 1
+         * uid : 123
          * appkey :
          * applyTime : 2017-08-30 11:28:51
          * isAgree : 3
          */
 
-        private int uid;
-        private int id;
-        private String fusername;
         private String applyInfo;
+        private String fusername;
+        private int id;
+        private int uid;
         private String appkey;
         private String applyTime;
         private int isAgree;
 
-        public int getUid() {
-            return uid;
+        public String getApplyInfo() {
+            return applyInfo;
         }
 
-        public void setUid(int uid) {
-            this.uid = uid;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
+        public void setApplyInfo(String applyInfo) {
+            this.applyInfo = applyInfo;
         }
 
         public String getFusername() {
@@ -86,12 +78,20 @@ public class NewFriendBean {
             this.fusername = fusername;
         }
 
-        public String getApplyInfo() {
-            return applyInfo;
+        public int getId() {
+            return id;
         }
 
-        public void setApplyInfo(String applyInfo) {
-            this.applyInfo = applyInfo;
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getUid() {
+            return uid;
+        }
+
+        public void setUid(int uid) {
+            this.uid = uid;
         }
 
         public String getAppkey() {

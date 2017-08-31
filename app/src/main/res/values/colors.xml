@@ -11,7 +11,7 @@
     <!--状态栏颜色-->
     <color name="colorPrimaryDark">#11f11f</color>
     <!--控件颜色-->
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#8064a1</color>
 
     <!--Hint字体颜色-->
     <color name="colorHint">#989898</color>

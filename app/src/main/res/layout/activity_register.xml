@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="43dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/button_selector_code"
+                android:background="@drawable/button_getcode_bg"
                 android:text="立即获取"
                 android:textColor="@color/white"
                 android:textSize="13sp"/>
@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/button_selector"
+            android:background="@drawable/button_bg"
             android:text="下一步"
             android:textColor="@color/white"
             android:textSize="13sp" />

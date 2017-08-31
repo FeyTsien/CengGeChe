@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_margin="10dp"
-        android:background="@drawable/button_background"
+        android:background="@drawable/button_bg_click"
         android:onClick="btnMain"
         android:text="正式界面"/>
 
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/btn_main"
-        android:background="@drawable/button_background"
+        android:background="@drawable/button_bg_click"
         android:layout_margin="10dp"
         android:onClick="btnJChat"
         android:text="JChat功能界面"/>

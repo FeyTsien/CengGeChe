@@ -23,8 +23,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.SharedPreferencesUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,13 +37,10 @@ import cn.jpush.im.android.api.JMessageClient;
 
 public class MyApplication extends Application {
 
-    public static String deviceId;
-    public static String os = "android";
-    public static String sign;
-
-    private static final String IS_LOGIN_ED = "isLoginEd";
-    private static final String IS_NOTIFICATION = "isNotification";
     private static Context mContext = null;
+
+    private static Handler handler;
+    private static int mainThreadId;
 
     public static int getMainThreadId() {
         return mainThreadId;
@@ -54,158 +49,6 @@ public class MyApplication extends Application {
     public static Handler getHandler() {
         return handler;
     }
-
-    /**
-     * 查询是否登陆
-     *
-     * @return
-     */
-    public static boolean isLoginEd() {
-        return SharedPreferencesUtils.getBoolean(IS_LOGIN_ED, false);
-    }
-
-    /**
-     * 设置是否登陆
-     *
-     * @param isLoginEd
-     */
-    public static void setIsLoginEd(boolean isLoginEd) {
-        SharedPreferencesUtils.saveBoolean(IS_LOGIN_ED, isLoginEd);
-    }
-
-    /**
-     * 查询是否勾选不再提示（开始通知栏权限时）
-     *
-     * @return
-     */
-    public static boolean isNotification() {
-        return SharedPreferencesUtils.getBoolean(IS_NOTIFICATION, false);
-    }
-
-    /**
-     * 设置是否勾选不再提示（开始通知栏权限时）
-     *
-     * @param isLoginEd
-     */
-    public static void setIsNotification(boolean isLoginEd) {
-        SharedPreferencesUtils.saveBoolean(IS_NOTIFICATION, isLoginEd);
-    }
-
-    /**
-     * 保存UserId
-     */
-    public static void saveUid(String username) {
-        SharedPreferencesUtils.saveString("UID", username);
-    }
-    /**
-     * 获取UserId
-     */
-    public static String getUid() {
-        return SharedPreferencesUtils.getString("UID", null);
-    }
-
-    /**
-     * 保存UserName
-     */
-    public static void saveUserName(String username) {
-        SharedPreferencesUtils.saveString("USERNAME", username);
-    }
-    /**
-     * 获取UserName
-     */
-    public static String getUserName() {
-        return SharedPreferencesUtils.getString("USERNAME", null);
-    }
-    /**
-     * 保存Nickname
-     */
-    public static void saveNickname(String username) {
-        SharedPreferencesUtils.saveString("NICKNAME", username);
-    }
-    /**
-     * 获取UserName
-     */
-    public static String getNickname() {
-        return SharedPreferencesUtils.getString("NICKNAME", null);
-    }
-
-    /**
-     * 保存token
-     */
-    public static void saveToken(String token) {
-        SharedPreferencesUtils.saveString("TOKEN", token);
-    }
-    /**
-     * 获取token
-     */
-    public static String getToken() {
-        return SharedPreferencesUtils.getString("TOKEN", null);
-    }
-
-    /**
-     * 保存头像
-     */
-    public static void saveIcon(String token) {
-        SharedPreferencesUtils.saveString("ICON", token);
-    }
-    /**
-     * 获取头像
-     */
-    public static String getIcon() {
-        return SharedPreferencesUtils.getString("ICON", null);
-    }
-
-    /**
-     * 保存手机设备ID
-     */
-    public static void saveAndroidId() {
-        SharedPreferencesUtils.saveString("ANDROID_ID", CommonUtils.getIMEI(MyApplication.getContext()));
-    }
-
-    /**
-     * 获取手机设备ID
-     */
-    public static String getAndroidId() {
-        return SharedPreferencesUtils.getString("ANDROID_ID", null);
-    }
-
-    /**
-     * 保存RegistrationId
-     */
-    public static void saveRegistrationId(String userId) {
-        SharedPreferencesUtils.saveString("REGISTRATION_ID", userId);
-    }
-
-    /**
-     * 获取RegistrationId
-     */
-    public static String getRegistrationId() {
-        return SharedPreferencesUtils.getString("REGISTRATION_ID", "");
-    }
-
-    // 保存验证状态
-    public static void savaStatus(String time) {
-        SharedPreferencesUtils.saveString("STATTUS", time);
-    }
-
-    public static String getStatus() {
-        return SharedPreferencesUtils.getString("STATTUS", "0");
-    }
-
-    //清除登陆
-    public static void clearLogin() {
-        Log.i("clearLogin", "isTokenExpired: +++++++++++++++++++++++++++++++0005");
-        SharedPreferencesUtils.saveString("USER_ID", "");
-        SharedPreferencesUtils.saveBoolean(IS_LOGIN_ED, false);
-        setIsLoginEd(false);
-
-        saveToken("");
-        saveIcon("");
-        savaStatus("");
-    }
-
-    private static Handler handler;
-    private static int mainThreadId;
 
     public static Context getContext() {
         return mContext;
@@ -222,7 +65,7 @@ public class MyApplication extends Application {
         mContext = getApplicationContext();
         handler = new Handler();//创建Handle
         mainThreadId = Process.myTid();//得到主线程id
-        saveAndroidId();
+        AppData.saveAndroidId();
         // autolayout 的适配初始化 包括状态栏和底部操作栏
 //        AutoLayoutConifg.getInstance().useDeviceSize().init(this);
 
@@ -241,16 +84,27 @@ public class MyApplication extends Application {
         });
     }
 
+    //清除登陆
+    public static void clearLogin() {
+        Log.i("clearLogin", "isTokenExpired: +++++++++++++++++++++++++++++++0005");
+        AppData.saveUid("");
+        AppData.setIsLoginEd(false);
+
+        AppData.saveToken("");
+        AppData.saveIcon("");
+    }
+
 
     public final static float DESIGN_WIDTH = 750; //绘制页面时参照的设计图宽度
+
     /**
      * 屏幕适配的处理（暂时没有使用，以后有时间研究）
      */
-    public void resetDensity(){
+    public void resetDensity() {
         Point size = new Point();
-        ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getSize(size);
+        ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getSize(size);
 
-        getResources().getDisplayMetrics().xdpi = size.x/DESIGN_WIDTH*72f;
+        getResources().getDisplayMetrics().xdpi = size.x / DESIGN_WIDTH * 72f;
     }
 
     /**
@@ -258,7 +112,8 @@ public class MyApplication extends Application {
      * This configuration tuning is custom. You can tune every option, you may
      * tune some of them, or you can create default configuration by
      * ImageLoaderConfiguration.createDefault(this); method. </br>
-     *开源项目Android-Universal-Image-Loader的初始化
+     * 开源项目Android-Universal-Image-Loader的初始化
+     *
      * @param context Context
      */
     private void initImageLoader(Context context) {
@@ -286,6 +141,7 @@ public class MyApplication extends Application {
     /**
      * 解决java.lang.NoClassDefFoundError错误，方法数超过65536了
      * 5.0以下系统会出次问题
+     *
      * @param base
      */
     @Override

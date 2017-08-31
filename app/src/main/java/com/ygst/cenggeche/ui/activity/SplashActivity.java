@@ -9,7 +9,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
-import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
+import com.ygst.cenggeche.ui.activity.main.MainActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
 
 import butterknife.BindView;

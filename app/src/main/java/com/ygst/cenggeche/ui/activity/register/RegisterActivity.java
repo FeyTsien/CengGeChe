@@ -13,6 +13,7 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.registerinfo.RegisterInfoActivity;
 import com.ygst.cenggeche.ui.widget.TimeCount;
 import com.ygst.cenggeche.utils.CommonUtils;
@@ -48,7 +49,8 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
      */
     @OnClick(R.id.iv_back)
     public void goBack() {
-        finish();
+        CommonUtils.startActivity(this,LoginActivity.class);
+        CommonUtils.finishActivity(this);
     }
 
     //获取验证
@@ -125,33 +127,35 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
 
     @Override
     public void checkIsRegistError() {
-        ToastUtil.show(this, "访问服务器失败");
+        ToastUtil.show(this, "账号已被注册,请更换账号");
     }
 
     @Override
     public void getSMSCodeSuccess(CodeBean codeBean) {
-        ToastUtil.show(this, "获取验证码成功");
+        ToastUtil.show(this, "验证码已发送");
+        timeCount.cancel();
+        timeCount.onFinish();
     }
 
     @Override
     public void getSMSCodeError() {
+        ToastUtil.show(this, "验证码发送失败");
         timeCount.cancel();
         timeCount.onFinish();
     }
 
     @Override
     public void checkSMSCodeSuccess(CodeBean codeBean) {
-        ToastUtil.show(this, "验证码校验成功");
-        timeCount.cancel();
-        timeCount.onFinish();
+        ToastUtil.show(this, "校验成功");
         Intent intent = new Intent();
         intent.putExtra("username", mEtPhone.getText().toString());
         intent.setClass(this, RegisterInfoActivity.class);
         startActivity(intent);
+        CommonUtils.finishActivity(this);
     }
 
     @Override
     public void checkSMSCodeError() {
-        ToastUtil.show(this, "验证码校验失败");
+        ToastUtil.show(this, "校验失败");
     }
 }

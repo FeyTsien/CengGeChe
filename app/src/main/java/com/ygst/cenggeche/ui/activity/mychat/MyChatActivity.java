@@ -189,8 +189,18 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         initReceiver();
         initView();
         initListener();
+        getNotificationMessage();
     }
 
+    /**
+     * 点击通知跳转到聊天页显示消息
+     */
+    private void getNotificationMessage(){
+        Message msg = (Message) getIntent().getSerializableExtra(JMessageUtils.MESSAGE);
+        if(msg!=null){
+            refreshMessages(msg);
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -838,6 +848,36 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
      */
     public void onEvent(MessageEvent event) {
         final Message msg = event.getMessage();
+        refreshMessages(msg);
+
+        //若为群聊相关事件，如添加、删除群成员
+        Log.i(TAG, event.getMessage().toString());
+        if (msg.getContentType() == ContentType.eventNotification) {
+            GroupInfo groupInfo = (GroupInfo) msg.getTargetInfo();
+            long groupId = groupInfo.getGroupID();
+            UserInfo myInfo = JMessageClient.getMyInfo();
+            EventNotificationContent.EventNotificationType type = ((EventNotificationContent) msg
+                    .getContent()).getEventNotificationType();
+            if (groupId == mGroupId) {
+                switch (type) {
+                    case group_member_added:
+                        //添加群成员事件
+                        break;
+                    case group_member_removed:
+                        //删除群成员事件
+                        break;
+                    case group_member_exit:
+                        refreshGroupNum();
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 刷新单聊消息
+     */
+    private void refreshMessages(final Message msg){
         //刷新消息
         runOnUiThread(new Runnable() {
             @Override
@@ -871,30 +911,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             }
         });
 
-        //若为群聊相关事件，如添加、删除群成员
-        Log.i(TAG, event.getMessage().toString());
-        if (msg.getContentType() == ContentType.eventNotification) {
-            GroupInfo groupInfo = (GroupInfo) msg.getTargetInfo();
-            long groupId = groupInfo.getGroupID();
-            UserInfo myInfo = JMessageClient.getMyInfo();
-            EventNotificationContent.EventNotificationType type = ((EventNotificationContent) msg
-                    .getContent()).getEventNotificationType();
-            if (groupId == mGroupId) {
-                switch (type) {
-                    case group_member_added:
-                        //添加群成员事件
-                        break;
-                    case group_member_removed:
-                        //删除群成员事件
-                        break;
-                    case group_member_exit:
-                        refreshGroupNum();
-                        break;
-                }
-            }
-        }
     }
-
     private void refreshGroupNum() {
         Conversation conv = JMessageClient.getGroupConversation(mGroupId);
         GroupInfo groupInfo = (GroupInfo) conv.getTargetInfo();

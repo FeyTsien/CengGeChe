@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="43dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/button_selector_code"
+                android:background="@drawable/button_getcode_bg"
                 android:text="立即获取"
                 android:visibility="gone"
                 android:textColor="@color/white"
@@ -102,16 +102,17 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/button_selector"
+            android:background="@drawable/button_bg"
             android:text="确认"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
         <RelativeLayout
+            android:id="@+id/rl_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp">
+            android:padding="15dp">
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
