@@ -50,7 +50,7 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
     @OnClick(R.id.iv_back)
     public void goBack() {
         CommonUtils.startActivity(this,LoginActivity.class);
-        CommonUtils.finishActivity(this);
+        finish();
     }
 
     //获取验证

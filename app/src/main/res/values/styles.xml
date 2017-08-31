@@ -8,8 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item> <!--所有本APP内的控件颜色-->
     </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/BaseAppTheme">
+    <!-- 页面弹出（入场出场）动画 -->
+    <style name="AnimationActivity" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item >
+        <item name="android:activityOpenExitAnimation">@anim/in_from_right_abit</item >
+        <item name="android:activityCloseEnterAnimation">@anim/out_to_right</item >
+        <item name="android:activityCloseExitAnimation">@anim/out_to_right_abit</item >
     </style>
 
     <!--启动页style-->

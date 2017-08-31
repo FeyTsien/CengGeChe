@@ -127,7 +127,7 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
             public void onClick(View v) {
                 final Intent intent = new Intent();
                 intent.putExtra(JMessageUtils.TARGET_USERNAME, mEditTextTargetId.getText().toString());
-                intent.setClass(mContext, ChatActivity.class);
+                intent.setClass(mContext, MyChatActivity.class);
                 startActivity(intent);
             }
         });

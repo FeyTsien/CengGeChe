@@ -507,13 +507,13 @@ public class CommonUtils {
     public static void startActivity(Activity activity, Class goTo) {
         Intent intent = new Intent(activity, goTo);
         activity.startActivity(intent);
-        activity.overridePendingTransition(R.anim.xin_right, R.anim.xout_left);
+//        activity.overridePendingTransition(R.anim.xin_right, R.anim.xout_left);
     }
 
     //返回
     public static void finishActivity(Activity activity) {
         activity.finish();
-        activity.overridePendingTransition(R.anim.xin_left, R.anim.xout_right);
+//        activity.overridePendingTransition(R.anim.xin_left, R.anim.xout_right);
     }
 
     public static class Builder {

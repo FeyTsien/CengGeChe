@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="*此号将作为您的登录账号"
+                android:text="*此账号将作为您的登录账号"
                 android:textColor="@color/colorSub2"
                 android:textSize="13sp" />
         </RelativeLayout>
