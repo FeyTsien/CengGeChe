@@ -37,4 +37,9 @@
         <attr name="left_text_drawable_right" format="reference"/>
         <attr name="left_text_drawable_left" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="FlowLayout">
+        <attr name="horizontal_spacing" format="dimension" />
+        <attr name="vertical_spacing" format="dimension" />
+    </declare-styleable>
 </resources>

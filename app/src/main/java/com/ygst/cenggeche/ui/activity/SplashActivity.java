@@ -10,6 +10,7 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity;
+import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
 
 import butterknife.BindView;
@@ -88,7 +89,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void toIMActivity(){
-        CommonUtils.startActivity(this, TestActivity.class);
+        CommonUtils.startActivity(this, TestActivity2.class);
         finish();
     }
 

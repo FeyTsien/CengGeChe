@@ -12,8 +12,7 @@
         android:layout_below="@+id/jmui_send_time_txt"
         style="@style/jmui_chat_item_sender_avatar_style" />
 
-
-    <TextView
+    <io.github.rockerhieu.emojicon.EmojiconTextView
         android:id="@+id/jmui_msg_content"
         style="@style/jmui_msg_text_style"
         android:layout_width="wrap_content"
@@ -24,6 +23,18 @@
         android:background="@drawable/jmui_msg_send_bg"
         android:paddingLeft="10dp"
         android:paddingRight="15dp" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/jmui_msg_content"-->
+        <!--style="@style/jmui_msg_text_style"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toLeftOf="@+id/jmui_avatar_iv"-->
+        <!--android:layout_below="@+id/jmui_send_time_txt"-->
+        <!--android:layout_marginRight="3dp"-->
+        <!--android:background="@drawable/jmui_msg_send_bg"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingRight="15dp" />-->
 
     <ImageView
         android:id="@+id/jmui_sending_iv"

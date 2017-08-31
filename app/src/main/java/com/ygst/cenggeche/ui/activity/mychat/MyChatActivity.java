@@ -74,6 +74,11 @@ import cn.jpush.im.android.api.model.GroupInfo;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.android.eventbus.EventBus;
+import io.github.rockerhieu.emojicon.EmojiconEditText;
+import io.github.rockerhieu.emojicon.EmojiconGridFragment;
+import io.github.rockerhieu.emojicon.EmojiconsFragment;
+import io.github.rockerhieu.emojicon.emoji.Emojicon;
+import io.github.rockerhieu.emojiconize.Emojiconize;
 
 
 /**
@@ -81,7 +86,7 @@ import cn.jpush.im.android.eventbus.EventBus;
  * 邮箱 784787081@qq.com
  */
 
-public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatPresenter> implements MyChatContract.View, IEmotionSelectedListener, View.OnClickListener {
+public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatPresenter> implements MyChatContract.View, IEmotionSelectedListener, View.OnClickListener, EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
     private String TAG = "MyChatActivity";
 
@@ -144,7 +149,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     RecordVoiceButton mVoiceBtn;
     //消息输入框
     @BindView(R.id.etContent)
-    EditText mEtContent;
+    EmojiconEditText mEtContent;
     //点击展示表情包按钮
     @BindView(R.id.ivEmo)
     ImageView mIvEmo;
@@ -157,6 +162,9 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     //更多功能栏（包含着表情包和其他功能）
     @BindView(R.id.flEmotionView)
     FrameLayout mFlEmotionView;
+    //Emoji表情包展示栏
+    @BindView(R.id.emojicons)
+    FrameLayout mFlEmojicons;
     //表情包展示栏
     @BindView(R.id.elEmotion)
     EmotionLayout mElEmotion;
@@ -173,6 +181,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     @BindView(R.id.ivLocation)
     ImageView mIvLocation;
 
+    //表情键盘协调工具
     private EmotionKeyboard mEmotionKeyboard;
 
     @Override
@@ -182,6 +191,8 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+//        //如果加了这段话，可以使用普通控件默认兼容Emoji（但是Emoji列表里的表情变小了）
+//        Emojiconize.activity(this).go();
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         mContext = this;
@@ -195,12 +206,13 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     /**
      * 点击通知跳转到聊天页显示消息
      */
-    private void getNotificationMessage(){
+    private void getNotificationMessage() {
         Message msg = (Message) getIntent().getSerializableExtra(JMessageUtils.MESSAGE);
-        if(msg!=null){
+        if (msg != null) {
             refreshMessages(msg);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -242,7 +254,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     }
 
     public void initView() {
-        mElEmotion.attachEditText(mEtContent);
+//        mElEmotion.attachEditText(mEtContent);
         initEmotionKeyboard();
 
         //接受到传过来的Username和appkey
@@ -290,6 +302,35 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     }
 
 
+    /**
+     * 用于显示Emoji表情的展示栏的Fragment
+     *
+     * @param useSystemDefault
+     */
+    private void setEmojiconFragment(boolean useSystemDefault) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.emojicons, EmojiconsFragment.newInstance(useSystemDefault))
+                .commit();
+    }
+
+    /**
+     * Emoji表情包的重写方法
+     */
+    @Override
+    public void onEmojiconClicked(Emojicon emojicon) {
+        EmojiconsFragment.input(mEtContent, emojicon);
+    }
+
+    /**
+     * Emoji表情包的重写方法
+     */
+    @Override
+    public void onEmojiconBackspaceClicked(View v) {
+        EmojiconsFragment.backspace(mEtContent);
+    }
+
+
     // 监听耳机插入
     private void initReceiver() {
         mReceiver = new MyReceiver();
@@ -311,6 +352,10 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
     }
 
+
+    /**
+     * 初始化表情键盘协调工具
+     */
     private void initEmotionKeyboard() {
         mEmotionKeyboard = EmotionKeyboard.with(this);
         mEmotionKeyboard.bindToEditText(mEtContent);
@@ -323,14 +368,15 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 switch (view.getId()) {
                     case R.id.ivEmo:
                         setToBottom();
-                        if (!mElEmotion.isShown()) {
+//                        if (!mElEmotion.isShown()) {
+                        if (!mFlEmojicons.isShown()) {
                             if (mLlMore.isShown()) {
                                 showEmotionLayout();
                                 hideMoreLayout();
                                 hideAudioButton();
                                 return true;
                             }
-                        } else if (mElEmotion.isShown() && !mLlMore.isShown()) {
+                        } else if (mFlEmojicons.isShown() && !mLlMore.isShown()) {
                             mIvEmo.setImageResource(R.mipmap.ic_cheat_emo);
                             return false;
                         }
@@ -341,7 +387,8 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                     case R.id.ivMore:
                         setToBottom();
                         if (!mLlMore.isShown()) {
-                            if (mElEmotion.isShown()) {
+//                            if (mElEmotion.isShown()) {
+                            if (mFlEmojicons.isShown()) {
                                 showMoreLayout();
                                 hideEmotionLayout();
                                 hideAudioButton();
@@ -358,44 +405,34 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         });
     }
 
-    private void setListeners() {
-        mIvBack.setOnClickListener(this);
-        mIvRight.setOnClickListener(this);
-        mIvAudio.setOnClickListener(this);
-        mBtnSend.setOnClickListener(this);
-        mIvAlbum.setOnClickListener(this);
-        mIvShot.setOnClickListener(this);
-        mIvLocation.setOnClickListener(this);
-    }
 
-    private void setOnTouchListener() {
-
-    }
-
+    /**
+     * 监听初始化
+     */
     public void initListener() {
         setListeners();
         setOnTouchListener();
-        mElEmotion.setEmotionSelectedListener(this);
-        mElEmotion.setEmotionAddVisiable(true);
-        mElEmotion.setEmotionSettingVisiable(true);
-        mElEmotion.setEmotionExtClickListener(new IEmotionExtClickListener() {
-            @Override
-            public void onEmotionAddClick(View view) {
-                Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onEmotionSettingClick(View view) {
-                Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mElEmotion.setEmotionSelectedListener(this);
+//        mElEmotion.setEmotionAddVisiable(true);
+//        mElEmotion.setEmotionSettingVisiable(true);
+//        mElEmotion.setEmotionExtClickListener(new IEmotionExtClickListener() {
+//            @Override
+//            public void onEmotionAddClick(View view) {
+//                Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onEmotionSettingClick(View view) {
+//                Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         mChatListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        LogUtils.i(TAG,"mChatListView触摸了内容区");
+                        LogUtils.i(TAG, "mChatListView触摸了内容区");
                         closeBottomAndKeyboard();
 //                        if (mElEmotion.isShown() || mLlMore.isShown()) {
 //                            mEmotionKeyboard.interceptBackPress();
@@ -429,6 +466,26 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             }
         });
 
+    }
+
+    /**
+     * 触摸监听
+     */
+    private void setOnTouchListener() {
+
+    }
+
+    /**
+     * 单点击监听
+     */
+    private void setListeners() {
+        mIvBack.setOnClickListener(this);
+        mIvRight.setOnClickListener(this);
+        mIvAudio.setOnClickListener(this);
+        mBtnSend.setOnClickListener(this);
+        mIvAlbum.setOnClickListener(this);
+        mIvShot.setOnClickListener(this);
+        mIvLocation.setOnClickListener(this);
     }
 
     @Override
@@ -636,12 +693,19 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     }
 
     private void showEmotionLayout() {
-        mElEmotion.setVisibility(View.VISIBLE);
+        setEmojiconFragment(false);
+        //Emoji表情包栏
+        mFlEmojicons.setVisibility(View.VISIBLE);
+//        //自定义表情包栏
+//        mElEmotion.setVisibility(View.VISIBLE);
         mIvEmo.setImageResource(R.mipmap.ic_cheat_keyboard);
     }
 
     private void hideEmotionLayout() {
-        mElEmotion.setVisibility(View.GONE);
+        //Emoji表情包栏
+        mFlEmojicons.setVisibility(View.GONE);
+//        //自定义表情包栏
+//        mElEmotion.setVisibility(View.GONE);
         mIvEmo.setImageResource(R.mipmap.ic_cheat_emo);
     }
 
@@ -654,11 +718,14 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     }
 
     private void closeBottomAndKeyboard() {
-        mElEmotion.setVisibility(View.GONE);
+        //Emoji表情包栏
+        mFlEmojicons.setVisibility(View.GONE);
+//        //自定义表情包栏
+//        mElEmotion.setVisibility(View.GONE);
         mLlMore.setVisibility(View.GONE);
         dismissSoftInput();
         if (mEmotionKeyboard != null) {
-            LogUtils.i(TAG,"mEmotionKeyboard");
+            LogUtils.i(TAG, "mEmotionKeyboard");
             mEmotionKeyboard.interceptBackPress();
         }
     }
@@ -670,7 +737,9 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             mVoiceBtn.releaseRecorder();
             RecordVoiceButton.mIsPressed = false;
         }
-        if (mElEmotion.isShown() || mLlMore.isShown()) {
+
+//        if (mElEmotion.isShown() || mLlMore.isShown()) {
+        if (mFlEmojicons.isShown() || mLlMore.isShown()) {
             mEmotionKeyboard.interceptBackPress();
         } else {
             mConversation.resetUnreadCount();
@@ -877,7 +946,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     /**
      * 刷新单聊消息
      */
-    private void refreshMessages(final Message msg){
+    private void refreshMessages(final Message msg) {
         //刷新消息
         runOnUiThread(new Runnable() {
             @Override
@@ -912,6 +981,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         });
 
     }
+
     private void refreshGroupNum() {
         Conversation conv = JMessageClient.getGroupConversation(mGroupId);
         GroupInfo groupInfo = (GroupInfo) conv.getTargetInfo();

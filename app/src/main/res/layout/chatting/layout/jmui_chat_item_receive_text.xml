@@ -25,7 +25,7 @@
             android:layout_toRightOf="@id/jmui_avatar_iv"
             />
 
-        <TextView
+        <io.github.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/jmui_msg_content"
             style="@style/jmui_msg_text_style"
             android:layout_width="wrap_content"
@@ -38,6 +38,20 @@
             android:paddingLeft="15dp"
             android:paddingRight="10dp"
             android:textColor="#363333" />
+
+        <!--<TextView-->
+            <!--android:id="@+id/jmui_msg_content"-->
+            <!--style="@style/jmui_msg_text_style"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_below="@id/jmui_display_name_tv"-->
+            <!--android:layout_marginLeft="3dp"-->
+            <!--android:layout_toRightOf="@id/jmui_avatar_iv"-->
+            <!--android:background="@drawable/jmui_msg_receive_bg"-->
+            <!--android:paddingLeft="15dp"-->
+            <!--android:paddingRight="10dp"-->
+            <!--android:textColor="#363333" />-->
 
     </RelativeLayout>
 

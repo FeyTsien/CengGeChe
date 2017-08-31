@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/app_toolbar_chat"/>
+    <include layout="@layout/app_toolbar_chat" />
 
     <!--内容-->
     <LinearLayout
@@ -13,6 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
+
         <cn.jmessage.android.uikit.chatting.DropDownListView
             android:id="@+id/list_view_chat"
             android:layout_width="match_parent"
@@ -49,13 +51,21 @@
                 android:layout_weight="1"
                 android:gravity="center">
 
-                <EditText
+                <io.github.rockerhieu.emojicon.EmojiconEditText
                     android:id="@+id/etContent"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@null"
                     android:drawableBottom="@drawable/selector_edit_focus"
                     android:visibility="visible" />
+
+                <!--<EditText-->
+                <!--android:id="@+id/etContent"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:background="@null"-->
+                <!--android:drawableBottom="@drawable/selector_edit_focus"-->
+                <!--android:visibility="visible" />-->
 
                 <com.ygst.cenggeche.ui.activity.mychat.RecordVoiceButton
                     android:id="@+id/record_voice_button"
@@ -109,6 +119,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone">
+        <!--Emoji表情-->
+        <FrameLayout
+            android:id="@+id/emojicons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
         <!--表情-->
         <com.lqr.emoji.EmotionLayout
             android:id="@+id/elEmotion"
