@@ -26,7 +26,6 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     public SwipeMenuListViewAdapter(Context context, List<ApplyBean.DataBean> list) {
         mContext = context;
         this.mListDataBean = list;
-        this.activity = new NewFriendListActivity();
     }
 
     @Override
@@ -46,6 +45,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        activity = new NewFriendListActivity();
         if (convertView == null) {
             convertView = View.inflate(mContext.getApplicationContext(), R.layout.item_list_newfriend, null);
             new ViewHolder(convertView);
