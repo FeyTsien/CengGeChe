@@ -19,12 +19,14 @@ import java.util.List;
 
 public class SwipeMenuListViewAdapter extends BaseAdapter {
 
+    NewFriendListActivity activity;
     List<ApplyBean.DataBean> mListDataBean;
     Context mContext;
 
     public SwipeMenuListViewAdapter(Context context, List<ApplyBean.DataBean> list) {
         mContext = context;
         this.mListDataBean = list;
+        this.activity = new NewFriendListActivity();
     }
 
     @Override
@@ -67,19 +69,13 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
         holder.mBtnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newFriend.setIsAgree(1);
-                holder.mTvIsAgree.setText("已同意");
-                holder.mBtnYes.setVisibility(View.GONE);
-                holder.mBtnNo.setVisibility(View.GONE);
+                activity.showNoAgreeDialog(newFriend);
             }
         });
         holder.mBtnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newFriend.setIsAgree(2);
-                holder.mTvIsAgree.setText("已拒绝");
-                holder.mBtnNo.setVisibility(View.GONE);
-                holder.mBtnYes.setVisibility(View.GONE);
+
             }
         });
 

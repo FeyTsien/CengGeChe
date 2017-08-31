@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="20dp"
         android:orientation="horizontal">
 
         <TextView
@@ -73,25 +73,25 @@
 
         <Button
             android:id="@+id/btn_yes"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
             android:layout_marginRight="10dp"
-            android:background="@color/green"
+            android:background="@drawable/button_bg_yes"
             android:text="同意"
             android:layout_gravity="center_vertical"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:visibility="gone"/>
 
         <Button
             android:id="@+id/btn_no"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:background="@color/red"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
+            android:background="@drawable/button_bg_no"
             android:layout_gravity="center_vertical"
             android:text="拒绝"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:visibility="gone"/>
     </LinearLayout>
 

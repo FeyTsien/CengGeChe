@@ -200,6 +200,18 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
         });
     }
 
+
+    private void initConversationListView(){
+        mListConversation = JMessageClient.getConversationList();
+        mSwipeMenuListViewAdapter = new SwipeMenuListViewAdapter(getActivity(),mListConversation);
+        if (mListConversation != null) {
+            mListView.setAdapter(mSwipeMenuListViewAdapter);
+        }
+        if(mSwipeMenuListViewAdapter!=null){
+            mSwipeMenuListViewAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void setIsRead(SwipeMenu menu,Conversation conversation) {
         if(conversation.getUnReadMsgCnt()>0) {
             conversation.setUnReadMessageCnt(0);
@@ -217,17 +229,6 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
             ToastUtil.show(getActivity(), "删除单聊会话成功");
         } else {
             ToastUtil.show(getActivity(), "删除群聊会话成功");
-        }
-    }
-
-    private void initConversationListView(){
-        mListConversation = JMessageClient.getConversationList();
-        mSwipeMenuListViewAdapter = new SwipeMenuListViewAdapter(getActivity(),mListConversation);
-        if (mListConversation != null) {
-            mListView.setAdapter(mSwipeMenuListViewAdapter);
-        }
-        if(mSwipeMenuListViewAdapter!=null){
-            mSwipeMenuListViewAdapter.notifyDataSetChanged();
         }
     }
 

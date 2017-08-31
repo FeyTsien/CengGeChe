@@ -1,10 +1,9 @@
 package com.ygst.cenggeche.ui.activity.newfriendlist;
 
-import android.util.Log;
-
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.Gson;
 import com.ygst.cenggeche.bean.ApplyBean;
+import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.UrlUtils;
@@ -35,14 +34,12 @@ public class NewFriendListPresenter extends BasePresenterImpl<NewFriendListContr
 
             @Override
             public void onError(Throwable e) {
-                Log.i("checkSMSCodeError", "onError:+ ++++++++++++++" + e.toString());
+                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
             }
 
             @Override
             public void onNext(String s) {
-                Log.i("checkSMSCodeError", "onNext:+ ++++++++++++++" + s);
-//                LoginBean loginBean = (LoginBean) GsonManger.getGsonManger().gsonFromat(s, new LoginBean());
-
+                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
                 Gson gson = new Gson();
                 ApplyBean applyBean = gson.fromJson(s, ApplyBean.class);
 
@@ -60,7 +57,105 @@ public class NewFriendListPresenter extends BasePresenterImpl<NewFriendListContr
     }
 
     @Override
-    public void deleteDate(ApplyBean.DataBean dataBean, int position) {
+    public void deleteApplyDate(String myusername, String fusername, final int position) {
+        Map<String, String> map = new HashMap<>();
+        map.put("myusername", myusername);
+        map.put("fusername", fusername);
+        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_DELETE_DATE, new Observer<String>() {
 
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
+            }
+
+            @Override
+            public void onNext(String s) {
+                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
+                Gson gson = new Gson();
+                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+
+                if ("0000".equals(codeBean.getCode())) {
+                    if (mView != null)
+                        mView.deleteApplyDateSuccess(position);
+                } else {
+                    if (mView != null)
+                        mView.deleteApplyDateError();
+                    LogUtils.i(TAG,"code:"+codeBean.getCode());
+                }
+            }
+        }, map);
+    }
+
+    @Override
+    public void noAgree(String myusername, String fusername) {
+        Map<String, String> map = new HashMap<>();
+        map.put("myusername", myusername);
+        map.put("fusername", fusername);
+        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_DATE_NO_AGREE, new Observer<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
+            }
+
+            @Override
+            public void onNext(String s) {
+                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
+                Gson gson = new Gson();
+                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+
+                if ("0000".equals(codeBean.getCode())) {
+                    if (mView != null)
+                        mView.noAgreeSuccess();
+                } else {
+                    if (mView != null)
+                        mView.noAgreeError();
+                    LogUtils.i(TAG,"code:"+codeBean.getCode());
+                }
+            }
+        }, map);
+    }
+
+    @Override
+    public void yesAgree(String myusername, String fusername) {
+        Map<String, String> map = new HashMap<>();
+        map.put("myusername", myusername);
+        map.put("fusername", fusername);
+        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_DATE_YES_AGREE, new Observer<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
+            }
+
+            @Override
+            public void onNext(String s) {
+                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
+                Gson gson = new Gson();
+                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+
+                if ("0000".equals(codeBean.getCode())) {
+                    if (mView != null)
+                        mView.yesAgreeSuccess();
+                } else {
+                    if (mView != null)
+                        mView.yesAgreeError();
+                    LogUtils.i(TAG,"code:"+codeBean.getCode());
+                }
+            }
+        }, map);
     }
 }

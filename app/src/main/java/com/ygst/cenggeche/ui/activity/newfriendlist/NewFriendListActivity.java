@@ -1,6 +1,7 @@
 package com.ygst.cenggeche.ui.activity.newfriendlist;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,6 +21,7 @@ import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenu;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuCreator;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuItem;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuListView;
+import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.List;
@@ -115,7 +117,7 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
                 switch (index) {
                     case 0:
                         // delete删除某个会话
-                        mPresenter.deleteDate(dataBeanItem, position);
+                        mPresenter.deleteApplyDate(AppData.getUserName(), dataBeanItem.getFusername(),position);
                         break;
                 }
             }
@@ -151,12 +153,74 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
 
     @Override
     public void getApplyListSuccess(ApplyBean applyBean) {
-        ToastUtil.show(this,"成功了");
-        setListView(applyBean.getData());
+        mListDataBean = applyBean.getData();
+        setListView(mListDataBean);
     }
 
     @Override
     public void getApplyListError() {
         ToastUtil.show(this,"未获取到信息");
     }
+
+    @Override
+    public void deleteApplyDateSuccess(int position) {
+        mListDataBean.remove(position);
+        if(mSwipeMenuListViewAdapter!=null){
+            mSwipeMenuListViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void deleteApplyDateError() {
+        ToastUtil.show(this,"删除申请失败，请重试");
+    }
+
+
+    /**
+     *拒绝申请提示框
+     */
+    public void showNoAgreeDialog(final ApplyBean.DataBean dataBean){
+        CommonUtils.showInfoDialog(this, "拒绝该用户的好友申请吗？", "提示", "拒绝", "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mPresenter.noAgree(AppData.getUserName(),dataBean.getFusername());
+            }
+        }, null);
+    }
+    /**
+     *同意申请提示框
+     */
+    public void showYesAgreeDialog(final ApplyBean.DataBean dataBean){
+        CommonUtils.showInfoDialog(this, "同意该用户的好友申请吗？", "提示", "同意", "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mPresenter.yesAgree(AppData.getUserName(),dataBean.getFusername());
+            }
+        }, null);
+    }
+    @Override
+    public void noAgreeSuccess() {
+        if(mSwipeMenuListViewAdapter!=null){
+            mSwipeMenuListViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void noAgreeError() {
+        ToastUtil.show(this,"拒绝申请失败，请重试");
+    }
+
+    @Override
+    public void yesAgreeSuccess() {
+        if(mSwipeMenuListViewAdapter!=null){
+            mSwipeMenuListViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void yesAgreeError() {
+        ToastUtil.show(this,"同意申请失败，请重试");
+    }
+
+
 }

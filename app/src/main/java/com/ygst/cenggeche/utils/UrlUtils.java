@@ -42,8 +42,13 @@ public class UrlUtils {
     public static String APPLY_FRIEND = "/friend/applyFriend.do";
     //验证消息列表
     public static String APPLY_LIST="/friend/applyList.do";
-    //验证消息列表
-    public static String DELETE_APPLY="/friend/realDelapplyFriend.do";
+    //删除验证消息
+    public static String APPLY_DELETE_DATE="/friend/realDelapplyFriend.do";
+    //拒绝对方申请
+    public static String APPLY_DATE_NO_AGREE="/friendOperate/delFriend.do";
+    //同意对方申请
+    public static String APPLY_DATE_YES_AGREE="/friend/addFriend.do";
+
 
     // 刷新token
     public static String REFRESHTOKEN = "/login/refreshToken.do";
