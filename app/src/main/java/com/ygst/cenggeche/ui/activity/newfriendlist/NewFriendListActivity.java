@@ -141,8 +141,6 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
         if (listDataBean != null) {
             mSwipeMenuListViewAdapter = new SwipeMenuListViewAdapter(this, listDataBean);
             mListView.setAdapter(mSwipeMenuListViewAdapter);
-        }
-        if(mSwipeMenuListViewAdapter!=null){
             mSwipeMenuListViewAdapter.notifyDataSetChanged();
         }
     }

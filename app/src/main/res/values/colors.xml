@@ -9,7 +9,7 @@
     <!--原色-->
     <color name="colorPrimary">#26d97f</color>
     <!--状态栏颜色-->
-    <color name="colorPrimaryDark">#11f11f</color>
+    <color name="colorPrimaryDark">#8064a1</color>
     <!--控件颜色-->
     <color name="colorAccent">#8064a1</color>
 
