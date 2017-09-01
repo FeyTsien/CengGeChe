@@ -1,5 +1,6 @@
 package com.ygst.cenggeche.ui.activity.friendlist;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import com.github.promeg.pinyinhelper.Pinyin;
@@ -32,20 +33,28 @@ public class CommonUtil {
      *
      * @param list 要进行排序的数据源
      */
-    public static void sortData(List<FriendBean> list) {
+    public static void sortData(List<FriendBean.DataBean> list) {
         if (list == null || list.size() == 0) return;
         for (int i = 0; i < list.size(); i++) {
-            FriendBean bean = list.get(i);
-            String tag = Pinyin.toPinyin(bean.getName().substring(0, 1).charAt(0)).substring(0, 1);
+            FriendBean.DataBean bean = list.get(i);
+                String friendName = "";
+                if(!TextUtils.isEmpty(bean.getFriendNote())){
+                    friendName = bean.getFriendNote();
+                }else if(!TextUtils.isEmpty(bean.getNickname())){
+                    friendName = bean.getNickname();
+                }else{
+                    friendName = bean.getFriendusername();
+                }
+            String tag = Pinyin.toPinyin(friendName.substring(0, 1).charAt(0)).substring(0, 1);
             if (tag.matches("[A-Z]")) {
                 bean.setIndexTag(tag);
             } else {
                 bean.setIndexTag("#");
             }
         }
-        Collections.sort(list, new Comparator<FriendBean>() {
+        Collections.sort(list, new Comparator<FriendBean.DataBean>() {
             @Override
-            public int compare(FriendBean o1, FriendBean o2) {
+            public int compare(FriendBean.DataBean o1, FriendBean.DataBean o2) {
                 if ("#".equals(o1.getIndexTag())) {
                     return 1;
                 } else if ("#".equals(o2.getIndexTag())) {
@@ -61,7 +70,7 @@ public class CommonUtil {
      * @param beans 数据源
      * @return tags 返回一个包含所有Tag字母在内的字符串
      */
-    public static String getTags(List<FriendBean> beans) {
+    public static String getTags(List<FriendBean.DataBean> beans) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < beans.size(); i++) {
             if (!builder.toString().contains(beans.get(i).getIndexTag())) {

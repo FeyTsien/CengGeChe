@@ -264,6 +264,6 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
 
     @Override
     public void loginError() {
-        ToastUtil.show(this, "登录失败了");
+        LogUtils.i(TAG,"登录失败了");
     }
 }

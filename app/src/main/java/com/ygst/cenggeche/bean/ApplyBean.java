@@ -7,10 +7,8 @@ import java.util.List;
  */
 
 public class ApplyBean {
-
-
     /**
-     * data : [{"applyInfo":"sdfa","fusername":"123456","id":1,"uid":123,"appkey":"","applyTime":"2017-08-30 11:28:51","isAgree":3},{"applyInfo":"4123213","fusername":"1234564","id":3,"uid":123,"appkey":"","applyTime":"2017-08-30 11:11:12","isAgree":3},{"applyInfo":"sdfa","fusername":"123456","id":4,"uid":123,"appkey":"","applyTime":"2017-08-30 14:44:16","isAgree":3}]
+     * data : [{"applyInfo":"sdfa","fusername":"123456","id":4,"userPic":"jkljk","nickname":"ljkl","appkey":"","applyTime":"2017-08-30 14:44:16","myusername":"123","isAgree":3},{"applyInfo":"sdfa","fusername":"123456","id":1,"userPic":"jkljk","nickname":"ljkl","appkey":"","applyTime":"2017-08-30 11:28:51","myusername":"123","isAgree":3}]
      * code : 0000
      * msg : 成功
      */
@@ -47,19 +45,23 @@ public class ApplyBean {
         /**
          * applyInfo : sdfa
          * fusername : 123456
-         * id : 1
-         * uid : 123
+         * id : 4
+         * userPic : jkljk
+         * nickname : ljkl
          * appkey :
-         * applyTime : 2017-08-30 11:28:51
+         * applyTime : 2017-08-30 14:44:16
+         * myusername : 123
          * isAgree : 3
          */
 
         private String applyInfo;
         private String fusername;
         private int id;
-        private int uid;
+        private String userPic;
+        private String nickname;
         private String appkey;
         private String applyTime;
+        private String myusername;
         private int isAgree;
 
         public String getApplyInfo() {
@@ -86,12 +88,20 @@ public class ApplyBean {
             this.id = id;
         }
 
-        public int getUid() {
-            return uid;
+        public String getUserPic() {
+            return userPic;
         }
 
-        public void setUid(int uid) {
-            this.uid = uid;
+        public void setUserPic(String userPic) {
+            this.userPic = userPic;
+        }
+
+        public String getNickname() {
+            return nickname;
+        }
+
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
         }
 
         public String getAppkey() {
@@ -108,6 +118,14 @@ public class ApplyBean {
 
         public void setApplyTime(String applyTime) {
             this.applyTime = applyTime;
+        }
+
+        public String getMyusername() {
+            return myusername;
+        }
+
+        public void setMyusername(String myusername) {
+            this.myusername = myusername;
         }
 
         public int getIsAgree() {

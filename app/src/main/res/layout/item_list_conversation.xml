@@ -23,8 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_girl" />
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
     <LinearLayout
@@ -67,7 +66,7 @@
             android:layout_weight="1"
             android:gravity="bottom">
 
-            <TextView
+            <io.github.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_latest_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -30,6 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.ygst.cenggeche.ui.widget.MyTextDrawable;
+import com.ygst.cenggeche.ui.widget.TextDrawable;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -556,8 +558,21 @@ public class MsgListAdapter extends BaseAdapter {
                         if (status == 0) {
                             holder.headIcon.setImageBitmap(bitmap);
                         } else {
-                            holder.headIcon.setImageResource(IdHelper.getDrawable(mContext,
-                                    "jmui_head_icon"));
+                            String name = "";
+                            if(!TextUtils.isEmpty(userInfo.getNotename())){
+                                //备注名
+                                name = userInfo.getNotename();
+                            }else if(!TextUtils.isEmpty(userInfo.getNickname())){
+                                //昵称
+                                name = userInfo.getNickname();
+                            }else{
+                                //用户名
+                                name = userInfo.getUserName();
+                            }
+                            TextDrawable drawable = MyTextDrawable.getTextDrawable(name);
+                            holder.headIcon.setImageDrawable(drawable);
+//                            holder.headIcon.setImageResource(IdHelper.getDrawable(mContext,
+//                                    "jmui_head_icon"));
                             HandleResponseCode.onHandle(mContext, status, false);
                         }
                     }

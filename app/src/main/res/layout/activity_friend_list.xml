@@ -24,7 +24,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/icon_me" />
+            android:src="@drawable/ic_verification_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,11 +51,52 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/ll_blacklist"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/ll_newfriend"
+        android:layout_marginBottom="2dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_blacklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_blacklist_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/iv_blacklist"
+            android:text="黑名单"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_blacklist"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="好友列表"
+        android:textColor="@color/colorTheme" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rl_recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ll_newfriend"
+        android:layout_below="@+id/tv_friend"
         android:background="@color/white" />
 
     <com.ygst.cenggeche.recycle.contacts_recycle.IndexBar

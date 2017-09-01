@@ -1,11 +1,13 @@
 package com.ygst.cenggeche.ui.activity.addfriend;
 
+import android.app.ProgressDialog;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
+import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.Map;
@@ -22,6 +24,7 @@ public class AddFriendPresenter extends BasePresenterImpl<AddFriendContract.View
 
     @Override
     public void sendAddFriend(Map<String, String> map) {
+        final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "发送");
         HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_FRIEND, new Observer<String>() {
 
             @Override

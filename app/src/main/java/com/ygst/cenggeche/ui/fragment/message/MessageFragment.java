@@ -28,8 +28,6 @@ import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-import cn.jmessage.android.uikit.chatting.ChatActivity;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.enums.ConversationType;
 import cn.jpush.im.android.api.event.MessageEvent;
@@ -97,7 +95,6 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
         LogUtils.i(TAG, "------------onCreateView");
         //生命周期3：onCreateView()；
         mRootView = inflater.inflate(R.layout.fragment_message, container, false);
-        ButterKnife.bind(getActivity());
         initView();
         return mRootView;
     }

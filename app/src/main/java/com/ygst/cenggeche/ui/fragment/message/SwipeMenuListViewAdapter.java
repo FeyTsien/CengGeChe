@@ -135,7 +135,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                     //显示性别
                     if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
                         holder.mIVgender.setImageResource(R.mipmap.icon_girl);
-                    } else if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
+                    } else if (mUserInfo.getGender().equals(UserInfo.Gender.male)) {
                         holder.mIVgender.setImageResource(R.mipmap.icon_boy);
                     } else {
                     }
@@ -144,27 +144,36 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                 mUserInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
                     @Override
                     public void gotResult(int status, String desc, Bitmap bitmap) {
+                        String name = "";
+                        if(!TextUtils.isEmpty(mUserInfo.getNotename())){
+                            name =mUserInfo.getNotename();
+                        }else if(!TextUtils.isEmpty(mUserInfo.getNickname())){
+                            name =mUserInfo.getNickname();
+                        }else {
+                            name =mUserInfo.getUserName();
+                        }
+                        //会话的名称
+                        holder.mTVtargetName.setText(name);
+
                         if (status == 0) {
                             holder.mIVavatar.setImageBitmap(bitmap);
                         } else {
-                            TextDrawable drawable = mDrawableBuilder.build(String.valueOf(convItem.getTitle().charAt(0)), mColorGenerator.getColor(convItem.getTitle()));
+                            TextDrawable drawable = mDrawableBuilder.build(String.valueOf(name.charAt(0)), mColorGenerator.getColor(name));
                             holder.mIVavatar.setImageDrawable(drawable);
 //                            holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
                         }
                     }
                 });
             } else {
-                TextDrawable drawable = mDrawableBuilder.build(String.valueOf(convItem.getTitle().charAt(0)), mColorGenerator.getColor(convItem.getTitle()));
-                holder.mIVavatar.setImageDrawable(drawable);
-//                holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
+                holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
             }
         } else {
             GroupInfo mGroupInfo = (GroupInfo) convItem.getTargetInfo();
+            //会话的名称
+            holder.mTVtargetName.setText(mGroupInfo.getGroupName());
             holder.mIVavatar.setImageResource(R.drawable.group);
         }
 
-        //会话的名称
-        holder.mTVtargetName.setText(convItem.getTitle());
         //最新对话内容
         holder.mTVlatestMessage.setText(contentStr);
         //单个会话未读消息数

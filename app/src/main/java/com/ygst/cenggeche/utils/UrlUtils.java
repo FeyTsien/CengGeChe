@@ -36,6 +36,8 @@ public class UrlUtils {
     public static String REGIST = "/user/regist.do";
     //登录接口
     public static String LOGIN = "/user/login.do";
+    //退出接口
+    public static String LOGIN_OUT = "/user/logout.do";
     //重置密码接口
     public static String RESET_PASS = "/user/resetPass.do";
     //申请好友
@@ -45,9 +47,13 @@ public class UrlUtils {
     //删除验证消息
     public static String APPLY_DELETE_DATE="/friend/realDelapplyFriend.do";
     //拒绝对方申请
-    public static String APPLY_DATE_NO_AGREE="/friendOperate/delFriend.do";
+    public static String APPLY_DATE_NO_AGREE="/friend/delapplyFriend.do";
     //同意对方申请
     public static String APPLY_DATE_YES_AGREE="/friend/addFriend.do";
+    //好友列表
+    public static String FRIEND_LIST="/friendOperate/friendList.do";
+
+
 
 
     // 刷新token

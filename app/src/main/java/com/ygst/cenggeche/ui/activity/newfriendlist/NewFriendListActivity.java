@@ -138,8 +138,8 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
      * @param listDataBean
      */
     private void setListView(List<ApplyBean.DataBean> listDataBean){
-        mSwipeMenuListViewAdapter = new SwipeMenuListViewAdapter(this, listDataBean);
         if (listDataBean != null) {
+            mSwipeMenuListViewAdapter = new SwipeMenuListViewAdapter(this, listDataBean);
             mListView.setAdapter(mSwipeMenuListViewAdapter);
         }
         if(mSwipeMenuListViewAdapter!=null){
@@ -187,6 +187,17 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
             }
         }, null);
     }
+    @Override
+    public void noAgreeSuccess() {
+        ToastUtil.show(this,"拒绝成功");
+        setListView(mListDataBean);
+    }
+
+    @Override
+    public void noAgreeError() {
+        ToastUtil.show(this,"拒绝申请失败，请重试");
+    }
+
     /**
      *同意申请提示框
      */
@@ -199,22 +210,9 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
         }, null);
     }
     @Override
-    public void noAgreeSuccess() {
-        if(mSwipeMenuListViewAdapter!=null){
-            mSwipeMenuListViewAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void noAgreeError() {
-        ToastUtil.show(this,"拒绝申请失败，请重试");
-    }
-
-    @Override
     public void yesAgreeSuccess() {
-        if(mSwipeMenuListViewAdapter!=null){
-            mSwipeMenuListViewAdapter.notifyDataSetChanged();
-        }
+        ToastUtil.show(this,"同意申请");
+        setListView(mListDataBean);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ygst.cenggeche.ui.activity.newfriendlist;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.ApplyBean;
+import com.ygst.cenggeche.ui.widget.MyTextDrawable;
+import com.ygst.cenggeche.ui.widget.TextDrawable;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     public SwipeMenuListViewAdapter(Context context, List<ApplyBean.DataBean> list) {
         mContext = context;
         this.mListDataBean = list;
+        this.activity = (NewFriendListActivity) context;
     }
 
     @Override
@@ -45,21 +49,29 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        activity = new NewFriendListActivity();
         if (convertView == null) {
             convertView = View.inflate(mContext.getApplicationContext(), R.layout.item_list_newfriend, null);
             new ViewHolder(convertView);
         }
         final ViewHolder holder = (ViewHolder) convertView.getTag();
         final ApplyBean.DataBean newFriend = mListDataBean.get(position);
-
+        String applyName = "";
         if (newFriend != null) {
-            holder.mTvTargetName.setText(newFriend.getFusername());
+            if(!TextUtils.isEmpty(newFriend.getNickname())){
+                applyName =newFriend.getNickname();
+            }else{
+                applyName =newFriend.getFusername();
+            }
+            holder.mTvTargetName.setText(applyName);
+            //自定义的文字图片
+            TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
+            holder.mIvAvatar.setImageDrawable(drawable);
+
             holder.mTvLatestMessage.setText(newFriend.getApplyInfo());
             if (newFriend.getIsAgree() == 1) {
-                holder.mTvIsAgree.setText("已同意");
-            } else if (newFriend.getIsAgree() == 2) {
                 holder.mTvIsAgree.setText("已拒绝");
+            } else if (newFriend.getIsAgree() == 2) {
+                holder.mTvIsAgree.setText("已同意");
             } else {
                 holder.mBtnYes.setVisibility(View.VISIBLE);
                 holder.mBtnNo.setVisibility(View.VISIBLE);
@@ -69,13 +81,13 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
         holder.mBtnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.showNoAgreeDialog(newFriend);
+                activity.showYesAgreeDialog(newFriend);
             }
         });
         holder.mBtnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                activity.showNoAgreeDialog(newFriend);
             }
         });
 

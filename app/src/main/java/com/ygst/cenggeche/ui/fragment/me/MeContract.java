@@ -1,7 +1,5 @@
 package com.ygst.cenggeche.ui.fragment.me;
 
-import android.content.Context;
-
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -12,10 +10,11 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class MeContract {
     interface View extends BaseView {
-        
+        void loginOutSuccess();
+        void loginOutError();
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+        void loginOut();
     }
 }

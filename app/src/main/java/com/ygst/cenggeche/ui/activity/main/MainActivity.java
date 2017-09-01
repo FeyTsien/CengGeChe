@@ -40,6 +40,7 @@ import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.ConversationRefreshEvent;
 import cn.jpush.im.android.api.event.LoginStateChangeEvent;
+import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.MyInfoUpdatedEvent;
 import cn.jpush.im.android.api.event.NotificationClickEvent;
 import cn.jpush.im.android.api.event.OfflineMessageEvent;
@@ -526,13 +527,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //        }
     }
 
-//    /**
-//     * 消息事件实体类 MessageEvent
-//     *(之前是onEvent(),改成了onEventMainThread()主线程模式)
-//     * @param event
-//     */
-//    public void onEventMainThread(MessageEvent event) {
-//        showAllUnReadMsgCount();
+    /**
+     * 消息事件实体类 MessageEvent
+     *(之前是onEvent(),改成了onEventMainThread()主线程模式)
+     * @param event
+     */
+    public void onEventMainThread(MessageEvent event) {
+        showAllUnReadMsgCount();
 //        Message msg = event.getMessage();
 //        switch (msg.getContentType()) {
 //            case custom:
@@ -619,7 +620,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //            default:
 //                break;
 //        }
-//    }
+    }
 
     /**
      * 用户下线事件UserLogoutEvent (已过时，请使用LoginStateChangeEvent代替)

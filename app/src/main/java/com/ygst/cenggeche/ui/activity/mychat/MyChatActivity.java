@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,7 +40,6 @@ import com.jarek.imageselect.activity.FolderListActivity;
 import com.jarek.imageselect.bean.ImageFolderBean;
 import com.lqr.emoji.EmotionKeyboard;
 import com.lqr.emoji.EmotionLayout;
-import com.lqr.emoji.IEmotionExtClickListener;
 import com.lqr.emoji.IEmotionSelectedListener;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
@@ -78,7 +76,6 @@ import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconGridFragment;
 import io.github.rockerhieu.emojicon.EmojiconsFragment;
 import io.github.rockerhieu.emojicon.emoji.Emojicon;
-import io.github.rockerhieu.emojiconize.Emojiconize;
 
 
 /**
@@ -195,6 +192,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 //        Emojiconize.activity(this).go();
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        JMessageClient.registerEventReceiver(this);
         mContext = this;
 
         initReceiver();
@@ -227,8 +225,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 JMessageClient.enterGroupConversation(groupId);
             }
         } else if (null != targetId) {
-            String appKey = getIntent().getStringExtra(TARGET_APP_KEY);
-            JMessageClient.enterSingleConversation(targetId, appKey);
+            String appKey = getIntent().getStringExtra(TARGET_APP_KEY);            JMessageClient.enterSingleConversation(targetId, appKey);
         }
         mChatAdapter.initMediaPlayer();
         Log.i(TAG, "[Life cycle] - onResume");
@@ -242,6 +239,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         unregisterReceiver(mReceiver);
         mChatAdapter.releaseMediaPlayer();
         mUIHandler.removeCallbacksAndMessages(null);
+        JMessageClient.unRegisterEventReceiver(this);
         super.onDestroy();
     }
 
@@ -266,7 +264,12 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             mIsSingle = true;
             mConversation = JMessageClient.getSingleConversation(targetUserName, targetAppKey);
             if (mConversation != null) {
-                mTvTitle.setText(mConversation.getTitle());
+                UserInfo mUserInfo = (UserInfo) mConversation.getTargetInfo();
+                if(!TextUtils.isEmpty(mUserInfo.getNickname())){
+                    mTvTitle.setText(mUserInfo.getNickname());
+                }else{
+                    mTvTitle.setText(mUserInfo.getUserName());
+                }
             } else {
                 mConversation = Conversation.createSingleConversation(targetUserName, targetAppKey);
                 mTvTitle.setText(mConversation.getTitle());

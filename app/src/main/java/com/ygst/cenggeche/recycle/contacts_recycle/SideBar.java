@@ -46,7 +46,7 @@ public class SideBar extends View {
         mPaint.setDither(true);
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.GRAY);
-        mPaint.setTextSize(35);
+        mPaint.setTextSize(25);
     }
 
     @Override

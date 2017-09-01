@@ -11,6 +11,7 @@ import com.ygst.cenggeche.manager.GsonManger;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.HashMap;
@@ -132,7 +133,7 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
                 } else {
                     if (mView != null)
                         mView.loginError();
-//                    ToastUtil.show(mView.getContext(), loginBean.getMsg());
+                    ToastUtil.show(mView.getContext(), loginBean.getMsg());
                 }
             }
         }, map);

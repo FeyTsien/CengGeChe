@@ -1,7 +1,9 @@
 package com.ygst.cenggeche.ui.activity.friendlist;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +24,7 @@ import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycleHolder> {
 
-    private List<FriendBean> contactBeanList;
+    private List<FriendBean.DataBean> mListDataBean;
     private Context mContext;
     // declare the color generator and drawable builder
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
@@ -30,25 +32,25 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
 
     public ContactAdapter(Context context) {
         this.mContext = context;
-        contactBeanList = new ArrayList<>();
+        mListDataBean = new ArrayList<>();
     }
 
-    public void addAll(List<FriendBean> beans) {
-        if (contactBeanList.size() > 0) {
-            contactBeanList.clear();
+    public void addAll(List<FriendBean.DataBean> beans) {
+        if (mListDataBean.size() > 0) {
+            mListDataBean.clear();
         }
-        contactBeanList.addAll(beans);
+        mListDataBean.addAll(beans);
         notifyDataSetChanged();
     }
 
-    public void add(FriendBean bean, int position) {
-        contactBeanList.add(position, bean);
+    public void add(FriendBean.DataBean bean, int position) {
+        mListDataBean.add(position, bean);
         notifyItemInserted(position);
     }
 
-    public void add(FriendBean bean) {
-        contactBeanList.add(bean);
-        notifyItemChanged(contactBeanList.size() - 1);
+    public void add(FriendBean.DataBean bean) {
+        mListDataBean.add(bean);
+        notifyItemChanged(mListDataBean.size() - 1);
     }
 
     @Override
@@ -59,19 +61,33 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
 
     @Override
     public void onBindViewHolder(MyRecycleHolder holder, int position) {
-        if (contactBeanList == null || contactBeanList.size() == 0 || contactBeanList.size() <= position)
+        if (mListDataBean == null || mListDataBean.size() == 0 || mListDataBean.size() <= position)
             return;
-        FriendBean bean = contactBeanList.get(position);
+        FriendBean.DataBean bean = mListDataBean.get(position);
+        String friendName = "";
         if (bean != null) {
-            holder.tv_name.setText(bean.getName());
-            TextDrawable drawable = mDrawableBuilder.build(String.valueOf(bean.getName().charAt(0)), mColorGenerator.getColor(bean.getName()));
-            holder.iv_img.setImageDrawable(drawable);
+            if(!TextUtils.isEmpty(bean.getFriendNote())){
+                friendName = bean.getFriendNote();
+            }else if(!TextUtils.isEmpty(bean.getNickname())){
+                friendName = bean.getNickname();
+            }else{
+                friendName = bean.getFriendusername();
+            }
+            holder.tv_name.setText(friendName);
+
+            if(!TextUtils.isEmpty(bean.getUserPic())){
+                Uri uri = Uri.parse(bean.getUserPic());
+                holder.iv_img.setImageURI(uri);
+            }else {
+                TextDrawable drawable = mDrawableBuilder.build(String.valueOf(friendName.charAt(0)), mColorGenerator.getColor(friendName));
+                holder.iv_img.setImageDrawable(drawable);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return contactBeanList.size();
+        return mListDataBean.size();
     }
 
     public static class MyRecycleHolder extends RecyclerView.ViewHolder {

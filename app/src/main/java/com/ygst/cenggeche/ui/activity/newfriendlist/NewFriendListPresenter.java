@@ -129,7 +129,7 @@ public class NewFriendListPresenter extends BasePresenterImpl<NewFriendListContr
     public void yesAgree(String myusername, String fusername) {
         Map<String, String> map = new HashMap<>();
         map.put("myusername", myusername);
-        map.put("fusername", fusername);
+        map.put("friendusername", fusername);
         HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_DATE_YES_AGREE, new Observer<String>() {
             @Override
             public void onCompleted() {
