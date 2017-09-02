@@ -1,4 +1,4 @@
-package com.ygst.cenggeche.ui.activity;
+package com.ygst.cenggeche.ui.test;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

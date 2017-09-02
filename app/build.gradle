@@ -43,6 +43,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     sourceSets {
         main {
             assets.srcDirs = ['src/main/assets', 'src/main/assets/']
@@ -56,68 +57,32 @@ android {
 //            jniLibs.srcDirs = ['src/main/jniLibs']
         }
     }
-    productFlavors {
 
-        yiyongche {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yiyongche"]
-        }
-        wandoujia {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
-        }
-        mumayi {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "mumayi"]
-        }
-        baidu {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
-        }
-
-        qh360 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qh360"]
-        }
-
-        c360 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "c360"]
-        }
-
-        c91 {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "c91"]
-        }
-        huawei {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "huawei"]
-        }
-        meizu {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "meizu"]
-        }
-        oppo {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "oppo"]
-        }
-        vivo {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "vivo"]
-        }
-        lenovo {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "lenovo"]
-        }
-        anzhuo {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "anzhuo"]
-        }
-        sogou {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "sogou"]
-        }
-        tencent {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent"]
-        }
-        QQ {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "QQ"]
-        }
-        xiaomi {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
-        }
-        samsung {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "samsung"]
-        }
-    }
-
-
+//    productFlavors {
+//        baidu {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
+//        }
+//
+//        qh360 {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qh360"]
+//        }
+//
+//        huawei {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "huawei"]
+//        }
+//        oppo {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "oppo"]
+//        }
+//        vivo {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "vivo"]
+//        }
+//        tencent {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent"]
+//        }
+//        xiaomi {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+//        }
+//    }
 }
 
 dependencies {
@@ -126,45 +91,62 @@ dependencies {
     compile "com.android.support:palette-v7:${rootProject.ext.support}"
     compile "com.android.support:design:${rootProject.ext.support}"
     compile "com.android.support:recyclerview-v7:${rootProject.ext.support}"
+    compile "com.android.support:cardview-v7:${rootProject.ext.support}"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile 'com.blankj:utilcode:1.3.6'
+
+//    配置方法数超过 64K 的应用
+    compile 'com.android.support:multidex:1.0.0'
+
     //Android超强util库  -- 算不上超强,跟apache-commons相比差太远
-    //图片加载
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    compile 'com.blankj:utilcode:1.3.6'
+
     //di
     compile 'com.google.dagger:dagger:2.0.2'
     compile 'com.google.dagger:dagger-compiler:2.0.2'
     provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    //一个 Android 系统的 View 注入框架，能够通过『注解』的方式来绑定 View 的属性或方法
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+//    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    //widget
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.0'
-    compile 'com.youth.banner:banner:1.4.9'
-    //最新版本
-    compile 'com.tencent.bugly:crashreport:latest.release'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    //圆形图片加载库
-    compile "com.android.support:cardview-v7:${rootProject.ext.support}"
-    compile 'com.miguelcatalan:materialsearchview:1.4.0'
-    //首页搜索View
-    //topnewsactivity用的
-    compile 'org.sufficientlysecure:html-textview:1.3'
-    compile 'com.github.chrisbanes:PhotoView:1.3.0'
-    //动画库
-    compile 'com.nineoldandroids:library:2.4.0'
-
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+
+//      一个强大并且灵活的RecyclerViewAdapter。（https://github.com/CymChad/BaseRecyclerViewAdapterHelper）
+//    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.0'
+
+//    图片加载（https://github.com/wasabeef/glide-transformations）
+//    compile 'jp.wasabeef:glide-transformations:2.0.1'
+
+//    Android图片轮播控件（https://github.com/youth5201314/banner）
+//    compile 'com.youth.banner:banner:1.4.9'
+
+//      腾讯的一个debug管理平台
+//    compile 'com.tencent.bugly:crashreport:latest.release'
+
+//     圆形图片处理
+//    compile 'de.hdodenhof:circleimageview:2.1.0'
+
+//    一款不错的自定义搜索框架（https://github.com/MiguelCatalan/MaterialSearchView）
+//    compile 'com.miguelcatalan:materialsearchview:1.4.0'
+
+    //topnewsactivity用的
+//    HtmlTextView是一个扩展的安卓TextView组件，能够加载HTML并把它转化为Spannable以显示它。
+//    compile 'org.sufficientlysecure:html-textview:3.4'
+
+//    放大ImageView中图片的功能
+//    compile 'com.github.chrisbanes:PhotoView:1.3.0'
+    //动画库
+//    compile 'com.nineoldandroids:library:2.4.0'
+
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'com.android.support:multidex:1.0.0'
     compile 'com.github.promeg:tinypinyin:2.0.3'
     //极光推送 // 此处以JPush 3.0.9 版本为例。
     //    compile 'cn.jiguang.sdk:jpush:3.0.9'
@@ -173,13 +155,17 @@ dependencies {
     compile 'cn.jiguang.sdk:jmessage:2.2.1'
     // 此处以JCore 1.1.6 版本为例。
     compile 'cn.jiguang.sdk:jcore:1.1.6'
-    //一个图片缓存库
-//    compile files('libs/picasso-2.4.0.jar')
+
+    //一个图片缓存库，毕加索
     compile 'com.squareup.picasso:picasso:2.5.2'
-    //一个表情包库
+
+//      一个表情包库
     compile 'com.lqr.emoji:library:1.0.2'
+//      图片加载
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     //有一个表情包库
     compile 'com.tb.emoji:yykEmoji:1.0.0'
+    //还是一个表情包框架
     compile 'io.github.rockerhieu:emojiconize:1.0.0'
 //    compile 'io.github.rockerhieu:emojicon:<latest-version>'
 

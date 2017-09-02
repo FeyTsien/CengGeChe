@@ -38,8 +38,22 @@
         <attr name="left_text_drawable_left" format="reference"/>
     </declare-styleable>
 
+    <!--流式布局-->
     <declare-styleable name="FlowLayout">
         <attr name="horizontal_spacing" format="dimension" />
         <attr name="vertical_spacing" format="dimension" />
+    </declare-styleable>
+
+    <!--圆形图片-->
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_fill_color" format="color" />
+    </declare-styleable>
+
+     <!--闪动的文字-->
+    <declare-styleable name="ShimmerView">
+        <attr name="reflectionColor" format="color"/>
     </declare-styleable>
 </resources>

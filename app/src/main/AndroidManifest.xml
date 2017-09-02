@@ -46,10 +46,10 @@
         </activity>
 
         <!--测试页-->
-        <activity android:name=".ui.activity.TestActivity"
+        <activity android:name=".ui.test.TestActivity"
             android:theme="@style/AppTheme" />
         <!--测试页-->
-        <activity android:name=".ui.activity.TestActivity2"
+        <activity android:name=".ui.test.TestActivity2"
             android:theme="@style/AppTheme" />
         <!--登录页-->
         <activity android:name=".ui.activity.login.LoginActivity" />

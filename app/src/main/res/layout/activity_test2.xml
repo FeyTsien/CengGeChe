@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:flowlayout="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,8 +9,47 @@
         android:id="@+id/flow_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="100dp"
         flowlayout:horizontal_spacing="10dp"
         flowlayout:vertical_spacing="10dp" />
+
+
+    <com.ygst.cenggeche.ui.widget.CircleImageView
+        android:id="@+id/civ_1"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_below="@+id/flow_layout"
+        android:src="@drawable/loli"
+        app:civ_border_color="@color/colorSub2"
+        app:civ_border_width="2dp" />
+
+    <com.ygst.cenggeche.ui.widget.CircleImageView
+        android:id="@+id/civ_2"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/flow_layout"
+        android:src="@drawable/loli"
+        app:civ_border_color="@color/colorSub"
+        app:civ_border_width="2dp" />
+
+    <com.ygst.cenggeche.ui.widget.shimmer.ShimmerTextView
+        android:id="@+id/shimmer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/civ_2"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:text="Tsien"
+        android:textColor="@color/colorTheme"
+        android:textSize="50sp" />
+
+    <Button
+        android:id="@+id/shandong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shimmer_tv"
+        android:layout_gravity="bottom"
+        android:text="闪动" />
+
 </RelativeLayout>
