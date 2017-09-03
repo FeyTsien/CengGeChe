@@ -11,10 +11,11 @@ import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
-import com.ygst.cenggeche.bean.FriendBean;
+import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.recycle.contacts_recycle.SideBar;
 import com.ygst.cenggeche.recycle.contacts_recycle.itemAnimator.SlideInOutLeftItemAnimator;
+import com.ygst.cenggeche.ui.activity.friendblacklist.FriendBlackListActivity;
 import com.ygst.cenggeche.ui.activity.newfriendlist.NewFriendListActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
@@ -38,8 +39,8 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
     private ContactAdapter mAdapter;
     private CustomItemDecoration decoration;
     private SideBar side_bar;
-    FriendBean friendBean;
-    List<FriendBean.DataBean> mListData = new ArrayList<>();
+    FriendListBean friendListBean;
+    List<FriendListBean.DataBean> mListData = new ArrayList<>();
     private LinearLayoutManager layoutManager;
 
     @BindView(R.id.tv_title)
@@ -49,9 +50,20 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
     @BindView(R.id.ll_newfriend)
     RelativeLayout mLlNewFriend;
 
+    /**
+     * 查看申请消息列表
+     */
     @OnClick(R.id.ll_newfriend)
-    public void goToNewFriendList() {
+    public void goNewFriendList() {
         CommonUtils.startActivity(this, NewFriendListActivity.class);
+    }
+
+    /**
+     * 查看黑名单列表
+     */
+    @OnClick(R.id.ll_blacklist)
+    public void goFriendBlackList() {
+        CommonUtils.startActivity(this, FriendBlackListActivity.class);
     }
 
     /**
@@ -118,10 +130,10 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
             mTvUnreadCount.setVisibility(View.GONE);
         }
 
-        if (friendBean == null) {
+        if (friendListBean == null) {
             mPresenter.getFriendList(AppData.getUserName());
         } else {
-            mListData = friendBean.getData();
+            mListData = friendListBean.getData();
             setListView(mListData);
         }
     }
@@ -131,7 +143,7 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
      *
      * @param listDataBean
      */
-    private void setListView(List<FriendBean.DataBean> listDataBean) {
+    private void setListView(List<FriendListBean.DataBean> listDataBean) {
         //对数据源进行排序
         CommonUtil.sortData(listDataBean);
         //返回一个包含所有Tag字母在内的字符串并赋值给tagsStr
@@ -145,9 +157,9 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
 
 
     @Override
-    public void getFriendListSuccess(FriendBean friendBean) {
+    public void getFriendListSuccess(FriendListBean friendListBean) {
         ToastUtil.show(this, "获取好友成功");
-        mListData = friendBean.getData();
+        mListData = friendListBean.getData();
         setListView(mListData);
     }
 

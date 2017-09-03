@@ -2,7 +2,7 @@ package com.ygst.cenggeche.ui.activity.friendlist;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.Gson;
-import com.ygst.cenggeche.bean.FriendBean;
+import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.UrlUtils;
@@ -40,15 +40,15 @@ public class FriendListPresenter extends BasePresenterImpl<FriendListContract.Vi
             public void onNext(String s) {
                 LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
                 Gson gson = new Gson();
-                FriendBean friendBean = gson.fromJson(s, FriendBean.class);
+                FriendListBean friendListBean = gson.fromJson(s, FriendListBean.class);
 
-                if ("0000".equals(friendBean.getCode())) {
+                if ("0000".equals(friendListBean.getCode())) {
                     if (mView != null)
-                        mView.getFriendListSuccess(friendBean);
+                        mView.getFriendListSuccess(friendListBean);
                 } else {
                     if (mView != null)
                         mView.getFriendListError();
-                    LogUtils.i(TAG,"code:"+friendBean.getCode());
+                    LogUtils.i(TAG,"code:"+ friendListBean.getCode());
                 }
             }
         }, map);

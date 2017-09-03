@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Administrator on 2017/5/12.
  */
 
-public class FriendBean implements Serializable {
+public class FriendListBean implements Serializable {
 
     /**
      * data : [{"friendTime":"2017-08-30 18:32:48","id":1,"userPic":"","nickname":"","friendusername":"erwsf","operationTime":"2017-08-30 16:19:59","gender":0,"myusername":"456a","friendNote":"sf","friendStatus":1},{"friendTime":"2017-08-30 19:08:02","id":2,"userPic":"","nickname":"","friendusername":"sdfasf","operationTime":"2017-08-31 16:36:04","gender":0,"myusername":"456a","friendNote":"sf","friendStatus":1}]

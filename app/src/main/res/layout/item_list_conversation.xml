@@ -73,6 +73,7 @@
                 android:id="@+id/tv_latest_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="小明是个傻逼"
                 android:textColor="@color/gray"
                 android:textSize="12sp" />

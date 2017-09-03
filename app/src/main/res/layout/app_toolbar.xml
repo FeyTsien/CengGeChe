@@ -8,7 +8,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/colorTheme"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         app:contentInsetStart="0.0dp"
@@ -18,12 +18,10 @@
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="left|center_vertical"
-            android:paddingBottom="10dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingTop="10dp"
             android:src="@mipmap/icon_back" />
 
         <TextView
@@ -32,8 +30,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="标题"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/iv_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:src="@mipmap/icon_menu"
+            android:visibility="gone"/>
+
     </android.support.v7.widget.Toolbar>
 
     <View

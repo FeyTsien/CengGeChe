@@ -9,7 +9,7 @@
         android:id="@+id/flow_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         flowlayout:horizontal_spacing="10dp"
         flowlayout:vertical_spacing="10dp" />
 
@@ -51,5 +51,20 @@
         android:layout_below="@+id/shimmer_tv"
         android:layout_gravity="bottom"
         android:text="闪动" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shandong">
+
+        <GridView
+            android:id="@+id/gv_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:horizontalSpacing="5dp"
+            android:numColumns="3"
+            android:verticalSpacing="5dp" />
+    </RelativeLayout>
 
 </RelativeLayout>

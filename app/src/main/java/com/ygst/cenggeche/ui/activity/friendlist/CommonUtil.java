@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.github.promeg.pinyinhelper.Pinyin;
-import com.ygst.cenggeche.bean.FriendBean;
+import com.ygst.cenggeche.bean.FriendListBean;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,10 +33,10 @@ public class CommonUtil {
      *
      * @param list 要进行排序的数据源
      */
-    public static void sortData(List<FriendBean.DataBean> list) {
+    public static void sortData(List<FriendListBean.DataBean> list) {
         if (list == null || list.size() == 0) return;
         for (int i = 0; i < list.size(); i++) {
-            FriendBean.DataBean bean = list.get(i);
+            FriendListBean.DataBean bean = list.get(i);
                 String friendName = "";
                 if(!TextUtils.isEmpty(bean.getFriendNote())){
                     friendName = bean.getFriendNote();
@@ -52,9 +52,9 @@ public class CommonUtil {
                 bean.setIndexTag("#");
             }
         }
-        Collections.sort(list, new Comparator<FriendBean.DataBean>() {
+        Collections.sort(list, new Comparator<FriendListBean.DataBean>() {
             @Override
-            public int compare(FriendBean.DataBean o1, FriendBean.DataBean o2) {
+            public int compare(FriendListBean.DataBean o1, FriendListBean.DataBean o2) {
                 if ("#".equals(o1.getIndexTag())) {
                     return 1;
                 } else if ("#".equals(o2.getIndexTag())) {
@@ -70,7 +70,7 @@ public class CommonUtil {
      * @param beans 数据源
      * @return tags 返回一个包含所有Tag字母在内的字符串
      */
-    public static String getTags(List<FriendBean.DataBean> beans) {
+    public static String getTags(List<FriendListBean.DataBean> beans) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < beans.size(); i++) {
             if (!builder.toString().contains(beans.get(i).getIndexTag())) {

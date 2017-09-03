@@ -1,6 +1,6 @@
 package com.ygst.cenggeche.ui.activity.friendlist;
 
-import com.ygst.cenggeche.bean.FriendBean;
+import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -11,7 +11,7 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class FriendListContract {
     interface View extends BaseView {
-        void getFriendListSuccess(FriendBean friendBean);
+        void getFriendListSuccess(FriendListBean friendListBean);
         void getFriendListError();
     }
 

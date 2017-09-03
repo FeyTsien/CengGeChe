@@ -1,47 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:flowlayout="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPageBG"
     android:orientation="vertical">
-
-    <ListView
-        android:id="@+id/lv_info"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="200dp" />
+        android:layout_height="45dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:gravity="bottom"
-        android:text="个性标签"
-        android:textColor="@color/gray"
-        android:textSize="14sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="设置备注"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/black"
+            android:drawableRight="@drawable/set_right_arrows"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="1dp"
         android:background="@color/white">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="家乡"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/tv_hometown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:text="北京 通州"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:text="现所在地"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/tv_present_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:text="北京 朝阳"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="学历"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/tv_education"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:text="研究生"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
         android:gravity="bottom"
         android:text="个性标签"
+        android:textColor="@color/gray"
+        android:textSize="14sp" />
+
+    <com.ygst.cenggeche.ui.view.FlowLayout
+        android:id="@+id/flow_layout_biaoqian"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10dp"
+        flowlayout:horizontal_spacing="10dp"
+        flowlayout:vertical_spacing="10dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="bottom"
+        android:text="自我描述"
         android:textColor="@color/gray"
         android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:padding="10dp">
 
         <TextView
+            android:id="@+id/tv_miaoshu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.ui.activity.friendinfo.GridViewAdapter;
 import com.ygst.cenggeche.ui.view.FlowLayout;
 import com.ygst.cenggeche.ui.view.explosion.ExplosionField;
 import com.ygst.cenggeche.ui.widget.CheckableButton;
@@ -16,16 +17,16 @@ import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.ui.widget.shimmer.Shimmer;
 import com.ygst.cenggeche.ui.widget.shimmer.ShimmerTextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TestActivity2 extends AppCompatActivity {
     ShimmerTextView tv;
     Shimmer shimmer;
     CircleImageView cv1;
     FlowLayout flowLayout;
     String[] s = {"sssss", "sdsdsds", "ssdsdss", "fcvxcd", "dfdffffffffdgfgd", "dfgfgdfgdf", "gdfgdfgfg", "hjjks", "skjjjjjjjggggggggg", "ss", "sss", "sssss", "sssss"};
+    private Integer[] mImageIds = { R.drawable.b, R.drawable.c,
+            R.drawable.d, R.drawable.f,};
 
+    private GridViewAdapter mGridViewAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,11 @@ public class TestActivity2 extends AppCompatActivity {
                 }
             }
         });
+
+
+        GridView gridView = (GridView) findViewById(R.id.gv_pic);
+        mGridViewAdapter = new GridViewAdapter(this,mImageIds);
+        gridView.setAdapter(mGridViewAdapter);
     }
 
 
