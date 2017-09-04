@@ -2,7 +2,6 @@ package com.ygst.cenggeche.ui.activity.newfriendlist;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.Gson;
-import com.ygst.cenggeche.bean.ApplyBean;
 import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
@@ -25,34 +24,34 @@ public class NewFriendListPresenter extends BasePresenterImpl<NewFriendListContr
     public void getApplyList(String username) {
         Map<String, String> map = new HashMap<>();
         map.put("myusername", username);
-        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_LIST, new Observer<String>() {
-
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
-            }
-
-            @Override
-            public void onNext(String s) {
-                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
-                Gson gson = new Gson();
-                ApplyBean applyBean = gson.fromJson(s, ApplyBean.class);
-
-                if ("0000".equals(applyBean.getCode())) {
-                    if (mView != null)
-                        mView.getApplyListSuccess(applyBean);
-                } else {
-                    if (mView != null)
-                        mView.getApplyListError();
-                    LogUtils.i(TAG,"code:"+applyBean.getCode());
-                }
-            }
-        }, map);
+//        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_LIST, new Observer<String>() {
+//
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
+//                Gson gson = new Gson();
+//                ApplyBean applyBean = gson.fromJson(s, ApplyBean.class);
+//
+//                if ("0000".equals(applyBean.getCode())) {
+//                    if (mView != null)
+//                        mView.getApplyListSuccess(applyBean);
+//                } else {
+//                    if (mView != null)
+//                        mView.getApplyListError();
+//                    LogUtils.i(TAG,"code:"+applyBean.getCode());
+//                }
+//            }
+//        }, map);
 
     }
 

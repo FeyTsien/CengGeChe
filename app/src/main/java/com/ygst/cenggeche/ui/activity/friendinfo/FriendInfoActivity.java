@@ -4,20 +4,22 @@ package com.ygst.cenggeche.ui.activity.friendinfo;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
-import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.UserBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendoperate.FriendOperateActivity;
 import com.ygst.cenggeche.ui.view.FlowLayout;
 import com.ygst.cenggeche.ui.widget.MyTextDrawable;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
+import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import butterknife.BindView;
@@ -32,14 +34,16 @@ import butterknife.OnClick;
 
 public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View, FriendInfoPresenter> implements FriendInfoContract.View{
 
+    private static final int GO_FRIEND_OPERATE =11051;
     private UserBean.DataBean friendInfo;
     private String targetUsername;
+    //目标所处自己好友名单下的状态
+    private int friendStatus;
 
-    private GridViewAdapter mGridViewAdapter;
     @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @BindView(R.id.gv_pic)
-    GridView mGvPic;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
     @BindView(R.id.iv_menu)
     ImageView mIvMenu;
     @BindView(R.id.iv_avatar)
@@ -63,12 +67,16 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     public void goBack(){
         finish();
     }
+
+    /**
+     * 前去好友操作
+     */
     @OnClick(R.id.iv_menu)
     public void friendOperate(){
         Intent intent = new Intent(this, FriendOperateActivity.class);
-        intent.putExtra("myusername", AppData.getUserName());
-        intent.putExtra("targetUsername", targetUsername);
-        startActivity(intent);
+        intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
+        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS, friendStatus);
+        startActivityForResult(intent,GO_FRIEND_OPERATE);
     }
 
     @Override
@@ -90,14 +98,16 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     private void initView(){
         mTvTitle.setText("详细资料");
         mIvMenu.setVisibility(View.VISIBLE);
-        mGridViewAdapter = new GridViewAdapter(this,mImageIds);
-        mGvPic.setAdapter(mGridViewAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mRecyclerView.setAdapter(new RVAdapter(this));
     }
 
     private void initData(){
         Intent intent = getIntent();
-        String friendUsername =intent.getStringExtra("friendsUsername");
-        mPresenter.getFriendInfo(friendUsername);
+        targetUsername =intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
+        friendStatus =intent.getIntExtra(JMessageUtils.TARGET_FRIENDSTATUS,0);
+        mPresenter.getFriendInfo(targetUsername);
     }
 
     @Override
@@ -107,7 +117,6 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     }
 
     private void setFriendInfo(UserBean.DataBean friendInfo){
-        targetUsername = friendInfo.getUsername();
         String name = "";
         if(!TextUtils.isEmpty(friendInfo.getNickname())){
             name =friendInfo.getNickname();
@@ -130,11 +139,31 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
         }else if(friendInfo.getGender() == 1){
             mIvGender.setImageResource(R.mipmap.icon_boy);
         }
+        //年龄
         mTvAge.setText(friendInfo.getAge()+"岁");
+        //家乡
+        mTvHometown.setText(friendInfo.getHome());
+        //现居地
+        mTvPresentAddress.setText(friendInfo.getLocation());
+        //学历
+        mTvEducation.setText(friendInfo.getEducation());
     }
 
     @Override
     public void getFriendInfoError() {
+        ToastUtil.show(this,"获取好友信息失败");
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GO_FRIEND_OPERATE:
+
+                    friendStatus =getIntent().getIntExtra(JMessageUtils.TARGET_FRIENDSTATUS,0);
+                    break;
+            }
+        }
     }
 }

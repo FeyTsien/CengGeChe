@@ -100,7 +100,7 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
 
     }
 
-    // 验证码登录
+    // 登录
     @Override
     public void login(Map<String, String> map) {
 

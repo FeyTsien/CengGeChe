@@ -24,20 +24,11 @@
                 app:contentScrim="@android:color/transparent"
                 app:layout_scrollFlags="scroll">
 
-
-                <RelativeLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-                    <GridView
-                        android:id="@+id/gv_pic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:horizontalSpacing="5dp"
-                        android:numColumns="3"
-                        android:verticalSpacing="5dp" />
-                </RelativeLayout>
+                </android.support.v7.widget.RecyclerView>
             </android.support.design.widget.CollapsingToolbarLayout>
 
             <RelativeLayout

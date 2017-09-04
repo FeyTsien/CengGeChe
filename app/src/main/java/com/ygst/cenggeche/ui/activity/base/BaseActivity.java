@@ -14,6 +14,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.Window;
 
+import com.tsien.myapplication.asimplecachedemo.ACache;
 import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.http.LifeSubscription;
@@ -33,6 +34,8 @@ public abstract class BaseActivity extends AppCompatActivity implements LifeSubs
     // 管理运行的所有的activity
     public final static List<AppCompatActivity> mActivities = new LinkedList<AppCompatActivity>();
 
+    //轻量级的数据缓存工具类
+    public ACache mCache;
     public static BaseActivity activity;
     protected float mDensity;
     protected int mDensityDpi;
@@ -78,8 +81,8 @@ public abstract class BaseActivity extends AppCompatActivity implements LifeSubs
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         // 设置为竖屏显示
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         setContentView(getLayoutId());
+        mCache = ACache.get(this);
         mVelocityTracker = mVelocityTracker.obtain();
         decorView = getWindow().getDecorView();
         synchronized (mActivities) {

@@ -51,7 +51,7 @@ android {
             res.srcDirs = ['src/main/res/layout/imageselect',
                            'src/main/res/layout/chatting',
                            'src/main/res/layout/jmessage',
-                           'src/main/res/layout/jchat',
+                           'src/main/res/layout/acache',
                            'src/main/res']
             //==================
 //            jniLibs.srcDirs = ['src/main/jniLibs']

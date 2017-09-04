@@ -5,12 +5,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.tsien.myapplication.asimplecachedemo.ACacheMainActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity;
-import com.ygst.cenggeche.ui.test.TestActivity2;
 import com.ygst.cenggeche.utils.CommonUtils;
 
 import butterknife.BindView;
@@ -75,21 +75,12 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initData() {
-        //检测账号是否登陆
-//        UserInfo myInfo = JMessageClient.getMyInfo();
-//        if (myInfo == null) {
-//            //登录注册
-//            CommonUtils.startActivity(this,LoginActivity.class);
-//        }else {
-//            //主界面
-//        CommonUtils.startActivity(this,MainActivity.class);
-//        }
         CommonUtils.startActivity(this,MainActivity.class);
         finish();
     }
 
     private void toIMActivity(){
-        CommonUtils.startActivity(this, TestActivity2.class);
+        CommonUtils.startActivity(this, ACacheMainActivity.class);
         finish();
     }
 

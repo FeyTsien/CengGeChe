@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.utils.MD5Util;
 import com.ygst.cenggeche.utils.TextViewUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
@@ -206,11 +205,11 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
 
     @Override
     public void registrationSuccess() {
-        Intent intent = new Intent();
-        intent.putExtra("username",userName);
-        intent.putExtra("password",pwd);
-        intent.setClass(this, LoginActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent();
+//        intent.putExtra("username",userName);
+//        intent.putExtra("password",pwd);
+//        intent.setClass(this, LoginActivity.class);
+//        startActivity(intent);
         finish();
         ToastUtil.show(this, "欢迎您的加入");
     }

@@ -42,7 +42,7 @@
             android:textColor="@color/black" />
 
         <com.ygst.cenggeche.ui.widget.SwitchButton
-            android:id="@+id/switch_button"
+            android:id="@+id/sbtn_add_blacklist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -69,6 +69,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_del_friend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/apptoolbar"
+        layout="@layout/app_toolbar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/apptoolbar"
+        android:background="@color/white" />
+
+    <com.ygst.cenggeche.recycle.contacts_recycle.IndexBar
+        android:id="@+id/index_bar"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/apptoolbar"
+        android:background="@color/transparent">
+
+        <com.ygst.cenggeche.recycle.contacts_recycle.SideBar
+            android:id="@+id/side_bar"
+            android:layout_width="30dp"
+            android:layout_height="match_parent" />
+
+    </com.ygst.cenggeche.recycle.contacts_recycle.IndexBar>
+
+</RelativeLayout>

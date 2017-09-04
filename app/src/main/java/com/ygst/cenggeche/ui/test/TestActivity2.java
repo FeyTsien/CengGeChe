@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
-import com.ygst.cenggeche.ui.activity.friendinfo.GridViewAdapter;
 import com.ygst.cenggeche.ui.view.FlowLayout;
 import com.ygst.cenggeche.ui.view.explosion.ExplosionField;
 import com.ygst.cenggeche.ui.widget.CheckableButton;
@@ -26,7 +24,6 @@ public class TestActivity2 extends AppCompatActivity {
     private Integer[] mImageIds = { R.drawable.b, R.drawable.c,
             R.drawable.d, R.drawable.f,};
 
-    private GridViewAdapter mGridViewAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +57,6 @@ public class TestActivity2 extends AppCompatActivity {
                 }
             }
         });
-
-
-        GridView gridView = (GridView) findViewById(R.id.gv_pic);
-        mGridViewAdapter = new GridViewAdapter(this,mImageIds);
-        gridView.setAdapter(mGridViewAdapter);
     }
 
 

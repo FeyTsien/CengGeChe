@@ -52,19 +52,4 @@
         android:layout_gravity="bottom"
         android:text="闪动" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/shandong">
-
-        <GridView
-            android:id="@+id/gv_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:horizontalSpacing="5dp"
-            android:numColumns="3"
-            android:verticalSpacing="5dp" />
-    </RelativeLayout>
-
 </RelativeLayout>

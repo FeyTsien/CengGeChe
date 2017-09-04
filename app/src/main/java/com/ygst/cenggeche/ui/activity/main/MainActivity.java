@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
+import com.ygst.cenggeche.bean.ApplyBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendlist.FriendListActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
@@ -29,6 +30,7 @@ import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -375,6 +377,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public static final String IS_UPLOAD = "is_upload";
     public static final String LOGOUT_REASON = "logout_reason";
 
+    private Conversation mConversation;
+    UserInfo userInfo;
     /**
      * 新增联系人相关通知事件ContactNotifyEvent
      *
@@ -384,9 +388,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         LogUtils.i(TAG, "onEvent-----新增联系人相关通知事件ContactNotifyEvent");
         String reason = event.getReason();
         String fromUsername = event.getFromUsername();
-        String appkey = event.getfromUserAppKey();
+        String formAppkey = event.getfromUserAppKey();
 
+        mConversation = JMessageClient.getSingleConversation(fromUsername, formAppkey);
+        userInfo = (UserInfo) mConversation.getTargetInfo();
+        List<ApplyBean> mListApplyBean = new ArrayList<>();
 
+        ApplyBean applyBean = (ApplyBean) mCache.getAsObject(JMessageUtils.APPLE_BEAN);
+        if(applyBean ==null) {
+            applyBean = new ApplyBean();
+        }
         Intent intent = new Intent(this, ShowFriendReasonActivity.class);
 
         switch (event.getType()) {
@@ -394,11 +405,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 AppData.savaUnReadApplyCount(+1);
                 mTvUnreadCount.setVisibility(View.VISIBLE);
                 mTvUnreadCount.setText("" + AppData.getUnReadApplyCount());
-//                intent.putExtra("invite_received", "fromUsername = " + fromUsername + "\nfromUserAppKey" + appkey + "\nreason = " + reason);
-//                intent.putExtra("username", fromUsername);
-//                intent.putExtra("appkey", appkey);
-//                intent.setFlags(1);
-//                startActivity(intent);
+                applyBean.setReason(reason);
+                applyBean.setMyUsername(AppData.getUserName());
+                applyBean.setFromUsername(fromUsername);
+                applyBean.setFromAppkey(formAppkey);
+                applyBean.setFromNickname(userInfo.getNickname());
+                applyBean.setFromAvatar(userInfo.getAvatar());
+                applyBean.setIsAgree(3);
+                mListApplyBean.add(applyBean);
+                mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
                 break;
             case invite_accepted://对方接收了你的好友邀请
                 intent.putExtra("invite_accepted", "对方接受了你的好友邀请");

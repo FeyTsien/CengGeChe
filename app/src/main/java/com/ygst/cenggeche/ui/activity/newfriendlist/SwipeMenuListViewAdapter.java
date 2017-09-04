@@ -23,10 +23,10 @@ import java.util.List;
 public class SwipeMenuListViewAdapter extends BaseAdapter {
 
     NewFriendListActivity activity;
-    List<ApplyBean.DataBean> mListDataBean;
+    List<ApplyBean> mListDataBean;
     Context mContext;
 
-    public SwipeMenuListViewAdapter(Context context, List<ApplyBean.DataBean> list) {
+    public SwipeMenuListViewAdapter(Context context, List<ApplyBean> list) {
         mContext = context;
         this.mListDataBean = list;
         this.activity = (NewFriendListActivity) context;
@@ -48,26 +48,26 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = View.inflate(mContext.getApplicationContext(), R.layout.item_list_newfriend, null);
             new ViewHolder(convertView);
         }
         final ViewHolder holder = (ViewHolder) convertView.getTag();
-        final ApplyBean.DataBean newFriend = mListDataBean.get(position);
+        final ApplyBean newFriend = mListDataBean.get(position);
         String applyName = "";
         if (newFriend != null) {
-            if(!TextUtils.isEmpty(newFriend.getNickname())){
-                applyName =newFriend.getNickname();
+            if(!TextUtils.isEmpty(newFriend.getFromNickname())){
+                applyName =newFriend.getFromNickname();
             }else{
-                applyName =newFriend.getFusername();
+                applyName =newFriend.getFromUsername();
             }
             holder.mTvTargetName.setText(applyName);
             //自定义的文字图片
             TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
             holder.mIvAvatar.setImageDrawable(drawable);
 
-            holder.mTvLatestMessage.setText(newFriend.getApplyInfo());
+            holder.mTvLatestMessage.setText(newFriend.getReason());
             if (newFriend.getIsAgree() == 1) {
                 holder.mTvIsAgree.setText("已拒绝");
                 holder.mBtnYes.setVisibility(View.GONE);
@@ -85,13 +85,13 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
         holder.mBtnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.showYesAgreeDialog(newFriend);
+                activity.showYesAgreeDialog(position);
             }
         });
         holder.mBtnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.showNoAgreeDialog(newFriend);
+                activity.showNoAgreeDialog(position);
             }
         });
 

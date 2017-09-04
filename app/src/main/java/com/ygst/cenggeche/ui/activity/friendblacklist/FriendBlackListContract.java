@@ -1,7 +1,6 @@
 package com.ygst.cenggeche.ui.activity.friendblacklist;
 
-import android.content.Context;
-
+import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -12,10 +11,11 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class FriendBlackListContract {
     interface View extends BaseView {
-        
+        void getBlackListSuccess(FriendListBean friendListBean);
+        void getBlackListError();
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+        void getBlackList(String myusername);
     }
 }

@@ -56,6 +56,14 @@ public class UrlUtils {
     public static String APPLY_DATE_YES_AGREE="/friend/addFriend.do";
     //好友列表
     public static String FRIEND_LIST="/friendOperate/friendList.do";
+    //黑名单列表
+    public static String BLACK_LIST="/friendOperate/friendBlackList.do";
+    //删除好友
+    public static String DELETE_FRIEND="/friendOperate/delFriend.do";
+    //将好友加入黑名单
+    public static String ADD_BLACKLIST="/friendOperate/addBlackList.do";
+    //移除黑名单
+    public static String REMOVE_BLACKLIST="/friendOperate/removeBlackList.do";
 
 
 

@@ -9,13 +9,9 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
-import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +28,7 @@ import cn.jpush.im.api.BasicCallback;
 public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, AddFriendPresenter> implements AddFriendContract.View {
 
     private String TAG = "AddFriendActivity";
+
     String targetUserName;
     String targetAppKey;
     String reason;
@@ -52,24 +49,6 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
         ;
     }
 
-    /**
-     * 发送申请
-     */
-    @OnClick(R.id.bt_submit)
-    public void addFriendSubmit() {
-        Intent intent = this.getIntent();
-        targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
-        targetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
-        reason = mEditTextReason.getText().toString();
-
-        //好友请求请求发送成功
-        Map<String, String> map = new HashMap<>();
-        map.put("myusername", targetUserName);
-        map.put("fusername", AppData.getUserName());
-        map.put("appkey", targetAppKey);
-        map.put("applyInfo", reason);
-        mPresenter.sendAddFriend(map);
-    }
 
     @Override
     protected int getLayoutId() {
@@ -80,12 +59,48 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        init();
+    }
+
+    private void init(){
         mTvTitle.setText("申请好友");
     }
 
+    /**
+     * 发送申请
+     */
+    @OnClick(R.id.bt_submit)
+    public void addFriendSubmit() {
+        Intent intent = this.getIntent();
+        targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
+        targetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
+        reason = mEditTextReason.getText().toString();
+
+        ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+                LogUtils.i(TAG, "responseMessage: " + responseMessage);
+                if (0 == responseCode) {
+                    finish();
+                    ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
+                } else {
+                    //好友请求发送失败
+                    ToastUtil.show(AddFriendActivity.this, "申请好友发送失败");
+                }
+            }
+        });
+//
+//        Map<String, String> map = new HashMap<>();
+//        map.put("myusername", targetUserName);
+//        map.put("fusername", AppData.getUserName());
+//        map.put("appkey", targetAppKey);
+//        map.put("applyInfo", reason);
+//        mPresenter.sendAddFriend(map);
+    }
+
+
     @Override
     public void sendSucceed() {
-
 
         ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
             @Override

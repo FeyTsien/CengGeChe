@@ -155,7 +155,6 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         timeCount.cancel();
         timeCount.onFinish();
         CommonUtils.startActivity(this, RegisterActivity.class);
-        finish();
     }
 
     @Override

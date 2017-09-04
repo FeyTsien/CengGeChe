@@ -1,139 +1,76 @@
 package com.ygst.cenggeche.bean;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by Administrator on 2017/8/29.
  */
 
-public class ApplyBean {
-    /**
-     * data : [{"applyInfo":"sdfa","fusername":"123456","id":4,"userPic":"jkljk","nickname":"ljkl","appkey":"","applyTime":"2017-08-30 14:44:16","myusername":"123","isAgree":3},{"applyInfo":"sdfa","fusername":"123456","id":1,"userPic":"jkljk","nickname":"ljkl","appkey":"","applyTime":"2017-08-30 11:28:51","myusername":"123","isAgree":3}]
-     * code : 0000
-     * msg : 成功
-     */
+public class ApplyBean implements Serializable {
 
-    private String code;
-    private String msg;
-    private List<DataBean> data;
+    private String reason;
+    private String myUsername;
+    private String fromUsername;
+    private String fromAvatar;
+    private String fromNickname;
+    private String fromAppkey;
 
-    public String getCode() {
-        return code;
+    //1表示同意，2表示拒绝，3表示没有回复状态
+    private int isAgree;
+
+    public String getReason() {
+        return reason;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMyUsername() {
+        return myUsername;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMyUsername(String myUsername) {
+        this.myUsername = myUsername;
     }
 
-    public List<DataBean> getData() {
-        return data;
+    public String getFromUsername() {
+        return fromUsername;
     }
 
-    public void setData(List<DataBean> data) {
-        this.data = data;
+    public void setFromUsername(String fromUsername) {
+        this.fromUsername = fromUsername;
     }
 
-    public static class DataBean {
-        /**
-         * applyInfo : sdfa
-         * fusername : 123456
-         * id : 4
-         * userPic : jkljk
-         * nickname : ljkl
-         * appkey :
-         * applyTime : 2017-08-30 14:44:16
-         * myusername : 123
-         * isAgree : 3
-         */
+    public String getFromAvatar() {
+        return fromAvatar;
+    }
 
-        private String applyInfo;
-        private String fusername;
-        private int id;
-        private String userPic;
-        private String nickname;
-        private String appkey;
-        private String applyTime;
-        private String myusername;
-        private int isAgree;
+    public void setFromAvatar(String fromAvatar) {
+        this.fromAvatar = fromAvatar;
+    }
 
-        public String getApplyInfo() {
-            return applyInfo;
-        }
+    public String getFromNickname() {
+        return fromNickname;
+    }
 
-        public void setApplyInfo(String applyInfo) {
-            this.applyInfo = applyInfo;
-        }
+    public void setFromNickname(String fromNickname) {
+        this.fromNickname = fromNickname;
+    }
 
-        public String getFusername() {
-            return fusername;
-        }
+    public String getFromAppkey() {
+        return fromAppkey;
+    }
 
-        public void setFusername(String fusername) {
-            this.fusername = fusername;
-        }
+    public void setFromAppkey(String fromAppkey) {
+        this.fromAppkey = fromAppkey;
+    }
 
-        public int getId() {
-            return id;
-        }
+    public int getIsAgree() {
+        return isAgree;
+    }
 
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getUserPic() {
-            return userPic;
-        }
-
-        public void setUserPic(String userPic) {
-            this.userPic = userPic;
-        }
-
-        public String getNickname() {
-            return nickname;
-        }
-
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-        }
-
-        public String getAppkey() {
-            return appkey;
-        }
-
-        public void setAppkey(String appkey) {
-            this.appkey = appkey;
-        }
-
-        public String getApplyTime() {
-            return applyTime;
-        }
-
-        public void setApplyTime(String applyTime) {
-            this.applyTime = applyTime;
-        }
-
-        public String getMyusername() {
-            return myusername;
-        }
-
-        public void setMyusername(String myusername) {
-            this.myusername = myusername;
-        }
-
-        public int getIsAgree() {
-            return isAgree;
-        }
-
-        public void setIsAgree(int isAgree) {
-            this.isAgree = isAgree;
-        }
+    public void setIsAgree(int isAgree) {
+        this.isAgree = isAgree;
     }
 }

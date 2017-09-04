@@ -16,6 +16,7 @@ import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.widget.ColorGenerator;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
+import com.ygst.cenggeche.utils.JMessageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +91,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("friendsUsername",bean.getFriendusername());
+                intent.putExtra(JMessageUtils.TARGET_USERNAME,bean.getFriendusername());
+                intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS,bean.getFriendStatus());
                 intent.setClass(mContext, FriendInfoActivity.class);
                 mContext.startActivity(intent);
             }
