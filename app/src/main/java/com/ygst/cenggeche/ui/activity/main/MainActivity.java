@@ -377,8 +377,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public static final String IS_UPLOAD = "is_upload";
     public static final String LOGOUT_REASON = "logout_reason";
 
-    private Conversation mConversation;
-    UserInfo userInfo;
     /**
      * 新增联系人相关通知事件ContactNotifyEvent
      *
@@ -390,14 +388,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         String fromUsername = event.getFromUsername();
         String formAppkey = event.getfromUserAppKey();
 
-        mConversation = JMessageClient.getSingleConversation(fromUsername, formAppkey);
-        userInfo = (UserInfo) mConversation.getTargetInfo();
-        List<ApplyBean> mListApplyBean = new ArrayList<>();
+        Conversation mConversation = JMessageClient.getSingleConversation(fromUsername, formAppkey);
+        UserInfo userInfo = (UserInfo) mConversation.getTargetInfo();
 
-        ApplyBean applyBean = (ApplyBean) mCache.getAsObject(JMessageUtils.APPLE_BEAN);
-        if(applyBean ==null) {
-            applyBean = new ApplyBean();
+        List<ApplyBean> mListApplyBean = (List<ApplyBean>) mCache.getAsObject(JMessageUtils.APPLE_BEAN);
+        if(mListApplyBean ==null) {
+            mListApplyBean = new ArrayList<>();
+
         }
+        ApplyBean applyBean = new ApplyBean();
         Intent intent = new Intent(this, ShowFriendReasonActivity.class);
 
         switch (event.getType()) {

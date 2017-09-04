@@ -16,8 +16,8 @@ public class NewFriendListContract {
 //        void deleteApplyDateError();
 //        void noAgreeSuccess();
 //        void noAgreeError();
-//        void yesAgreeSuccess();
-//        void yesAgreeError();
+        void yesAgreeSuccess(int position);
+        void yesAgreeError();
     }
 
     interface  Presenter extends BasePresenter<View> {
@@ -28,7 +28,7 @@ public class NewFriendListContract {
 //        //拒绝对方申请
 //        void noAgree(String myusername,String fusername);
         //同意对方申请
-        void yesAgree(String myusername,String fusername);
+        void yesAgree(String myusername,String fusername,int position);
 
     }
 }

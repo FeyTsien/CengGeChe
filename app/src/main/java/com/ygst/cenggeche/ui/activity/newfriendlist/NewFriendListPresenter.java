@@ -20,10 +20,10 @@ import rx.Observer;
 public class NewFriendListPresenter extends BasePresenterImpl<NewFriendListContract.View> implements NewFriendListContract.Presenter{
 
     private final String TAG = "NewFriendListPresenter";
-    @Override
-    public void getApplyList(String username) {
-        Map<String, String> map = new HashMap<>();
-        map.put("myusername", username);
+//    @Override
+//    public void getApplyList(String username) {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("myusername", username);
 //        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_LIST, new Observer<String>() {
 //
 //            @Override
@@ -53,79 +53,79 @@ public class NewFriendListPresenter extends BasePresenterImpl<NewFriendListContr
 //            }
 //        }, map);
 
-    }
+//    }
+
+//    @Override
+//    public void deleteApplyDate(String myusername, String fusername, final int position) {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("myusername", myusername);
+//        map.put("fusername", fusername);
+//        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_DELETE_DATE, new Observer<String>() {
+//
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
+//                Gson gson = new Gson();
+//                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+//
+//                if ("0000".equals(codeBean.getCode())) {
+//                    if (mView != null)
+//                        mView.deleteApplyDateSuccess(position);
+//                } else {
+//                    if (mView != null)
+//                        mView.deleteApplyDateError();
+//                    LogUtils.i(TAG,"code:"+codeBean.getCode());
+//                }
+//            }
+//        }, map);
+//    }
+//
+//    @Override
+//    public void noAgree(String myusername, String fusername) {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("myusername", myusername);
+//        map.put("fusername", fusername);
+//        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_DATE_NO_AGREE, new Observer<String>() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
+//                Gson gson = new Gson();
+//                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+//
+//                if ("0000".equals(codeBean.getCode())) {
+//                    if (mView != null)
+//                        mView.noAgreeSuccess();
+//                } else {
+//                    if (mView != null)
+//                        mView.noAgreeError();
+//                    LogUtils.i(TAG,"code:"+codeBean.getCode());
+//                }
+//            }
+//        }, map);
+//    }
 
     @Override
-    public void deleteApplyDate(String myusername, String fusername, final int position) {
-        Map<String, String> map = new HashMap<>();
-        map.put("myusername", myusername);
-        map.put("fusername", fusername);
-        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_DELETE_DATE, new Observer<String>() {
-
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
-            }
-
-            @Override
-            public void onNext(String s) {
-                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
-                Gson gson = new Gson();
-                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
-
-                if ("0000".equals(codeBean.getCode())) {
-                    if (mView != null)
-                        mView.deleteApplyDateSuccess(position);
-                } else {
-                    if (mView != null)
-                        mView.deleteApplyDateError();
-                    LogUtils.i(TAG,"code:"+codeBean.getCode());
-                }
-            }
-        }, map);
-    }
-
-    @Override
-    public void noAgree(String myusername, String fusername) {
-        Map<String, String> map = new HashMap<>();
-        map.put("myusername", myusername);
-        map.put("fusername", fusername);
-        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_DATE_NO_AGREE, new Observer<String>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
-            }
-
-            @Override
-            public void onNext(String s) {
-                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
-                Gson gson = new Gson();
-                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
-
-                if ("0000".equals(codeBean.getCode())) {
-                    if (mView != null)
-                        mView.noAgreeSuccess();
-                } else {
-                    if (mView != null)
-                        mView.noAgreeError();
-                    LogUtils.i(TAG,"code:"+codeBean.getCode());
-                }
-            }
-        }, map);
-    }
-
-    @Override
-    public void yesAgree(String myusername, String fusername) {
+    public void yesAgree(String myusername, String fusername, final int position) {
         Map<String, String> map = new HashMap<>();
         map.put("myusername", myusername);
         map.put("friendusername", fusername);
@@ -148,7 +148,7 @@ public class NewFriendListPresenter extends BasePresenterImpl<NewFriendListContr
 
                 if ("0000".equals(codeBean.getCode())) {
                     if (mView != null)
-                        mView.yesAgreeSuccess();
+                        mView.yesAgreeSuccess(position);
                 } else {
                     if (mView != null)
                         mView.yesAgreeError();

@@ -12,11 +12,11 @@ import java.util.Map;
 
 public class AddFriendContract {
     interface View extends BaseView {
-        void sendSucceed();
-        void sendFail();
+//        void sendSucceed();
+//        void sendFail();
     }
 
     interface  Presenter extends BasePresenter<View> {
-       void sendAddFriend(Map<String, String> map);
+//       void sendAddFriend(Map<String, String> map);
     }
 }

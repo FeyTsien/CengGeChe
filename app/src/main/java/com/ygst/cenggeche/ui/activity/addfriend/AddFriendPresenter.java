@@ -22,34 +22,34 @@ import rx.Observer;
 public class AddFriendPresenter extends BasePresenterImpl<AddFriendContract.View> implements AddFriendContract.Presenter {
     private String TAG = "AddFriendPresenter";
 
-    @Override
-    public void sendAddFriend(Map<String, String> map) {
-        final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "发送");
-        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_FRIEND, new Observer<String>() {
-
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i("checkSMSCodeError", "onError:+ ++++++++++++++" + e.toString());
-            }
-
-            @Override
-            public void onNext(String s) {
-                Gson gson = new Gson();
-                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
-
-                if ("0000".equals(codeBean.getCode())) {
-                    if (mView != null)
-                        mView.sendSucceed();
-                } else {
-                    if (mView != null)
-                        mView.sendFail();
-                }
-            }
-        }, map);
-    }
+//    @Override
+//    public void sendAddFriend(Map<String, String> map) {
+//        final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "发送");
+//        HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_FRIEND, new Observer<String>() {
+//
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                Log.i("checkSMSCodeError", "onError:+ ++++++++++++++" + e.toString());
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                Gson gson = new Gson();
+//                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+//
+//                if ("0000".equals(codeBean.getCode())) {
+//                    if (mView != null)
+//                        mView.sendSucceed();
+//                } else {
+//                    if (mView != null)
+//                        mView.sendFail();
+//                }
+//            }
+//        }, map);
+//    }
 }

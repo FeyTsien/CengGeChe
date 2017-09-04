@@ -89,36 +89,29 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
                 }
             }
         });
+    }
+
+
+//    @Override
+//    public void sendSucceed() {
 //
-//        Map<String, String> map = new HashMap<>();
-//        map.put("myusername", targetUserName);
-//        map.put("fusername", AppData.getUserName());
-//        map.put("appkey", targetAppKey);
-//        map.put("applyInfo", reason);
-//        mPresenter.sendAddFriend(map);
-    }
-
-
-    @Override
-    public void sendSucceed() {
-
-        ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
-            @Override
-            public void gotResult(int responseCode, String responseMessage) {
-                LogUtils.i(TAG, "responseMessage: " + responseMessage);
-                if (0 == responseCode) {
-                    finish();
-                    ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
-                } else {
-                    //好友请求发送失败
-                    ToastUtil.show(AddFriendActivity.this, "申请好友发送失败");
-                }
-            }
-        });
-    }
-
-    @Override
-    public void sendFail() {
-        ToastUtil.show(this, "申请好友发送失败了");
-    }
+//        ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
+//            @Override
+//            public void gotResult(int responseCode, String responseMessage) {
+//                LogUtils.i(TAG, "responseMessage: " + responseMessage);
+//                if (0 == responseCode) {
+//                    finish();
+//                    ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
+//                } else {
+//                    //好友请求发送失败
+//                    ToastUtil.show(AddFriendActivity.this, "申请好友发送失败");
+//                }
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public void sendFail() {
+//        ToastUtil.show(this, "申请好友发送失败了");
+//    }
 }

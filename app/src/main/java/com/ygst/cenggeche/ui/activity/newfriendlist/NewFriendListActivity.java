@@ -17,13 +17,16 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.ApplyBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenu;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuCreator;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuItem;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuListView;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
+import com.ygst.cenggeche.utils.ToastUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +42,7 @@ import butterknife.OnClick;
 
 public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract.View, NewFriendListPresenter> implements NewFriendListContract.View {
     private String TAG = "NewFriendListActivity";
-    List<ApplyBean> mListDataBean;
+    List<ApplyBean> mListApplyBean;
 
     private SwipeMenuListViewAdapter mSwipeMenuListViewAdapter;
     private SwipeMenuListView mListView;
@@ -109,11 +112,12 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public void onMenuItemClick(int position, SwipeMenu menu, int index) {
-                ApplyBean dataBeanItem = mListDataBean.get(position);
+                ApplyBean dataBeanItem = mListApplyBean.get(position);
                 switch (index) {
                     case 0:
                         // delete删除某个会话
-                        mListDataBean.remove(position);
+                        mListApplyBean.remove(position);
+                        mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
                         if (mSwipeMenuListViewAdapter != null) {
                             mSwipeMenuListViewAdapter.notifyDataSetChanged();
                         }
@@ -125,17 +129,18 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ApplyBean dataBeanItem = mListDataBean.get(position);
-                final Intent intent = new Intent();
+                ApplyBean dataBeanItem = mListApplyBean.get(position);
+                Intent intent = new Intent(NewFriendListActivity.this, FriendInfoActivity.class);
+                intent.putExtra(JMessageUtils.TARGET_USERNAME,mListApplyBean.get(position).getFromUsername());
+                startActivity(intent);
             }
         });
 
-        mListDataBean = new ArrayList<>();
-        mListDataBean = (ArrayList<ApplyBean>) mCache.getAsObject(JMessageUtils.APPLE_BEAN);
-        setListView(mListDataBean);
+        mListApplyBean = new ArrayList<>();
+        mListApplyBean = (ArrayList<ApplyBean>) mCache.getAsObject(JMessageUtils.APPLE_BEAN);
+        setListView(mListApplyBean);
 
     }
-
 
     /**
      * 设置显示所有申请信息
@@ -155,29 +160,6 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
                 getResources().getDisplayMetrics());
     }
 
-//    @Override
-//    public void getApplyListSuccess(ApplyBean applyBean) {
-//    }
-//
-//    @Override
-//    public void getApplyListError() {
-//        ToastUtil.show(this, "未获取到信息");
-//    }
-
-//    @Override
-//    public void deleteApplyDateSuccess(int position) {
-//        mListDataBean.remove(position);
-//        if (mSwipeMenuListViewAdapter != null) {
-//            mSwipeMenuListViewAdapter.notifyDataSetChanged();
-//        }
-//    }
-//
-//    @Override
-//    public void deleteApplyDateError() {
-//        ToastUtil.show(this, "删除申请失败，请重试");
-//    }
-
-
     /**
      * 拒绝申请提示框
      */
@@ -185,22 +167,12 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
         CommonUtils.showInfoDialog(this, "拒绝该用户的好友申请吗？", "提示", "拒绝", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-//                mPresenter.noAgree(AppData.getUserName(),dataBean.getFusername());
+                mListApplyBean.get(position).setIsAgree(2);
+                mListApplyBean.set(position,mListApplyBean.get(position));
+                mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
             }
         }, null);
     }
-
-//    @Override
-//    public void noAgreeSuccess() {
-//        ToastUtil.show(this, "拒绝成功");
-//        setListView(mListDataBean);
-//    }
-//
-//    @Override
-//    public void noAgreeError() {
-//        ToastUtil.show(this, "拒绝申请失败，请重试");
-//    }
 
     /**
      * 同意申请提示框
@@ -209,24 +181,25 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
         CommonUtils.showInfoDialog(this, "同意该用户的好友申请吗？", "提示", "同意", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String fromUserName = mListDataBean.get(position).getFromUsername();
-                mPresenter.yesAgree(AppData.getUserName(),fromUserName);
-                mListDataBean.get(position).setIsAgree(1);
-                mListDataBean.set(position,mListDataBean.get(position));
+                String fromUserName = mListApplyBean.get(position).getFromUsername();
+                mPresenter.yesAgree(AppData.getUserName(),fromUserName,position);
             }
         }, null);
     }
 
-//    @Override
-//    public void yesAgreeSuccess() {
-//        ToastUtil.show(this, "同意申请");
-//        setListView(mListDataBean);
-//    }
-//
-//    @Override
-//    public void yesAgreeError() {
-//        ToastUtil.show(this, "同意申请失败，请重试");
-//    }
+    @Override
+    public void yesAgreeSuccess(int position) {
+        ToastUtil.show(this, "同意申请");
+        mListApplyBean.get(position).setIsAgree(1);
+        mListApplyBean.set(position,mListApplyBean.get(position));
+        mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
+        setListView(mListApplyBean);
+    }
+
+    @Override
+    public void yesAgreeError() {
+        ToastUtil.show(this, "同意申请失败，请重试");
+    }
 
 
 }

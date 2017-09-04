@@ -1,6 +1,7 @@
 package com.ygst.cenggeche.ui.activity.newfriendlist;
 
 import android.content.Context;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,9 +64,15 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                 applyName =newFriend.getFromUsername();
             }
             holder.mTvTargetName.setText(applyName);
-            //自定义的文字图片
-            TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
-            holder.mIvAvatar.setImageDrawable(drawable);
+
+            if(!TextUtils.isEmpty(newFriend.getFromAvatar())){
+                Uri uri = Uri.parse(newFriend.getFromAvatar());
+                holder.mIvAvatar.setImageURI(uri);
+            }else {
+                //自定义的文字图片
+                TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
+                holder.mIvAvatar.setImageDrawable(drawable);
+            }
 
             holder.mTvLatestMessage.setText(newFriend.getReason());
             if (newFriend.getIsAgree() == 1) {
