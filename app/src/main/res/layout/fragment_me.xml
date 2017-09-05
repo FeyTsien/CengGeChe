@@ -4,6 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="224dp"
+       android:background="@mipmap/icon_me_topbg">
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_above="@+id/ll_jilu">
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+      </RelativeLayout>
+      <LinearLayout
+          android:id="@+id/ll_jilu"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_alignParentBottom="true"
+          android:background="@color/translucent_me_bg">
+
+      </LinearLayout>
+   </RelativeLayout>
    <Button
        android:id="@+id/btn_login_out"
        android:layout_width="match_parent"

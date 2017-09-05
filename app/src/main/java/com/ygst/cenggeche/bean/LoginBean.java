@@ -1,5 +1,7 @@
 package com.ygst.cenggeche.bean;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/4/21.
  */
@@ -86,7 +88,7 @@ public class LoginBean {
         private String jingWeiDu;
         private String registrationId;
         private String location;
-        private String tag;
+        private List<String> tag;
         private int rubNum;
         private int passiveRubNum;
         private int education;
@@ -162,11 +164,11 @@ public class LoginBean {
             this.location = location;
         }
 
-        public String getTag() {
+        public List<String> getTag() {
             return tag;
         }
 
-        public void setTag(String tag) {
+        public void setTag(List<String> tag) {
             this.tag = tag;
         }
 

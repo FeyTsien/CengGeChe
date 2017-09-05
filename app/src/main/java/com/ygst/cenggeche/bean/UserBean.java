@@ -106,7 +106,7 @@ public class UserBean {
         private String jingWeiDu;
         private String registrationId;
         private String location;
-        private String tag;
+        private List<String> tag;
         private int rubNum;
         private int passiveRubNum;
         private int education;
@@ -182,11 +182,11 @@ public class UserBean {
             this.location = location;
         }
 
-        public String getTag() {
+        public List<String> getTag() {
             return tag;
         }
 
-        public void setTag(String tag) {
+        public void setTag(List<String> tag) {
             this.tag = tag;
         }
 

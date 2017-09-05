@@ -26,4 +26,11 @@ public class JMessageUtils {
 
     //验证消息
     public static final String APPLE_BEAN = "ApplyBean";
+
+    //是否同意好友申请
+    public static final String IS_AGREE_KEY="isAgreeKey";
+    //同意好友申请
+    public static final String YES_AGREE="yesAgree";
+    //拒绝好友申请
+    public static final String NO_AGREE="noAgree";
 }

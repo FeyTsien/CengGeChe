@@ -218,14 +218,13 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         if (!RecordVoiceButton.mIsPressed) {
             mVoiceBtn.dismissDialog();
         }
-        String targetId = getIntent().getStringExtra(JMessageUtils.TARGET_USERNAME);
         if (!mIsSingle) {
-            long groupId = getIntent().getLongExtra(JMessageUtils.GROUP_ID_KEY, 0);
-            if (groupId != 0) {
-                JMessageClient.enterGroupConversation(groupId);
+            if (mGroupId != 0) {
+                JMessageClient.enterGroupConversation(mGroupId);
             }
-        } else if (null != targetId) {
-            String appKey = getIntent().getStringExtra(TARGET_APP_KEY);            JMessageClient.enterSingleConversation(targetId, appKey);
+        } else if (null != targetUserName) {
+            String appKey = getIntent().getStringExtra(TARGET_APP_KEY);
+            JMessageClient.enterSingleConversation(targetUserName, appKey);
         }
         mChatAdapter.initMediaPlayer();
         Log.i(TAG, "[Life cycle] - onResume");
@@ -265,11 +264,20 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             mConversation = JMessageClient.getSingleConversation(targetUserName, targetAppKey);
             if (mConversation != null) {
                 UserInfo mUserInfo = (UserInfo) mConversation.getTargetInfo();
-                if(!TextUtils.isEmpty(mUserInfo.getNickname())){
+                if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
                     mTvTitle.setText(mUserInfo.getNickname());
-                }else{
+                } else {
                     mTvTitle.setText(mUserInfo.getUserName());
                 }
+
+                if (!mUserInfo.isFriend()) {
+                    //不是好友则显示添加好友按钮
+                    mIvRight.setVisibility(View.VISIBLE);
+                } else {
+                    //是好友则隐藏添加好友按钮
+                    mIvRight.setVisibility(View.GONE);
+                }
+
             } else {
                 mConversation = Conversation.createSingleConversation(targetUserName, targetAppKey);
                 mTvTitle.setText(mConversation.getTitle());
@@ -300,10 +308,36 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 mUIHandler.sendEmptyMessageDelayed(REFRESH_LAST_PAGE, 1000);
             }
         });
+
+        //向对方发送是否同意好友申请
+        sendIsAgreeMsg(intent);
         //滑到底部
         setToBottom();
     }
 
+
+    /**
+     * 向对方发送是否同意好友申请
+     */
+    private void sendIsAgreeMsg(Intent intent) {
+        String isAgree = intent.getStringExtra(JMessageUtils.IS_AGREE_KEY);
+        LogUtils.i(TAG, "isAgree:" + isAgree);
+        if (!TextUtils.isEmpty(isAgree))
+            if (isAgree.equals(JMessageUtils.YES_AGREE)) {
+                String msgContent = "我已接受你的好友申请";
+                TextContent content = new TextContent(msgContent);
+                final Message msg = mConversation.createSendMessage(content);
+//            final Message msg2 = mConversation.createSendCustomMessage(map);
+                mChatAdapter.addMsgToList(msg);
+                JMessageClient.sendMessage(msg);
+            } else if (isAgree.equals(JMessageUtils.NO_AGREE)) {
+                String msgContent = "我已拒绝你的好友申请";
+                TextContent content = new TextContent(msgContent);
+                final Message msg = mConversation.createSendMessage(content);
+                mChatAdapter.addMsgToList(msg);
+                JMessageClient.sendMessage(msg);
+            }
+    }
 
     /**
      * 用于显示Emoji表情的展示栏的Fragment
@@ -517,7 +551,6 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 JMessageClient.sendMessage(msg);
                 mEtContent.setText("");
                 setToBottom();
-                Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.ivAudio://切换语言
                 // 开启权限

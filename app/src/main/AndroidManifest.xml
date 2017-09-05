@@ -74,6 +74,8 @@
         <activity android:name=".ui.activity.newfriendlist.NewFriendListActivity" />
         <!--好友详细信息-->
         <activity android:name=".ui.activity.friendinfo.FriendInfoActivity" />
+        <!--展示大图-->
+        <activity android:name=".ui.activity.friendinfo.BigPicActivity" />
         <!--好友操作-->
         <activity android:name=".ui.activity.friendoperate.FriendOperateActivity" />
 

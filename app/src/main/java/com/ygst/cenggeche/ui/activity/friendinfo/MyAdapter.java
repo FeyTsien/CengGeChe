@@ -1,6 +1,7 @@
 package com.ygst.cenggeche.ui.activity.friendinfo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
     public MyAdapter(Context context) {
         super();
         mContext = context;
-        count = new Random().nextInt(9);
+        count = new Random().nextInt(6);
     }
 
     @Override
@@ -53,6 +54,9 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
             @Override
             public void onClick(View v) {
                 Log.d("click", position + "");
+                Intent intent = new Intent(mContext,BigPicActivity.class);
+                intent.putExtra("pic_uri","http://ompb0h8qq.bkt.clouddn.com/header/header.jpg");
+                mContext.startActivity(intent);
             }
         });
     }

@@ -668,7 +668,7 @@ public class MsgListAdapter extends BaseAdapter {
         CustomContent content = (CustomContent) msg.getContent();
         Boolean isBlackListHint = content.getBooleanValue("blackList");
         if (isBlackListHint != null && isBlackListHint) {
-            holder.groupChange.setText(IdHelper.getString(mContext, "server_803008"));
+            holder.groupChange.setText("消息已发出，但被对方拒收了");
         } else {
             holder.groupChange.setVisibility(View.GONE);
         }

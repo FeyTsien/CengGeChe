@@ -399,11 +399,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         ApplyBean applyBean = new ApplyBean();
         Intent intent = new Intent(this, ShowFriendReasonActivity.class);
 
+        Intent mIntent = new Intent(this, MyChatActivity.class);
+
         switch (event.getType()) {
             case invite_received://收到好友邀请
-                AppData.savaUnReadApplyCount(+1);
+                AppData.savaUnReadApplyCount(AppData.getUnReadApplyCount()+1);
                 mTvUnreadCount.setVisibility(View.VISIBLE);
                 mTvUnreadCount.setText("" + AppData.getUnReadApplyCount());
+                for(ApplyBean applyBean1:mListApplyBean){
+                    if(fromUsername.equals(applyBean1.getFromUsername())){
+                        mListApplyBean.remove(applyBean1);
+                    }
+                }
                 applyBean.setReason(reason);
                 applyBean.setMyUsername(AppData.getUserName());
                 applyBean.setFromUsername(fromUsername);
@@ -415,14 +422,32 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
                 break;
             case invite_accepted://对方接收了你的好友邀请
-                intent.putExtra("invite_accepted", "对方接受了你的好友邀请");
-                intent.setFlags(2);
-                startActivity(intent);
+                for(int i=0;i<mListApplyBean.size();i++){
+                    ApplyBean applyBean2 = mListApplyBean.get(i);
+                    if(fromUsername.equals(applyBean2.getFromUsername())){
+                        //修改为已同意状态
+                        applyBean2.setIsAgree(1);
+                        mListApplyBean.set(i,applyBean2);
+                    }
+                }
+                mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
+                mPresenter.weAreFriend(AppData.getUserName(),fromUsername);
+
+                mIntent.putExtra(JMessageUtils.TARGET_USERNAME, fromUsername);
+                mIntent.putExtra(JMessageUtils.TARGET_APP_KEY,formAppkey);
+                mIntent.putExtra(JMessageUtils.IS_AGREE_KEY,JMessageUtils.YES_AGREE);
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(mIntent);
                 break;
             case invite_declined://对方拒绝了你的好友邀请
-                intent.putExtra("invite_declined", "对方拒绝了你的好友邀请\n拒绝原因:" + event.getReason());
-                intent.setFlags(3);
-                startActivity(intent);
+                mIntent.putExtra(JMessageUtils.TARGET_USERNAME, fromUsername);
+                mIntent.putExtra(JMessageUtils.TARGET_APP_KEY,formAppkey);
+                mIntent.putExtra(JMessageUtils.IS_AGREE_KEY,JMessageUtils.NO_AGREE);
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(mIntent);
+//                intent.putExtra("invite_declined", "对方拒绝了你的好友邀请\n拒绝原因:" + event.getReason());
+//                intent.setFlags(3);
+//                startActivity(intent);
                 break;
             case contact_deleted://对方将你从好友中删除
                 intent.putExtra("contact_deleted", "对方将你从好友中删除");
@@ -434,6 +459,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
+
+    @Override
+    public void weAreFriendSuccess() {
+//        ToastUtil.show(this,"绑定了好友关系");
+    }
+
+    @Override
+    public void weAreFriendError() {
+//        ToastUtil.show(this,"绑定好友关系失败了");
+    }
     /**
      * 通知栏点击事件实体类NotificationClickEvent
      *
@@ -700,5 +735,4 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         intent.putExtra(INFO_UPDATE, myInfo.getUserName());
         startActivity(intent);
     }
-
 }

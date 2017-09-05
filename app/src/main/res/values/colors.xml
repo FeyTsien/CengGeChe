@@ -28,6 +28,7 @@
     <!--短息密码登录的切换按钮边框色：粉色#ff608f-->
     <color name="colorfense">#ff608f</color>
 
+    <color name="translucent_me_bg">#30000000</color>"
 
     <!--水波纹或5.0以下选择器颜色（activity_web_view.xml）-->
     <color name="tabBackground">#777D7D7D</color>

@@ -75,11 +75,11 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
             }
 
             holder.mTvLatestMessage.setText(newFriend.getReason());
-            if (newFriend.getIsAgree() == 1) {
+            if (newFriend.getIsAgree() == 2) {
                 holder.mTvIsAgree.setText("已拒绝");
                 holder.mBtnYes.setVisibility(View.GONE);
                 holder.mBtnNo.setVisibility(View.GONE);
-            } else if (newFriend.getIsAgree() == 2) {
+            } else if (newFriend.getIsAgree() == 1) {
                 holder.mTvIsAgree.setText("已同意");
                 holder.mBtnYes.setVisibility(View.GONE);
                 holder.mBtnNo.setVisibility(View.GONE);

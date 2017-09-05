@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.widget.SwitchButton;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
@@ -37,7 +36,9 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
 
     @OnClick(R.id.iv_back)
     public void goBack() {
-        onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS, friendStatus);
+        setResult(2, intent);
         finish();
     }
 
@@ -70,8 +71,10 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked) {
                     //加入黑名单
+                    friendStatus = 3;
                     mPresenter.addBlackList(AppData.getUserName(), targetUsername);
                 } else {
+                    friendStatus = 1;
                     //移除黑名单
                     mPresenter.removeBlackList(AppData.getUserName(), targetUsername);
                 }
@@ -111,7 +114,6 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
 
     @Override
     public void addBlackListSuccess() {
-        friendStatus = 3;
         if (!SBtnAddBlackList.isChecked()) {
             SBtnAddBlackList.setChecked(true);
         }
@@ -143,9 +145,9 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, FriendInfoActivity.class);
+        Intent intent = new Intent();
         intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS, friendStatus);
         setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 }

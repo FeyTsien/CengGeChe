@@ -114,7 +114,6 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
 
             @Override
             public void onError(Throwable e) {
-                progressDialog.dismiss();
                 Log.i("checkSMSCodeError", "onError:+ ++++++++++++++" + e.toString());
             }
 
