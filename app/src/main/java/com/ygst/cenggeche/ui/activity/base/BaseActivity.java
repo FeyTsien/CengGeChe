@@ -14,7 +14,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.Window;
 
-import com.tsien.myapplication.asimplecachedemo.ACache;
+import com.ygst.cenggeche.app.ACache;
 import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.http.LifeSubscription;

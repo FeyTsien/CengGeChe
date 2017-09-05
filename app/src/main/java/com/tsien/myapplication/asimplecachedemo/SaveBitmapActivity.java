@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.ACache;
 
 /**
  * 

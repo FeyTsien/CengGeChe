@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.tsien.myapplication.asimplecachedemo.beans.UserBean;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.ACache;
 
 /**
  * 
