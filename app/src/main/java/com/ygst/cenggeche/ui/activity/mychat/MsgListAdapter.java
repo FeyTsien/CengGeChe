@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
@@ -30,8 +31,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.ygst.cenggeche.app.AppData;
+import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.widget.MyTextDrawable;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
+import com.ygst.cenggeche.utils.JMessageUtils;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -587,23 +591,28 @@ public class MsgListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View arg0) {
                     //TODO jump to InfoActivity
-//                    Intent intent = new Intent();
-//                    if (msg.getDirect() == MessageDirect.send) {
-//                        intent.putExtra(JChatDemoApplication.TARGET_ID, mTargetId);
-//                        Log.i(TAG, "msg.getFromName() " + mTargetId);
-//                        intent.setClass(mContext, MeInfoActivity.class);
-//                        mContext.startActivity(intent);
-//                    } else {
-//                        String targetID = userInfo.getUserName();
-//                        intent.putExtra(JChatDemoApplication.TARGET_ID, targetID);
-//                        if (!mIsGroup) {
-//                            intent.putExtra(JChatDemoApplication.TARGET_APP_KEY, mTargetAppKey);
-//                        }
-//                        intent.putExtra(JChatDemoApplication.GROUP_ID, mGroupId);
-//                        intent.setClass(mContext, FriendInfoActivity.class);
-//                        ((Activity) mContext).startActivityForResult(intent,
-//                                JChatDemoApplication.REQUEST_CODE_FRIEND_INFO);
-//                    }
+                    Intent intent = new Intent();
+                    if (msg.getDirect() == MessageDirect.send) {
+                        intent.putExtra(JMessageUtils.TARGET_USERNAME, AppData.getUserName());
+                        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS,1105);
+                        intent.setClass(mContext, FriendInfoActivity.class);
+                        mContext.startActivity(intent);
+                    } else {
+                        int friendStatus;
+                        intent.putExtra(JMessageUtils.TARGET_USERNAME, userInfo.getUserName());
+                        if(userInfo.isFriend()){
+                            friendStatus =1;
+                            if(userInfo.getBlacklist() == 1){
+                                //在黑名单中
+                                friendStatus = 3;
+                            }
+                        }else{
+                            friendStatus =2;
+                        }
+                        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS,friendStatus);
+                        intent.setClass(mContext, FriendInfoActivity.class);
+                        mContext.startActivity(intent);
+                    }
                 }
             });
         }

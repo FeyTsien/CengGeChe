@@ -57,7 +57,7 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
     private void initView() {
         mTvTitle.setText("好友设置");
         targetUsername = getIntent().getStringExtra(JMessageUtils.TARGET_USERNAME);
-        friendStatus =getIntent().getIntExtra(JMessageUtils.TARGET_FRIENDSTATUS,0);
+        friendStatus = getIntent().getIntExtra(JMessageUtils.TARGET_FRIENDSTATUS, 0);
         if (friendStatus == 1) {
             //为1时是正常好友状态，不显示处于黑名单状态
             SBtnAddBlackList.setChecked(false);
@@ -71,8 +71,13 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked) {
                     //加入黑名单
-                    friendStatus = 3;
-                    mPresenter.addBlackList(AppData.getUserName(), targetUsername);
+                    CommonUtils.showInfoDialog(FriendOperateActivity.this, "确定要拉黑该好友吗？", "提示", "拉黑", "取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            friendStatus = 3;
+                            mPresenter.addBlackList(AppData.getUserName(), targetUsername);
+                        }
+                    }, null);
                 } else {
                     friendStatus = 1;
                     //移除黑名单
@@ -104,7 +109,7 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
 
     @Override
     public void delFriendSuccess() {
-
+        finish();
     }
 
     @Override

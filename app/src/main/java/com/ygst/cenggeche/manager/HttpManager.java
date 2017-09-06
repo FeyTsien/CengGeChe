@@ -6,9 +6,9 @@ import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.interfaces.ProjectAPI;
 import com.ygst.cenggeche.utils.RSAUtil;
 import com.ygst.cenggeche.utils.RetrofitUtil;
+import com.ygst.cenggeche.utils.SignUtils;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -71,23 +71,25 @@ public class HttpManager {
         if (AppData.getUid() != null) {
             uid = AppData.getUid();
         }
-        String sign = getSign(map);
+
+        String singStr = SignUtils.payParamsToString(map, false);
+        String sign = RSAUtil.encryptByPublic(MyApplication.getContext(),singStr);
         Observable<String> observable = RetrofitUtil.getInstance().get(ProjectAPI.class).postMethod(deviceId, uid, sign, url, map);
         //在子线程中执行请求，在主线程观察，将信息设置给观察者
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 
-    private String getSign(Map map) {
-        String stringA = "";
-        //遍历list得到map里面排序后的元素
-        Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, String> entry = it.next();
-            stringA = stringA + entry.getKey() + "=" + entry.getValue() + "&";
-        }
-        stringA = stringA.substring(0, stringA.length() - 1);
-        return RSAUtil.encryptByPublic(MyApplication.getContext(), stringA);
-    }
+//    private String getSign(Map map) {
+//        String stringA = "";
+//        //遍历list得到map里面排序后的元素
+//        Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
+//        while (it.hasNext()) {
+//            Map.Entry<String, String> entry = it.next();
+//            stringA = stringA + entry.getKey() + "=" + entry.getValue() + "&";
+//        }
+//        stringA = stringA.substring(0, stringA.length() - 1);
+//        return RSAUtil.encryptByPublic(MyApplication.getContext(), stringA);
+//    }
 
     /**
      * Post方式请求

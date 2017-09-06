@@ -2,7 +2,7 @@ package com.ygst.cenggeche.ui.activity.friendinfo;
 
 
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.UserBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
@@ -21,6 +22,8 @@ import com.ygst.cenggeche.ui.widget.MyTextDrawable;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,6 +68,8 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     TextView mTvEducation;
     @BindView(R.id.flow_layout_biaoqian)
     FlowLayout mFlowlBiaoQian;
+    @BindView(R.id.tv_miaoshu)
+    TextView mTvMiaoShu;
 
     @OnClick(R.id.iv_back)
     public void goBack() {
@@ -105,15 +110,15 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
         JMessageClient.getUserInfo(targetUsername, new GetUserInfoCallback() {
             @Override
             public void gotResult(int responseCode, String s, UserInfo userInfo) {
-                if(responseCode == 0){
-                    if(userInfo.isFriend()){
+                if (responseCode == 0) {
+                    if (userInfo.isFriend()) {
                         //是好友则显示可以好友操作菜单
                         mIvMenu.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         //不是好友不显示
                         mIvMenu.setVisibility(View.GONE);
                     }
-                }else{
+                } else {
 
                 }
             }
@@ -140,13 +145,11 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
         //名字
         mTvName.setText(name);
         //头像
-        if (!TextUtils.isEmpty(friendInfo.getUserPic())) {
-            Uri uri = Uri.parse(friendInfo.getUserPic());
-            mIvAvatar.setImageURI(uri);
-        } else {
-            TextDrawable drawable = MyTextDrawable.getTextDrawable(name);
-            mIvAvatar.setImageDrawable(drawable);
-        }
+        TextDrawable drawable = MyTextDrawable.getTextDrawable(name);
+        Glide.with(this)
+                .load(friendInfo.getUserPic())
+                .placeholder(drawable)
+                .into(mIvAvatar);
         //性别符号
         if (friendInfo.getGender() == 0) {
             mIvGender.setImageResource(R.mipmap.icon_girl);
@@ -161,6 +164,19 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
         mTvPresentAddress.setText(friendInfo.getLocation());
         //学历
         mTvEducation.setText(friendInfo.getEducation());
+        //自我描述
+        mTvMiaoShu.setText(friendInfo.getUserSign());
+        //个性标签
+        List<String> listTag = friendInfo.getTag();
+        if (listTag != null && listTag.size() > 0) {
+            for (int i = 0; i < listTag.size(); i++) {
+                TextView view = new TextView(this);
+                view.setText(listTag.get(i));
+                view.setTextColor(Color.WHITE);
+                view.setBackgroundResource(R.drawable.button_bg);
+                mFlowlBiaoQian.addView(view);
+            }
+        }
     }
 
     @Override
@@ -171,10 +187,10 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            if(requestCode == GO_FRIEND_OPERATE){
-                if(data!=null){
-                    friendStatus = data.getIntExtra(JMessageUtils.TARGET_FRIENDSTATUS, 0);
-                }
+        if (requestCode == GO_FRIEND_OPERATE) {
+            if (data != null) {
+                friendStatus = data.getIntExtra(JMessageUtils.TARGET_FRIENDSTATUS, 0);
             }
+        }
     }
 }

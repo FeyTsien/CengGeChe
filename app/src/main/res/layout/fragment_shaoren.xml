@@ -1,10 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <RelativeLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="捎人"/>
+        android:layout_height="0dp"
+        android:clipChildren="false">
+
+        <android.support.v4.view.ViewPager
+            android:layout_marginTop="30dp"
+            android:id="@+id/tab_viewpager"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+
+            ></android.support.v4.view.ViewPager>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+
+            android:id="@+id/iv_release_plan"
+            android:src="@mipmap/iv_release_plan"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_take_her"
+            android:src="@mipmap/iv_take_her"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_trip_info"
+            android:src="@mipmap/iv_trip_info"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

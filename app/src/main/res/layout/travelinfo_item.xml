@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <!--接收行程-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@color/colortimerclose"
+            android:id="@+id/tv_ready_accept"
+            android:layout_margin="5dp"
+            android:text="已接收同行"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_gravity="bottom"
+            android:id="@+id/ll_t"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/rl_avatar"
+                android:layout_width="40dp"
+                android:layout_height="match_parent">
+
+                <cn.jmessage.android.uikit.chatting.CircleImageView
+                    android:id="@+id/user_smallicon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/ic_launcher" />
+
+                <ImageView
+                    android:id="@+id/iv_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/icon_girl" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="昵称呀"
+                     />
+
+                <TextView
+                    android:id="@+id/tv_userage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8月15号 08：:30 接受"
+                     />
+
+            </LinearLayout>
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:background="@drawable/btn_brond_white"
+                    android:text="忽略"
+                    android:textColor="@color/deep_violet"
+                    android:id="@+id/btn_ignore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/btn_brond_deepvoilet"
+                    android:text="接受"
+                    android:id="@+id/btn_accept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:gravity="center_vertical"
+            android:id="@+id/tv_start_location"
+            android:layout_margin="5dp"
+            android:drawableLeft="@mipmap/iv_start_location"
+            android:text="嘉捷企业汇"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_margin="5dp"
+            android:id="@+id/tv_end_location"
+            android:drawableLeft="@mipmap/iv_end_location"
+            android:text="天安门"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -4,26 +4,52 @@
 
     <!-- Required -->
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <!-- Optional. Required for location feature -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+
+
+    <!-- 高德地图定位权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+
+    <!-- 请求网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- 需要运行时注册的权限 -->
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 用于提高GPS定位速度 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 读取缓存数据 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- 更改设置 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <!-- 3.2.0版本增加 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- 3.2.0版本增加 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
         android:name=".app.MyApplication"
@@ -34,6 +60,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- 高德地图 -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="7d2bcd2161784132c4524623fbbd951f" />
+        <!-- 定位需要的服务 -->
+        <service android:name="com.amap.api.location.APSService"></service>
         <!--启动欢迎页-->
         <activity
             android:name=".ui.activity.SplashActivity"
@@ -78,6 +110,37 @@
         <activity android:name=".ui.activity.friendinfo.BigPicActivity" />
         <!--好友操作-->
         <activity android:name=".ui.activity.friendoperate.FriendOperateActivity" />
+
+
+
+        <!-- 发布行程 -->
+        <activity android:name=".ui.activity.releaseplan.ReleaseplanActivity" />
+
+        <!-- 行程信息 -->
+        <activity android:name=".ui.activity.travelinfo.TravelInfoActivity" />
+
+        <!-- 确定带上他信息 -->
+        <activity android:name=".ui.activity.suretravel.SureTravelActivity" />
+
+        <!-- 选择地址 -->
+        <activity android:name=".ui.activity.suretravel.SureAddrActivity" />
+
+        <!-- 带上他的发布行程信息 -->
+        <activity android:name=".ui.activity.itinerary.ItineraryActivity" />
+
+        <!-- 地理位置检索 -->
+        <activity android:name=".ui.activity.releaseplan.retrieval.RetrievalActivity" />
+
+        <!-- 确定发布信息 -->
+        <activity android:name=".ui.activity.releaseplan.surerelease.SureReleaseActivity" />
+        <!-- 获取车辆信息 -->
+        <activity android:name=".ui.activity.releaseplan.cartype.CartypeActivity" />
+
+        <!-- 获取附近人详细信息 -->
+        <activity android:name=".ui.activity.nearbyuserinfo.NearByUserInfoActivity" />
+
+        <!-- 切换城市列表 -->
+        <activity android:name=".ui.activity.changecity.ChangeCityActivity" />
 
 
         <!--下面是极光IM功能展示界面-->
@@ -160,7 +223,6 @@
         <activity android:name="com.jarek.imageselect.activity.ImageSelectActivity"/>
         <activity android:name="com.jarek.imageselect.activity.PreviewImageActivity"
             android:theme="@style/Translucent"/>
-
 
         <!--=================数据缓存demo================-->
         <activity

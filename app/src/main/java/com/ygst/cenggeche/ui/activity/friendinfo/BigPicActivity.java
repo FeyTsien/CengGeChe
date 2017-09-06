@@ -29,15 +29,13 @@ public class BigPicActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        String pic=getIntent().getStringExtra("pic_uri");
-        Glide.with(this)
-                .load(pic)
-                .placeholder(R.mipmap.ic_launcher)
-                .into(mIvBigPic);
+        String pic = getIntent().getStringExtra("pic_uri");
+//        Picasso.with(this).load(pic).placeholder(R.mipmap.icon_my_avatar).into(mIvBigPic);
+        Glide.with(this).load(pic).placeholder(R.mipmap.icon_my_avatar).into(mIvBigPic);
     }
 
     @OnClick(R.id.iv_big_pic)
-    public void offBigPic(){
+    public void offBigPic() {
         finish();
     }
 }

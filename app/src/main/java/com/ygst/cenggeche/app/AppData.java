@@ -11,6 +11,10 @@ public class AppData {
 
     private static final String IS_LOGIN_ED = "isLoginEd";
     private static final String IS_NOTIFICATION = "isNotification";
+    private static final String IS_LOCATION = "北京";
+
+
+
 
     /**
      * 查询是否登陆
@@ -157,4 +161,18 @@ public class AppData {
     public static int getUnReadApplyCount(){
         return SharedPreferencesUtils.getInt("UNREADCOUNT", 0);
     }
+
+    /**
+     * 保存当前城市
+     */
+    public static void saveLocation(String location) {
+        SharedPreferencesUtils.saveString("LOCATION", location);
+    }
+    /**
+     * 获取当前城市
+     */
+    public static String getLocation() {
+        return SharedPreferencesUtils.getString("LOCATION", null);
+    }
+
 }

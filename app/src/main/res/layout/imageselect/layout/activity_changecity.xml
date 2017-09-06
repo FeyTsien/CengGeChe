@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/app_toolbar"></include>
+
+    <RelativeLayout
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="20px"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_marginLeft="20px"
+            android:id="@+id/im_close"
+
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+
+    </RelativeLayout>
+
+
+    <View
+        android:layout_marginTop="20px"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="#e3e3e3"
+        />
+
+    <LinearLayout
+
+        android:gravity="center_vertical"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_marginLeft="20px"
+            android:text="当前定位城市"
+            android:textColor="#3d3d3d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <View
+
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="#e3e3e3"
+        />
+
+    <TextView
+        android:layout_marginLeft="20dp"
+        android:id="@+id/tv_location"
+        android:text="北京市"
+        android:layout_marginTop="20px"
+        android:layout_marginBottom="20px"
+        android:textColor="#3d3d3d"
+        android:background="@drawable/text_view_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="#e3e3e3"
+        />
+
+    <LinearLayout
+
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginLeft="20px"
+            android:text="已开通城市"
+
+            android:layout_margin="10dp"
+            android:textColor="#3d3d3d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="#e3e3e3"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="20px"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20px"
+        android:layout_height="wrap_content">
+        <TextView
+
+
+            android:id="@+id/tv_location_bj"
+            android:text="北京市"
+
+            android:textColor="#3d3d3d"
+            android:background="@drawable/text_view_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginLeft="20px"
+            android:id="@+id/tv_location_lf"
+            android:text="廊坊"
+
+
+            android:textColor="#3d3d3d"
+            android:background="@drawable/text_view_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

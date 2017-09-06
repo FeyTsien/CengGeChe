@@ -184,4 +184,16 @@
 
     <color name="green1">#45C01A</color>
     <color name="green2">#A3DEA3</color>
+
+
+    <!--蹭车页面字体颜色-->
+    <color name="text_cengche">#656565</color>
+    <color name="text_user_name">#fd6191</color>
+    <color name="colortimerclose">#13b7f6</color>
+    <!--半透明-->
+    <color name="nearby_distance_bg">#70000000</color>
+    <color name="pp_zimu">#f29804</color>
+
+    <color name="violet">#a878ff</color>
+    <color name="deep_violet">#8064a1</color>
 </resources>

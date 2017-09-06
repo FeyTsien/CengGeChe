@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.view.ikninephotoview.IKNinePhotoViewAdapter;
 import com.ygst.cenggeche.ui.view.ikninephotoview.IKNinePhotoViewHolder;
@@ -47,7 +48,9 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
     public void displayView(final MyHolder holder, final int position) {
         Glide.with(mContext)
                 .load("http://ompb0h8qq.bkt.clouddn.com/header/header.jpg")
-                .placeholder(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .placeholder(R.mipmap.icon_my_avatar)
                 .into(holder.mImageView);
 
         holder.getItemView().setOnClickListener(new View.OnClickListener() {

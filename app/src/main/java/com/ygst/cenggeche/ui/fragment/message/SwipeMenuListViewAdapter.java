@@ -78,6 +78,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
 
     /**
      * 给单行消息填充数据
+     *
      * @param holder
      * @param convItem
      */
@@ -148,12 +149,12 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                     @Override
                     public void gotResult(int status, String desc, Bitmap bitmap) {
                         String name = "";
-                        if(!TextUtils.isEmpty(mUserInfo.getNotename())){
-                            name =mUserInfo.getNotename();
-                        }else if(!TextUtils.isEmpty(mUserInfo.getNickname())){
-                            name =mUserInfo.getNickname();
-                        }else {
-                            name =mUserInfo.getUserName();
+                        if (!TextUtils.isEmpty(mUserInfo.getNotename())) {
+                            name = mUserInfo.getNotename();
+                        } else if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
+                            name = mUserInfo.getNickname();
+                        } else {
+                            name = mUserInfo.getUserName();
                         }
                         //会话的名称
                         holder.mTVtargetName.setText(name);
@@ -161,14 +162,12 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                         if (status == 0) {
                             holder.mIVavatar.setImageBitmap(bitmap);
                         } else {
-//                            TextDrawable drawable = mDrawableBuilder.build(String.valueOf(name.charAt(0)), mColorGenerator.getColor(name));
-//                            holder.mIVavatar.setImageDrawable(drawable);
-                            holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
+                            holder.mIVavatar.setImageResource(R.mipmap.icon_my_avatar);
                         }
                     }
                 });
             } else {
-                holder.mIVavatar.setImageResource(R.drawable.jmui_head_icon);
+                holder.mIVavatar.setImageResource(R.mipmap.icon_my_avatar);
             }
         } else {
             GroupInfo mGroupInfo = (GroupInfo) convItem.getTargetInfo();

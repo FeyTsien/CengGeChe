@@ -1,7 +1,5 @@
 package com.ygst.cenggeche.ui.fragment.nearby;
 
-import android.content.Context;
-
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -12,10 +10,13 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class NearbyContract {
     interface View extends BaseView {
+
+        void getnearbySuccess();
+        void getnearbyFail(String msg);
         
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+        void getnearBy(String lit, String lat, int page);
     }
 }

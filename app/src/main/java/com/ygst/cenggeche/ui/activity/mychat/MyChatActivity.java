@@ -262,25 +262,22 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             //==========单聊
             mIsSingle = true;
             mConversation = JMessageClient.getSingleConversation(targetUserName, targetAppKey);
-            if (mConversation != null) {
-                UserInfo mUserInfo = (UserInfo) mConversation.getTargetInfo();
-                if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
-                    mTvTitle.setText(mUserInfo.getNickname());
-                } else {
-                    mTvTitle.setText(mUserInfo.getUserName());
-                }
-
-                if (!mUserInfo.isFriend()) {
-                    //不是好友则显示添加好友按钮
-                    mIvRight.setVisibility(View.VISIBLE);
-                } else {
-                    //是好友则隐藏添加好友按钮
-                    mIvRight.setVisibility(View.GONE);
-                }
-
-            } else {
+            if (mConversation == null) {
                 mConversation = Conversation.createSingleConversation(targetUserName, targetAppKey);
-                mTvTitle.setText(mConversation.getTitle());
+            }
+            UserInfo mUserInfo = (UserInfo) mConversation.getTargetInfo();
+            if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
+                mTvTitle.setText(mUserInfo.getNickname());
+            } else {
+                mTvTitle.setText(mUserInfo.getUserName());
+            }
+
+            if (!mUserInfo.isFriend()) {
+                //不是好友则显示添加好友按钮
+                mIvRight.setVisibility(View.VISIBLE);
+            } else {
+                //是好友则隐藏添加好友按钮
+                mIvRight.setVisibility(View.GONE);
             }
             mChatAdapter = new MsgListAdapter(this, targetUserName, targetAppKey, longClickListener);
         } else {

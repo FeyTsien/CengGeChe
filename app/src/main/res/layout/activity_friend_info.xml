@@ -48,7 +48,7 @@
                         android:id="@+id/iv_avatar"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:src="@drawable/jmui_head_icon" />
+                        android:src="@mipmap/icon_my_avatar" />
 
                     <ImageView
                         android:id="@+id/iv_gender"

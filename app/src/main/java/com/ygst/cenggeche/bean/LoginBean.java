@@ -103,8 +103,8 @@ public class LoginBean {
         private int isTestUser;
         private int userlev;
         private String deviceId;
-        private int lat;
-        private int lit;
+        private double lat;
+        private double lit;
         private String platform;
         private String userPic;
         private String nickname;
@@ -284,19 +284,19 @@ public class LoginBean {
             this.deviceId = deviceId;
         }
 
-        public int getLat() {
+        public double getLat() {
             return lat;
         }
 
-        public void setLat(int lat) {
+        public void setLat(double lat) {
             this.lat = lat;
         }
 
-        public int getLit() {
+        public double getLit() {
             return lit;
         }
 
-        public void setLit(int lit) {
+        public void setLit(double lit) {
             this.lit = lit;
         }
 

@@ -1,7 +1,6 @@
 package com.ygst.cenggeche.ui.fragment.shaoren;
 
-import android.content.Context;
-
+import com.ygst.cenggeche.bean.AllStrokeBean;
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -12,10 +11,12 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class ShaoRenContract {
     interface View extends BaseView {
-        
+        void getAllInfoSuccess(AllStrokeBean allStrokeBean);
+        void getAllInfoFail();
+
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+        void getAllinfo(int page, String type);
     }
 }

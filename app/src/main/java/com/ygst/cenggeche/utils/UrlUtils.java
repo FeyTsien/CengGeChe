@@ -65,10 +65,38 @@ public class UrlUtils {
     //移除黑名单
     public static String REMOVE_BLACKLIST="/friendOperate/removeBlackList.do";
 
-
-
-
     // 刷新token
     public static String REFRESHTOKEN = "/login/refreshToken.do";
+
+    //获取全部行程（蹭车/捎人）
+    public static String ALLTRAVEL = "/stroke/getAllStroke.do";
+
+    //发布行程（车主/用户）接口
+    public static String RELEASESTROKE = "/stroke/releaseStroke.do";
+
+    //确认行程（车主/用户）接口
+    public static String CONFIRMSTROKE = "/stroke/confirmStroke.do";
+
+    //获取车辆品牌列表接口
+    public static String GETALLCARBRAND = "/car/getAllCarBrand.do";
+
+    //根据车辆品牌获取车系接口
+    public static String GETALLCARTYPEBRAND = "/car/getCarTypeByBrand.do";
+
+    //获取附近联系人
+    public static String GETNEARBYPERSON = "/lookAround/list.do";
+
+    //获取城市列表
+    public static String GETCITYNAME= "/map/getAllCity.do";
+
+    //获取用户当前进行中的行程接口
+    public static String GETCURRENTSTROKE= "/stroke/getUserCurrentStroke.do";
+
+
+
+
+
+
+
 
 }

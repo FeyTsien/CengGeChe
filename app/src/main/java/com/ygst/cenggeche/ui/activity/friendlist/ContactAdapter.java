@@ -2,7 +2,6 @@ package com.ygst.cenggeche.ui.activity.friendlist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.widget.ColorGenerator;
+import com.ygst.cenggeche.ui.widget.MyTextDrawable;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
 import com.ygst.cenggeche.utils.JMessageUtils;
 
@@ -69,30 +70,35 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
         final FriendListBean.DataBean bean = mListDataBean.get(position);
         String friendName = "";
         if (bean != null) {
-            if(!TextUtils.isEmpty(bean.getFriendNote())){
+            if (!TextUtils.isEmpty(bean.getFriendNote())) {
                 friendName = bean.getFriendNote();
-            }else if(!TextUtils.isEmpty(bean.getNickname())){
+            } else if (!TextUtils.isEmpty(bean.getNickname())) {
                 friendName = bean.getNickname();
-            }else{
+            } else {
                 friendName = bean.getFriendusername();
             }
             holder.tv_name.setText(friendName);
-
-            if(!TextUtils.isEmpty(bean.getUserPic())){
-                Uri uri = Uri.parse(bean.getUserPic());
-                holder.iv_img.setImageURI(uri);
-            }else {
-                TextDrawable drawable = mDrawableBuilder.build(String.valueOf(friendName.charAt(0)), mColorGenerator.getColor(friendName));
-                holder.iv_img.setImageDrawable(drawable);
-            }
+            //头像
+            TextDrawable drawable = MyTextDrawable.getTextDrawable(friendName);
+            Glide.with(mContext)
+                    .load(bean.getUserPic())
+                    .placeholder(drawable)
+                    .into(holder.iv_img);
+//            if(!TextUtils.isEmpty(bean.getUserPic())){
+//                Uri uri = Uri.parse(bean.getUserPic());
+//                holder.iv_img.setImageURI(uri);
+//            }else {
+//                TextDrawable drawable = mDrawableBuilder.build(String.valueOf(friendName.charAt(0)), mColorGenerator.getColor(friendName));
+//                holder.iv_img.setImageDrawable(drawable);
+//            }
         }
 
         holder.tv_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra(JMessageUtils.TARGET_USERNAME,bean.getFriendusername());
-                intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS,bean.getFriendStatus());
+                intent.putExtra(JMessageUtils.TARGET_USERNAME, bean.getFriendusername());
+                intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS, bean.getFriendStatus());
                 intent.setClass(mContext, FriendInfoActivity.class);
                 mContext.startActivity(intent);
             }

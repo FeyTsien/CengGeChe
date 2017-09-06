@@ -1,5 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/colorPageBG"
     android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipChildren="false">
+
+        <TextView
+            android:id="@+id/tv_citychange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:visibility="gone"
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher"
+            app:borderWidth="0dp"
+            app:elevation="8dp"
+            app:pressedTranslationZ="16dp"></android.support.design.widget.FloatingActionButton>
+
+        <android.support.v4.view.ViewPager
+            android:elevation="500dp"
+            android:layout_marginTop="30dp"
+            android:id="@+id/tab_viewpager"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
+
+        </android.support.v4.view.ViewPager>
+
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+
+            android:id="@+id/iv_release_plan"
+            android:src="@mipmap/iv_release_plan"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_take_her"
+            android:src="@mipmap/iv_take_her"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_trip_info"
+            android:src="@mipmap/iv_trip_info"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.ygst.cenggeche.ui.activity.newfriendlist;
 
 import android.content.Context;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.ApplyBean;
 import com.ygst.cenggeche.ui.widget.MyTextDrawable;
@@ -65,14 +65,22 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
             }
             holder.mTvTargetName.setText(applyName);
 
-            if(!TextUtils.isEmpty(newFriend.getFromAvatar())){
-                Uri uri = Uri.parse(newFriend.getFromAvatar());
-                holder.mIvAvatar.setImageURI(uri);
-            }else {
-                //自定义的文字图片
-                TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
-                holder.mIvAvatar.setImageDrawable(drawable);
-            }
+
+            //头像
+            TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
+            Glide.with(mContext)
+                    .load(newFriend.getFromAvatar())
+                    .placeholder(drawable)
+                    .into(holder.mIvAvatar);
+//
+//            if(!TextUtils.isEmpty(newFriend.getFromAvatar())){
+//                Uri uri = Uri.parse(newFriend.getFromAvatar());
+//                holder.mIvAvatar.setImageURI(uri);
+//            }else {
+//                //自定义的文字图片
+//                TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
+//                holder.mIvAvatar.setImageDrawable(drawable);
+//            }
 
             holder.mTvLatestMessage.setText(newFriend.getReason());
             if (newFriend.getIsAgree() == 2) {

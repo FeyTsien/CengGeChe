@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <include layout="@layout/app_toolbar" />
+
+    <FrameLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+
+
+        <com.amap.api.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.amap.api.maps.MapView>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            android:background="@android:color/transparent"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_gravity="right"
+                android:id="@+id/linear_cengshao"
+                android:background="@drawable/up_corner_backgroud"
+                android:orientation="horizontal"
+                android:layout_width="160dp"
+                android:layout_marginRight="20dp"
+                android:layout_height="40dp">
+
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="蹭车"
+                    android:textColor="#8064a1"
+                    android:id="@+id/tv_cengche"
+                    android:gravity="center"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#656565"
+                    android:layout_gravity="center_horizontal"
+                    />
+
+
+                <TextView
+                    android:layout_gravity="center"
+
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textColor="#656565"
+                    android:text="捎人"
+                    android:id="@+id/tv_shaoren"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/linear_right_corner_border"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:src="@mipmap/iv_start_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <EditText
+                            android:id="@+id/et_start_action"
+                            android:layout_weight="1"
+                            android:hint="你的位置"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+
+                            android:src="@mipmap/iv_end_location"
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <EditText
+                            android:id="@+id/et_end_action"
+                            android:layout_weight="1"
+                            android:hint="去哪里"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+
+                            android:src="@mipmap/iv_release_date"
+                            android:text=""
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <EditText
+                            android:id="@+id/et_usercar_time"
+                            android:layout_weight="1"
+                            android:hint="用车时间"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/linear_usercar_type"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:src="@mipmap/iv_cengchetype"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <EditText
+                            android:id="@+id/et_usercar_type"
+                            android:layout_weight="1"
+                            android:hint="用车类型"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <Button
+                android:visibility="gone"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="25dp"
+                android:background="#83b4ff"
+                android:id="@+id/but_release_plan"
+                android:text="确认行程"
+                android:textSize="28dp"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/white"
+            android:visibility="gone"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:id="@+id/ll_choosetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="10dp"
+                    android:id="@+id/tv_cancel"
+                    android:text="取消"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_margin="10dp"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/tv_finish"
+                    android:text="完成"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <com.ygst.cenggeche.ui.view.PickValueView
+                android:id="@+id/pickValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

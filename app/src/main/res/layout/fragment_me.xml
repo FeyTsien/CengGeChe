@@ -2,35 +2,198 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPageBG"
     android:orientation="vertical">
 
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="224dp"
-       android:background="@mipmap/icon_me_topbg">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="224dp"
+        android:layout_marginBottom="10dp"
+        android:background="@mipmap/icon_me_topbg">
 
-      <RelativeLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_above="@+id/ll_jilu">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll_jilu">
 
-         <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content" />
-      </RelativeLayout>
-      <LinearLayout
-          android:id="@+id/ll_jilu"
-          android:layout_width="match_parent"
-          android:layout_height="50dp"
-          android:layout_alignParentBottom="true"
-          android:background="@color/translucent_me_bg">
+            <com.ygst.cenggeche.ui.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/civ_avatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/loli"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp" />
 
-      </LinearLayout>
-   </RelativeLayout>
-   <Button
-       android:id="@+id/btn_login_out"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="100dp"
-       android:text="退出登录"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/civ_avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="测试"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_jilu"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/translucent_me_bg">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="110次"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="共发布行程"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="15次"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="总蹭车数"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="5次"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="总被蹭数"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_my_info"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/icon_my_info"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/icon_next"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="个人信息"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_trip_recorder"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/icon_trip_recorder"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/icon_next"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="行程记录"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_owner_auth"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/icon_owner_auth"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/icon_next"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="行程记录"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_setting"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/icon_setting"
+        android:drawablePadding="10dp"
+        android:drawableRight="@mipmap/icon_next"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="设置"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btn_login_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="退出登录" />
 </LinearLayout>

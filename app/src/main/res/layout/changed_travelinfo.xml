@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+    <RelativeLayout
+        android:layout_width="338px"
+        android:layout_height="60px"
+        android:layout_centerInParent="true"
+        android:background="@drawable/order_tab_back"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/rfo_tablayout"
+            style="@style/TabLayoutTextStyle"
+            android:layout_width="336px"
+            android:layout_height="56px"
+            android:layout_centerInParent="true"
+            android:background="@color/white"
+            android:gravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextColor="@color/white"></android.support.design.widget.TabLayout>
+
+        <TextView
+            android:layout_width="2px"
+            android:layout_height="60px"
+            android:layout_gravity="center"
+            android:layout_marginLeft="169px"
+            android:layout_weight="1"
+            android:background="@color/white" />
+
+        <TextView
+            android:layout_width="2px"
+            android:layout_height="60px"
+            android:layout_gravity="center"
+            android:layout_marginLeft="338px"
+            android:layout_weight="1"
+            android:background="@color/white" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

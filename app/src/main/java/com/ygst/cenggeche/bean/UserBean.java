@@ -7,8 +7,6 @@ import java.util.List;
  */
 
 public class UserBean {
-
-
     /**
      * data : {"birthday":"1994-08-24","home":"","loginTime":"2017-08-28 18:23:31","jingWeiDu":"199,11","registrationId":"18500632163","location":"","tag":"","rubNum":0,"passiveRubNum":0,"education":0,"password":"18500632163","userSign":"","redisTime":"2017-08-28 17:42:44","id":888,"username":"18500632163","distance":"","age":23,"gender":1,"isTestUser":0,"userlev":0,"deviceId":"1111111111111111111111111","lat":11,"lit":199,"platform":"android","userPic":"http://192.168.1.55/upload/image/user_pic/","nickname":"qing","expand3":"","expand2":"","expand1":"","totalNum":0,"useremail":"","userStatus":0,"realname":""}
      * pic : ["http:192.168.0.133/user_pic/888.jpg"]
@@ -121,8 +119,8 @@ public class UserBean {
         private int isTestUser;
         private int userlev;
         private String deviceId;
-        private int lat;
-        private int lit;
+        private double lat;
+        private double lit;
         private String platform;
         private String userPic;
         private String nickname;
@@ -302,19 +300,19 @@ public class UserBean {
             this.deviceId = deviceId;
         }
 
-        public int getLat() {
+        public double getLat() {
             return lat;
         }
 
-        public void setLat(int lat) {
+        public void setLat(double lat) {
             this.lat = lat;
         }
 
-        public int getLit() {
+        public double getLit() {
             return lit;
         }
 
-        public void setLit(int lit) {
+        public void setLit(double lit) {
             this.lit = lit;
         }
 

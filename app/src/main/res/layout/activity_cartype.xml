@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/app_toolbar"></include>
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_inputcartype"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_searchcartype"
+            android:text="确定"
+            android:background="@color/color_activity_blue_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/text_bxpp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="36px"
+            android:paddingLeft="10dp"
+            android:paddingTop="36px"
+            android:text="选择品牌"
+            android:textColor="@color/black"
+            android:textSize="26px" />
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/text_bxpp"
+            android:paddingBottom="36px"
+            android:paddingLeft="10dp"
+            android:paddingTop="36px"
+            android:text="选择车系"
+            android:textColor="@color/black"
+            android:textSize="26px" />
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/text_bxpp"
+            android:paddingBottom="36px"
+            android:paddingLeft="10dp"
+            android:paddingTop="36px"
+            android:text="选择颜色"
+            android:textColor="@color/black"
+            android:textSize="26px" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_line"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:layout_below="@id/text_bxpp"
+        android:background="@color/black" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ListView
+            android:layout_weight="1"
+            android:id="@+id/pp_lv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/text_line"
+            android:listSelector="#FFEFECEC"></ListView>
+
+
+        <ListView
+            android:layout_weight="1"
+            android:listSelector="#FFEFECEC"
+            android:id="@+id/cx_lv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/text_line"
+            android:layout_marginRight="30px"
+            android:layout_toRightOf="@id/pp_lv"
+            android:paddingLeft="20px"></ListView>
+
+        <ListView
+            android:layout_weight="1"
+            android:listSelector="#FFEFECEC"
+            android:id="@+id/cx_color"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/text_line"
+            android:layout_marginRight="30px"
+            android:layout_toRightOf="@id/pp_lv"
+            android:paddingLeft="20px"></ListView>
+
+
+
+        <TextView
+            android:id="@+id/tv_mask"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:background="#dddddd"
+            android:gravity="center"
+            android:text="A"
+            android:textSize="25sp"
+            android:visibility="gone" />
+
+        <com.ygst.cenggeche.ui.view.LetterSideBar
+            android:id="@+id/pp_letter"
+            android:layout_width="30px"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/text_line"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="50px" />
+    </LinearLayout>
+
+</LinearLayout>
