@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.Gson;
 import com.ygst.cenggeche.bean.CodeBean;
+import com.ygst.cenggeche.bean.MyInfoBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.CommonUtils;
@@ -23,6 +24,41 @@ import rx.Observer;
 public class MePresenter extends BasePresenterImpl<MeContract.View> implements MeContract.Presenter{
 
     private String TAG = "MePresenter";
+
+    @Override
+    public void getMyInfo() {
+        Map<String, String> map = new HashMap<>();
+        map.put("", "");
+        HttpManager.getHttpManager().postMethod(UrlUtils.GET_MY_INFO, new Observer<String>() {
+
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(String s) {
+                LogUtils.i(TAG, "ssss:" + s);
+                Gson gson = new Gson();
+                MyInfoBean myInfoBean = gson.fromJson(s, MyInfoBean.class);
+                if ("0000".equals(myInfoBean.getCode())) {
+                    if (mView != null) {
+                        mView.getMyInfoSuccess(myInfoBean);
+                    }
+//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
+                } else {
+                    if (mView != null) {
+                        mView.getMyInfoError();
+                    }
+//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
+                }
+            }
+        }, map);
+    }
+
     @Override
     public void loginOut() {
         final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "正在退出。。。");

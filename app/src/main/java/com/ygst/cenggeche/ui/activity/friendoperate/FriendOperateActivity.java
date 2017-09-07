@@ -27,7 +27,7 @@ import butterknife.OnClick;
 public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract.View, FriendOperatePresenter> implements FriendOperateContract.View {
 
     private String targetUsername;
-    private int friendStatus;
+    private int isBlack;
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
@@ -37,8 +37,8 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
     @OnClick(R.id.iv_back)
     public void goBack() {
         Intent intent = new Intent();
-        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS, friendStatus);
-        setResult(2, intent);
+        intent.putExtra(JMessageUtils.IS_BLACK, isBlack);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
@@ -57,11 +57,11 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
     private void initView() {
         mTvTitle.setText("好友设置");
         targetUsername = getIntent().getStringExtra(JMessageUtils.TARGET_USERNAME);
-        friendStatus = getIntent().getIntExtra(JMessageUtils.TARGET_FRIENDSTATUS, 0);
-        if (friendStatus == 1) {
+        isBlack = getIntent().getIntExtra(JMessageUtils.IS_BLACK, 0);
+        if (isBlack == 2) {
             //为1时是正常好友状态，不显示处于黑名单状态
             SBtnAddBlackList.setChecked(false);
-        } else if (friendStatus == 3) {
+        } else if (isBlack == 1) {
             //为3时显示处于黑名单状态
             SBtnAddBlackList.setChecked(true);
         }
@@ -74,12 +74,12 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
                     CommonUtils.showInfoDialog(FriendOperateActivity.this, "确定要拉黑该好友吗？", "提示", "拉黑", "取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            friendStatus = 3;
+                            isBlack = 1;
                             mPresenter.addBlackList(AppData.getUserName(), targetUsername);
                         }
                     }, null);
                 } else {
-                    friendStatus = 1;
+                    isBlack = 2;
                     //移除黑名单
                     mPresenter.removeBlackList(AppData.getUserName(), targetUsername);
                 }
@@ -126,7 +126,7 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
 
     @Override
     public void addBlackListError() {
-        friendStatus = 1;
+        isBlack = 2;
         if (SBtnAddBlackList.isChecked()) {
             SBtnAddBlackList.setChecked(false);
         }
@@ -134,7 +134,7 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
 
     @Override
     public void removeBlackListSuccess() {
-        friendStatus = 1;
+        isBlack = 2;
         if (SBtnAddBlackList.isChecked()) {
             SBtnAddBlackList.setChecked(false);
         }
@@ -142,7 +142,7 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
 
     @Override
     public void removeBlackListError() {
-        friendStatus = 3;
+        isBlack = 1;
         if (!SBtnAddBlackList.isChecked()) {
             SBtnAddBlackList.setChecked(true);
         }
@@ -151,7 +151,7 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS, friendStatus);
+        intent.putExtra(JMessageUtils.IS_BLACK, isBlack);
         setResult(RESULT_OK, intent);
         super.onBackPressed();
     }

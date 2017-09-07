@@ -598,18 +598,7 @@ public class MsgListAdapter extends BaseAdapter {
                         intent.setClass(mContext, FriendInfoActivity.class);
                         mContext.startActivity(intent);
                     } else {
-                        int friendStatus;
                         intent.putExtra(JMessageUtils.TARGET_USERNAME, userInfo.getUserName());
-                        if(userInfo.isFriend()){
-                            friendStatus =1;
-                            if(userInfo.getBlacklist() == 1){
-                                //在黑名单中
-                                friendStatus = 3;
-                            }
-                        }else{
-                            friendStatus =2;
-                        }
-                        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS,friendStatus);
                         intent.setClass(mContext, FriendInfoActivity.class);
                         mContext.startActivity(intent);
                     }

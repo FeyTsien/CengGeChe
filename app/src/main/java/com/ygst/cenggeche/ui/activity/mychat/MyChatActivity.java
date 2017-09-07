@@ -91,6 +91,8 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     private static final String GROUP_NAME = "groupName";
     private static final String MsgIDs = "msgIDs";
     private static final String TARGET_APP_KEY = "";
+    //跳转到加好友页（对方先发申请好友，当前用户再点默认同意）
+    private static final int IS_AGREE_KEY = 1105;
     private static final int REQUEST_CODE_TAKE_PHOTO = 4;
     private static final int RESULT_CODE_SELECT_PICTURE = 8;
     private static final int REFRESH_LAST_PAGE = 0x1023;
@@ -108,12 +110,15 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     private Context mContext;
     private boolean mIsSingle = true;
     private boolean mShowSoftInput = false;
-    private String targetUserName;
+    private String targetUsername;
     private String targetAppKey;
+    private boolean isFriend;
     private long mGroupId;
     private String mGroupName;
     private GroupInfo mGroupInfo;
     private Conversation mConversation;
+    private UserInfo mUserInfo;
+
     private MsgListAdapter mChatAdapter;
     private Dialog mDialog;
     private MyReceiver mReceiver;
@@ -222,12 +227,11 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             if (mGroupId != 0) {
                 JMessageClient.enterGroupConversation(mGroupId);
             }
-        } else if (null != targetUserName) {
+        } else if (null != targetUsername) {
             String appKey = getIntent().getStringExtra(TARGET_APP_KEY);
-            JMessageClient.enterSingleConversation(targetUserName, appKey);
+            JMessageClient.enterSingleConversation(targetUsername, appKey);
         }
         mChatAdapter.initMediaPlayer();
-        Log.i(TAG, "[Life cycle] - onResume");
     }
 
     /**
@@ -256,30 +260,30 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
         //接受到传过来的Username和appkey
         Intent intent = getIntent();
-        targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
+        targetUsername = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
         targetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
-        if (!TextUtils.isEmpty(targetUserName)) {
+        isFriend = intent.getBooleanExtra(JMessageUtils.IS_FRIEND,false);
+        if (!TextUtils.isEmpty(targetUsername)) {
             //==========单聊
             mIsSingle = true;
-            mConversation = JMessageClient.getSingleConversation(targetUserName, targetAppKey);
+            mConversation = JMessageClient.getSingleConversation(targetUsername, targetAppKey);
             if (mConversation == null) {
-                mConversation = Conversation.createSingleConversation(targetUserName, targetAppKey);
+                mConversation = Conversation.createSingleConversation(targetUsername, targetAppKey);
             }
-            UserInfo mUserInfo = (UserInfo) mConversation.getTargetInfo();
-            if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
-                mTvTitle.setText(mUserInfo.getNickname());
-            } else {
-                mTvTitle.setText(mUserInfo.getUserName());
-            }
-
-            if (!mUserInfo.isFriend()) {
+            mUserInfo = (UserInfo) mConversation.getTargetInfo();
+            if (!isFriend) {
                 //不是好友则显示添加好友按钮
                 mIvRight.setVisibility(View.VISIBLE);
             } else {
                 //是好友则隐藏添加好友按钮
                 mIvRight.setVisibility(View.GONE);
             }
-            mChatAdapter = new MsgListAdapter(this, targetUserName, targetAppKey, longClickListener);
+            if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
+                mTvTitle.setText(mUserInfo.getNickname());
+            } else {
+                mTvTitle.setText(mUserInfo.getUserName());
+            }
+            mChatAdapter = new MsgListAdapter(this, targetUsername, targetAppKey, longClickListener);
         } else {
             //==========群聊
             mIsSingle = false;
@@ -319,7 +323,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     private void sendIsAgreeMsg(Intent intent) {
         String isAgree = intent.getStringExtra(JMessageUtils.IS_AGREE_KEY);
         LogUtils.i(TAG, "isAgree:" + isAgree);
-        if (!TextUtils.isEmpty(isAgree))
+        if (!TextUtils.isEmpty(isAgree)) {
             if (isAgree.equals(JMessageUtils.YES_AGREE)) {
                 String msgContent = "我已接受你的好友申请";
                 TextContent content = new TextContent(msgContent);
@@ -334,6 +338,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 mChatAdapter.addMsgToList(msg);
                 JMessageClient.sendMessage(msg);
             }
+        }
     }
 
     /**
@@ -532,10 +537,10 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 break;
             case R.id.iv_right://标题栏右边按钮
                 Intent intent = new Intent();
-                intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUserName);
+                intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
                 intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
                 intent.setClass(this, AddFriendActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, IS_AGREE_KEY);
                 break;
             case R.id.btnSend://发送文字消息
                 String msgContent = TextViewUtils.getText(mEtContent);
@@ -678,6 +683,18 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                         Log.i(TAG, "onActivityResult unexpected result");
                     }
                     break;
+                case IS_AGREE_KEY:
+                    //是好友则隐藏添加好友按钮
+                    mIvRight.setVisibility(View.GONE);
+                    String msgContent = "我已接受你的好友申请";
+                    TextContent content = new TextContent(msgContent);
+                    final Message msg = mConversation.createSendMessage(content);
+//            final Message msg2 = mConversation.createSendCustomMessage(map);
+                    mChatAdapter.addMsgToList(msg);
+                    JMessageClient.sendMessage(msg);
+                    //滑到底部
+                    setToBottom();
+                    break;
 
             }
         }
@@ -780,7 +797,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             JMessageClient.exitConversation();
             //发送保存为草稿事件到会话列表界面,作为UIKit使用可以去掉
             if (mIsSingle) {
-                EventBus.getDefault().post(new Event.DraftEvent(targetUserName, targetAppKey, getChatInput()));
+                EventBus.getDefault().post(new Event.DraftEvent(targetUsername, targetAppKey, getChatInput()));
             } else {
                 EventBus.getDefault().post(new Event.DraftEvent(mGroupId, getChatInput()));
             }
@@ -990,7 +1007,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                     String targetId = userInfo.getUserName();
                     String appKey = userInfo.getAppKey();
                     //判断消息是否在当前会话中
-                    if (mIsSingle && targetId.equals(targetUserName) && appKey.equals(targetAppKey)) {
+                    if (mIsSingle && targetId.equals(targetUsername) && appKey.equals(targetAppKey)) {
                         Message lastMsg = mChatAdapter.getLastMsg();
                         //收到的消息和Adapter中最后一条消息比较，如果最后一条为空或者不相同，则加入到MsgList
                         if (lastMsg == null || msg.getId() != lastMsg.getId()) {

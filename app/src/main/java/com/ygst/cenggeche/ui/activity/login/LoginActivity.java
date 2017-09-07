@@ -198,30 +198,21 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      */
     @Override
     public void registered() {
-        final String username = TextViewUtils.getText(mEtUserName);
-        final String pwdOrCode = TextViewUtils.getText(mEtPwdCode);
-        JMessageClient.login(username, JMessageUtils.JMESSAGE_LOGIN_PASSWROD, new BasicCallback() {
-            @Override
-            public void gotResult(int responseCode, String LoginDesc) {
-                if (responseCode == 0) {
-                    LogUtils.i(TAG, "极光登录成功了");
-                    Map<String, String> map = new HashMap<>();
-                    map.put("username", username);
-                    map.put("checkType", checkType);
-                    if (checkType.equals("1")) {
-                        //密码登录
-                        String password = MD5Util.string2MD5(pwdOrCode);
-                        map.put("password", password);
-                    } else {
-                        //验证码登录
-                        map.put("smsCode", pwdOrCode);
-                    }
-                    mPresenter.login(map);
-                } else {
-                    ToastUtil.show(LoginActivity.this, "登录失败");
-                }
-            }
-        });
+        String username = TextViewUtils.getText(mEtUserName);
+        String pwdOrCode = TextViewUtils.getText(mEtPwdCode);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("username", username);
+        map.put("checkType", checkType);
+        if (checkType.equals("1")) {
+            //密码登录
+            String password = MD5Util.string2MD5(pwdOrCode);
+            map.put("password", password);
+        } else {
+            //验证码登录
+            map.put("smsCode", pwdOrCode);
+        }
+        mPresenter.login(map);
     }
 
 
@@ -238,27 +229,37 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     }
 
     @Override
-    public void loginSuccess(LoginBean loginBean) {
-        ToastUtil.show(this, "登录成功了");
-        timeCount.cancel();
-        timeCount.onFinish();
-        MyApplication.clearLogin();
-        // 储存登陆状态
-        AppData.setIsLoginEd(true);
-        // 保存 uid
-        AppData.saveUid(loginBean.getData().getId() + "");
-        // 保存 username
-        AppData.saveUserName(loginBean.getData().getUsername());
-        // 保存 nickname
-        AppData.saveUserName(loginBean.getData().getUsername());
-        // 保存昵称 nickname
-        AppData.saveNickname(loginBean.getData().getNickname());
+    public void loginSuccess(final LoginBean loginBean) {
+        String username = TextViewUtils.getText(mEtUserName);
+        JMessageClient.login(username, JMessageUtils.JMESSAGE_LOGIN_PASSWROD, new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String LoginDesc) {
+                if (responseCode == 0) {
+                    ToastUtil.show(LoginActivity.this, "登录成功了");
+                    timeCount.cancel();
+                    timeCount.onFinish();
+                    MyApplication.clearLogin();
+                    // 储存登陆状态
+                    AppData.setIsLoginEd(true);
+                    // 保存 uid
+                    AppData.saveUid(loginBean.getData().getId() + "");
+                    // 保存 username
+                    AppData.saveUserName(loginBean.getData().getUsername());
+                    // 保存 nickname
+                    AppData.saveUserName(loginBean.getData().getUsername());
+                    // 保存昵称 nickname
+                    AppData.saveNickname(loginBean.getData().getNickname());
 
+                    //开启友盟账号统计
+                    //（如果是使用第三方账号登录时，如新浪微博：MobclickAgent.onProfileSignIn("WB"，"userID")）;
+                    MobclickAgent.onProfileSignIn(loginBean.getData().getId() + "");
+                    CommonUtils.finishActivity(LoginActivity.this);
+                } else {
+                    ToastUtil.show(LoginActivity.this, "登录失败");
+                }
+            }
+        });
 
-        //开启友盟账号统计
-        //（如果是使用第三方账号登录时，如新浪微博：MobclickAgent.onProfileSignIn("WB"，"userID")）;
-        MobclickAgent.onProfileSignIn(loginBean.getData().getId() + "");
-        CommonUtils.finishActivity(this);
     }
 
     @Override

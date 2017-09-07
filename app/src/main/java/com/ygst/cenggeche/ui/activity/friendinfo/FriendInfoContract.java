@@ -11,7 +11,7 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class FriendInfoContract {
     interface View extends BaseView {
-        void getFriendInfoSuccess(UserBean.DataBean dataBean);
+        void getFriendInfoSuccess(UserBean userBean);
         void getFriendInfoError();
     }
 

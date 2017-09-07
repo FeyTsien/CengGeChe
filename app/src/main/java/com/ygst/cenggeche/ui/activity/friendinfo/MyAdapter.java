@@ -14,7 +14,7 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.view.ikninephotoview.IKNinePhotoViewAdapter;
 import com.ygst.cenggeche.ui.view.ikninephotoview.IKNinePhotoViewHolder;
 
-import java.util.Random;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,11 +30,13 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
 
     private Context mContext;
     private int count;
+    private List<String> mListPic;
 
-    public MyAdapter(Context context) {
+    public MyAdapter(Context context,List<String> listPic) {
         super();
         mContext = context;
-        count = new Random().nextInt(6);
+        mListPic = listPic;
+        count = listPic.size();
     }
 
     @Override
@@ -47,7 +49,7 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
     @Override
     public void displayView(final MyHolder holder, final int position) {
         Glide.with(mContext)
-                .load("http://ompb0h8qq.bkt.clouddn.com/header/header.jpg")
+                .load(mListPic.get(position))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .placeholder(R.mipmap.icon_my_avatar)
@@ -58,7 +60,7 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
             public void onClick(View v) {
                 Log.d("click", position + "");
                 Intent intent = new Intent(mContext,BigPicActivity.class);
-                intent.putExtra("pic_uri","http://ompb0h8qq.bkt.clouddn.com/header/header.jpg");
+                intent.putExtra("pic_uri",mListPic.get(position));
                 mContext.startActivity(intent);
             }
         });

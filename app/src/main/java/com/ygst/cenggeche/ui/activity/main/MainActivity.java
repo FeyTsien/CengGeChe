@@ -386,9 +386,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         LogUtils.i(TAG, "onEvent-----新增联系人相关通知事件ContactNotifyEvent");
         String reason = event.getReason();
         String fromUsername = event.getFromUsername();
-        String formAppkey = event.getfromUserAppKey();
+        String fromAppkey = event.getfromUserAppKey();
 
-        Conversation mConversation = JMessageClient.getSingleConversation(fromUsername, formAppkey);
+        Conversation mConversation = JMessageClient.getSingleConversation(fromUsername, fromAppkey);
         UserInfo userInfo = (UserInfo) mConversation.getTargetInfo();
 
         List<ApplyBean> mListApplyBean = (List<ApplyBean>) mCache.getAsObject(JMessageUtils.APPLE_BEAN);
@@ -414,7 +414,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 applyBean.setReason(reason);
                 applyBean.setMyUsername(AppData.getUserName());
                 applyBean.setFromUsername(fromUsername);
-                applyBean.setFromAppkey(formAppkey);
+                applyBean.setFromAppkey(fromAppkey);
                 applyBean.setFromNickname(userInfo.getNickname());
                 applyBean.setFromAvatar(userInfo.getAvatar());
                 applyBean.setIsAgree(3);
@@ -422,28 +422,26 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
                 break;
             case invite_accepted://对方接收了你的好友邀请
-                for(int i=0;i<mListApplyBean.size();i++){
-                    ApplyBean applyBean2 = mListApplyBean.get(i);
-                    if(fromUsername.equals(applyBean2.getFromUsername())){
-                        //修改为已同意状态
-                        applyBean2.setIsAgree(1);
-                        mListApplyBean.set(i,applyBean2);
-                    }
-                }
-                mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
-                mPresenter.weAreFriend(AppData.getUserName(),fromUsername);
-
-                mIntent.putExtra(JMessageUtils.TARGET_USERNAME, fromUsername);
-                mIntent.putExtra(JMessageUtils.TARGET_APP_KEY,formAppkey);
-                mIntent.putExtra(JMessageUtils.IS_AGREE_KEY,JMessageUtils.YES_AGREE);
-                mIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(mIntent);
+//                for(int i=0;i<mListApplyBean.size();i++){
+//                    ApplyBean applyBean2 = mListApplyBean.get(i);
+//                    if(fromUsername.equals(applyBean2.getFromUsername())){
+//                        //修改为已同意状态
+//                        applyBean2.setIsAgree(1);
+//                        mListApplyBean.set(i,applyBean2);
+//                    }
+//                }
+//                mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
+//                mPresenter.weAreFriend(AppData.getUserName(),fromUsername);
+//
+//                mIntent.putExtra(JMessageUtils.TARGET_USERNAME, fromUsername);
+//                mIntent.putExtra(JMessageUtils.TARGET_APP_KEY,formAppkey);
+//                mIntent.putExtra(JMessageUtils.IS_AGREE_KEY,JMessageUtils.YES_AGREE);
+//                startActivity(mIntent);
                 break;
             case invite_declined://对方拒绝了你的好友邀请
                 mIntent.putExtra(JMessageUtils.TARGET_USERNAME, fromUsername);
-                mIntent.putExtra(JMessageUtils.TARGET_APP_KEY,formAppkey);
+                mIntent.putExtra(JMessageUtils.TARGET_APP_KEY,fromAppkey);
                 mIntent.putExtra(JMessageUtils.IS_AGREE_KEY,JMessageUtils.NO_AGREE);
-                mIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(mIntent);
 //                intent.putExtra("invite_declined", "对方拒绝了你的好友邀请\n拒绝原因:" + event.getReason());
 //                intent.setFlags(3);

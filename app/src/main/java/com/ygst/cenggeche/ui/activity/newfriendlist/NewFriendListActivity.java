@@ -18,6 +18,7 @@ import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.ApplyBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
+import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenu;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuCreator;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuItem;
@@ -44,6 +45,8 @@ import cn.jpush.im.api.BasicCallback;
 
 public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract.View, NewFriendListPresenter> implements NewFriendListContract.View {
     private String TAG = "NewFriendListActivity";
+    String fromUserName;
+    String fromAppkey;
     List<ApplyBean> mListApplyBean;
 
     private SwipeMenuListViewAdapter mSwipeMenuListViewAdapter;
@@ -133,7 +136,7 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ApplyBean dataBeanItem = mListApplyBean.get(position);
                 Intent intent = new Intent(NewFriendListActivity.this, FriendInfoActivity.class);
-                intent.putExtra(JMessageUtils.TARGET_USERNAME,mListApplyBean.get(position).getFromUsername());
+                intent.putExtra(JMessageUtils.TARGET_USERNAME, mListApplyBean.get(position).getFromUsername());
                 startActivity(intent);
             }
         });
@@ -170,23 +173,22 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final ApplyBean applyBean = mListApplyBean.get(position);
-                ContactManager.declineInvitation(applyBean.getFromUsername(),applyBean.getFromAppkey(),"", new BasicCallback() {
+                ContactManager.declineInvitation(applyBean.getFromUsername(), applyBean.getFromAppkey(), "", new BasicCallback() {
                     @Override
                     public void gotResult(int responseCode, String s) {
-                        if(responseCode == 0){
+                        if (responseCode == 0) {
                             applyBean.setIsAgree(2);
-                            mListApplyBean.set(position,applyBean);
+                            mListApplyBean.set(position, applyBean);
                             mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
                             setListView(mListApplyBean);
-                        }else{
-                            ToastUtil.show(NewFriendListActivity.this,"拒绝好友失败");
+                        } else {
+                            ToastUtil.show(NewFriendListActivity.this, "拒绝好友失败");
                         }
                     }
                 });
             }
         }, null);
     }
-
     /**
      * 同意申请提示框
      */
@@ -194,25 +196,9 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
         CommonUtils.showInfoDialog(this, "同意该用户的好友申请吗？", "提示", "同意", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                final String fromUserName = mListApplyBean.get(position).getFromUsername();
-                final String fromAppkey = mListApplyBean.get(position).getFromAppkey();
-                ContactManager.acceptInvitation(fromUserName, fromAppkey, new BasicCallback() {
-                    @Override
-                    public void gotResult(int responseCode, String responseMessage) {
-                        if (0 == responseCode) {
-                            //接收好友请求成功
-                            mListApplyBean.get(position).setIsAgree(1);
-                            mListApplyBean.set(position,mListApplyBean.get(position));
-                            mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
-                            setListView(mListApplyBean);
-                            mPresenter.yesAgree(AppData.getUserName(),fromUserName,position);
-                        } else {
-                            //接收好友请求失败
-                            ToastUtil.show(NewFriendListActivity.this,"同意申请失败，请稍后重试");
-                        }
-                    }
-                });
+                fromUserName = mListApplyBean.get(position).getFromUsername();
+                fromAppkey = mListApplyBean.get(position).getFromAppkey();
+                mPresenter.yesAgree(AppData.getUserName(), fromUserName, position);
             }
         }, null);
     }
@@ -220,6 +206,19 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
     @Override
     public void yesAgreeSuccess(int position) {
         ToastUtil.show(this, "同意申请");
+
+        //接收好友请求成功
+        mListApplyBean.get(position).setIsAgree(1);
+        mListApplyBean.set(position, mListApplyBean.get(position));
+        mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
+        setListView(mListApplyBean);
+
+        Intent mIntent = new Intent(NewFriendListActivity.this, MyChatActivity.class);
+        mIntent.putExtra(JMessageUtils.TARGET_USERNAME, fromUserName);
+        mIntent.putExtra(JMessageUtils.TARGET_APP_KEY, fromAppkey);
+        mIntent.putExtra(JMessageUtils.IS_FRIEND, true);
+        mIntent.putExtra(JMessageUtils.IS_AGREE_KEY, JMessageUtils.YES_AGREE);
+        startActivity(mIntent);
     }
 
     @Override

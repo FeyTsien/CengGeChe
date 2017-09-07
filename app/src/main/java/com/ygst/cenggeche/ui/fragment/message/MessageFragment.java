@@ -174,6 +174,7 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
                     String targetId = ((UserInfo) conversation.getTargetInfo()).getUserName();
                     intent.putExtra(JMessageUtils.TARGET_USERNAME, targetId);
                     intent.putExtra(JMessageUtils.TARGET_APP_KEY, conversation.getTargetAppKey());
+                    intent.putExtra(JMessageUtils.IS_FRIEND,((UserInfo) conversation.getTargetInfo()).isFriend());
                     intent.setClass(mContext, MyChatActivity.class);
                     startActivity(intent);
                 } else{

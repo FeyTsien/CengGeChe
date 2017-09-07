@@ -98,7 +98,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra(JMessageUtils.TARGET_USERNAME, bean.getFriendusername());
-                intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS, bean.getFriendStatus());
                 intent.setClass(mContext, FriendInfoActivity.class);
                 mContext.startActivity(intent);
             }

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.view.ikninephotoview.IKNinePhotoView;
 
+import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -21,10 +23,12 @@ import butterknife.BindView;
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.RVHolder> {
 
     private Context context;
+    private List<String> mListPic;
 
-    public RVAdapter(Context context) {
+    public RVAdapter(Context context,List<String> listPic) {
         super();
         this.context = context;
+        this.mListPic = listPic;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.RVHolder> {
 
     @Override
     public void onBindViewHolder(RVHolder holder, int position) {
-        MyAdapter adapter = new MyAdapter(context);
+        MyAdapter adapter = new MyAdapter(context,mListPic);
         holder.mNinePhoto.setAdapter(adapter);
 
     }

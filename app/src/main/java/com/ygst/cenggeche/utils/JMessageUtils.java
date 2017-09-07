@@ -33,4 +33,8 @@ public class JMessageUtils {
     public static final String YES_AGREE="yesAgree";
     //拒绝好友申请
     public static final String NO_AGREE="noAgree";
+    //是否为好友关系
+    public static final String IS_FRIEND="isFriend";
+    //是否为好友关系
+    public static final String IS_BLACK="isBlack";
 }

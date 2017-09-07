@@ -77,6 +77,7 @@ public class FriendBean implements Serializable {
         private String myusername;
         private String friendNote;
         private int friendStatus;
+        private int isBlack;
 
         public String getFriendTime() {
             return friendTime;
@@ -156,6 +157,14 @@ public class FriendBean implements Serializable {
 
         public void setFriendStatus(int friendStatus) {
             this.friendStatus = friendStatus;
+        }
+
+        public int getIsBlack() {
+            return isBlack;
+        }
+
+        public void setIsBlack(int isBlack) {
+            this.isBlack = isBlack;
         }
     }
 }

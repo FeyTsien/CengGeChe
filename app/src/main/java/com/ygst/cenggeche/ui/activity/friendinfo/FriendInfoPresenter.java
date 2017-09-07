@@ -43,7 +43,7 @@ public class FriendInfoPresenter extends BasePresenterImpl<FriendInfoContract.Vi
                 UserBean userBean = gson.fromJson(s, UserBean.class);
                 if ("0000".equals(userBean.getCode())) {
                     if (mView != null)
-                        mView.getFriendInfoSuccess(userBean.getData());
+                        mView.getFriendInfoSuccess(userBean);
 //                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 } else {
                     if (mView != null)

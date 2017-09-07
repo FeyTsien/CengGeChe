@@ -38,6 +38,8 @@ public class UrlUtils {
     public static String LOGIN = "/user/login.do";
     //退出接口
     public static String LOGIN_OUT = "/user/logout.do";
+    //获取我的信息接口
+    public static String GET_MY_INFO = "/user/getMyInfo.do";
     //获取用户信息接口
     public static String GET_USER_INFO = "/user/getUserInfo.do";
     //获取好友信息接口

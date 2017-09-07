@@ -95,7 +95,8 @@
         <activity android:name=".ui.activity.main.MainActivity" />
         <!--自定义的聊天页-->
         <activity android:name=".ui.activity.mychat.MyChatActivity"
-            android:theme="@style/ChatTheme" />
+            android:theme="@style/ChatTheme"
+            android:launchMode="singleTask" />
         <!--添加好友-->
         <activity android:name=".ui.activity.addfriend.AddFriendActivity" />
         <!--联系人列表-->
