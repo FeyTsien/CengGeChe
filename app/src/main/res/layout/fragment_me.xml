@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/ll_jilu">
 
+
             <com.ygst.cenggeche.ui.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/civ_avatar"
                 android:layout_width="70dp"
@@ -24,6 +25,13 @@
                 android:src="@drawable/loli"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="2dp" />
+
+            <ImageView
+                android:id="@+id/iv_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/civ_avatar"
+                android:layout_alignRight="@+id/civ_avatar"/>
 
             <TextView
                 android:id="@+id/tv_myname"
@@ -55,9 +63,8 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_horizontal|bottom"
-                    android:text="110次"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -87,9 +94,8 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_horizontal|bottom"
-                    android:text="15次"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -119,9 +125,8 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_horizontal|bottom"
-                    android:text="5次"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"

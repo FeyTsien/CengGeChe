@@ -23,6 +23,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetUserInfoCallback;
+import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 
 
@@ -84,6 +87,7 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
      */
     @OnClick(R.id.bt_submit)
     public void addFriendSubmit() {
+
         Intent intent = this.getIntent();
         targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
         targetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
@@ -95,6 +99,62 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
                 return;
             }
         }
+
+        JMessageClient.getUserInfo(targetUserName, targetAppKey, new GetUserInfoCallback() {
+            @Override
+            public void gotResult(int i, String s, UserInfo userInfo) {
+                if(userInfo.isFriend()){
+                    ToastUtil.show(AddFriendActivity.this, "已经是好友关系，不可申请");
+                    return;
+                }else{
+                    ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
+                        @Override
+                        public void gotResult(int responseCode, String responseMessage) {
+                            LogUtils.i(TAG, "responseMessage: " + responseMessage);
+                            if (0 == responseCode) {
+                                finish();
+                                ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
+                            } else {
+                                //好友请求发送失败
+                                ToastUtil.show(AddFriendActivity.this, "申请好友发送失败");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void yesAgreeSuccess(int position) {
+        ToastUtil.show(this, "同意申请");
+        ContactManager.acceptInvitation(targetUserName, targetAppKey, new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+                if (0 == responseCode) {
+                    //接收好友请求成功
+                } else {
+                    //接收好友请求失败
+                }
+            }
+        });
+        mListApplyBean.get(position).setIsAgree(1);
+        mListApplyBean.set(position, mListApplyBean.get(position));
+        mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
+        Intent mIntent = new Intent();
+        setResult(RESULT_OK, mIntent);
+        finish();
+    }
+
+    @Override
+    public void yesAgreeError() {
+        ToastUtil.show(this, "同意申请失败了，请重试");
+    }
+
+
+    @Override
+    public void sendSucceed() {
+
         ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
             @Override
             public void gotResult(int responseCode, String responseMessage) {
@@ -111,42 +171,7 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
     }
 
     @Override
-    public void yesAgreeSuccess(int position) {
-        ToastUtil.show(this, "同意申请");
-        mListApplyBean.get(position).setIsAgree(1);
-        mListApplyBean.set(position, mListApplyBean.get(position));
-        mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
-        Intent mIntent = new Intent();
-        setResult(RESULT_OK, mIntent);
-        finish();
+    public void sendFail() {
+        ToastUtil.show(this, "申请好友发送失败了");
     }
-
-    @Override
-    public void yesAgreeError() {
-        ToastUtil.show(this, "同意申请失败了，请重试");
-    }
-
-
-//    @Override
-//    public void sendSucceed() {
-//
-//        ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
-//            @Override
-//            public void gotResult(int responseCode, String responseMessage) {
-//                LogUtils.i(TAG, "responseMessage: " + responseMessage);
-//                if (0 == responseCode) {
-//                    finish();
-//                    ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
-//                } else {
-//                    //好友请求发送失败
-//                    ToastUtil.show(AddFriendActivity.this, "申请好友发送失败");
-//                }
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public void sendFail() {
-//        ToastUtil.show(this, "申请好友发送失败了");
-//    }
 }

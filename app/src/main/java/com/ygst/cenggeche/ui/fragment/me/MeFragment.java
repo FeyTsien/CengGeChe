@@ -7,18 +7,20 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.ACache;
 import com.ygst.cenggeche.app.AppData;
-import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.bean.MyInfoBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
+import com.ygst.cenggeche.ui.activity.setting.SettingActivity;
 import com.ygst.cenggeche.ui.widget.CircleImageView;
-import com.ygst.cenggeche.utils.ToastUtil;
+import com.ygst.cenggeche.utils.CommonUtils;
 
-import cn.jpush.im.android.api.JMessageClient;
+import butterknife.OnClick;
 
 /**
  * MVPPlugin
@@ -27,9 +29,10 @@ import cn.jpush.im.android.api.JMessageClient;
 
 public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> implements MeContract.View {
 
+    public ACache mCache;
     private View mRootView;
-    Button mBtnLoginOut;
     private CircleImageView mCivAvatar;
+    private ImageView mIvGender;
     private TextView mTvMyName;
     private TextView mTvTotalNum;
     private TextView mTvRubNum;
@@ -49,35 +52,52 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
     }
 
     private void init() {
+//        mCache = ACache.get(getActivity());
+//        MyInfoBean myInfoBean = (MyInfoBean) mCache.getAsObject("myInfoBean");
+//        if(myInfoBean!=null){
+//            getMyInfoSuccess(myInfoBean);
+//        }
         //获取个人信息
         mPresenter.getMyInfo();
-        mBtnLoginOut = (Button) mRootView.findViewById(R.id.btn_login_out);
         mCivAvatar = (CircleImageView) mRootView.findViewById(R.id.civ_avatar);
+        mIvGender = (ImageView) mRootView.findViewById(R.id.iv_gender);
         mTvMyName = (TextView) mRootView.findViewById(R.id.tv_myname);
         mTvTotalNum = (TextView) mRootView.findViewById(R.id.tv_total_num);
         mTvRubNum = (TextView) mRootView.findViewById(R.id.tv_rub_num);
         mTvPassiveRubNum = (TextView) mRootView.findViewById(R.id.tv_passive_rub_num);
 
-        mBtnLoginOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.loginOut();
-            }
-        });
     }
 
 
+    /**
+     * 获取信息成功
+     * @param myInfoBean
+     */
     @Override
     public void getMyInfoSuccess(MyInfoBean myInfoBean) {
+//        mCache.put("myInfoBean", (Serializable) myInfoBean);
+
         MyInfoBean.DataBean dataBean = myInfoBean.getData();
+        //头像
+        Glide.with(this).load(dataBean.getUserPic()).placeholder(R.mipmap.icon_my_avatar).into(mCivAvatar);
+        //性别
+        if(dataBean.getGender() ==0){
+            mIvGender.setImageResource(R.mipmap.icon_girl);
+        }else if(dataBean.getGender() ==1){
+            mIvGender.setImageResource(R.mipmap.icon_boy);
+        }
+        //名字
         if(!TextUtils.isEmpty(dataBean.getNickname())){
             mTvMyName.setText(myInfoBean.getData().getNickname());
         }else{
             mTvMyName.setText(AppData.getUserName());
         }
-        mTvTotalNum.setText(dataBean.getTotalNum());
-        mTvRubNum.setText(dataBean.getRubNum());
-        mTvPassiveRubNum.setText(dataBean.getPassiveRubNum());
+        //总发布行程数
+        mTvTotalNum.setText(dataBean.getTotalNum()+"次");
+        //总蹭车数
+        mTvRubNum.setText(dataBean.getRubNum()+"次");
+        //总被蹭数
+        mTvPassiveRubNum.setText(dataBean.getPassiveRubNum()+"次");
     }
 
     @Override
@@ -85,15 +105,8 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
 
     }
 
-    @Override
-    public void loginOutSuccess() {
-        JMessageClient.logout();
-        MyApplication.clearLogin();
-        ToastUtil.show(getActivity(), "退出成功");
-    }
-
-    @Override
-    public void loginOutError() {
-
+    @OnClick(R.id.tv_setting)
+    public void setting(){
+        CommonUtils.startActivity(getActivity(), SettingActivity.class);
     }
 }

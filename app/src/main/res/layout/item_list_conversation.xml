@@ -25,8 +25,8 @@
             android:id="@+id/iv_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignBottom="@+id/iv_avatar"
+            android:layout_alignRight="@+id/iv_avatar"/>
     </RelativeLayout>
 
     <LinearLayout

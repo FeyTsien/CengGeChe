@@ -207,6 +207,16 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
     public void yesAgreeSuccess(int position) {
         ToastUtil.show(this, "同意申请");
 
+        ContactManager.acceptInvitation(fromUserName, fromAppkey, new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+                if (0 == responseCode) {
+                    //接收好友请求成功
+                } else {
+                    //接收好友请求失败
+                }
+            }
+        });
         //接收好友请求成功
         mListApplyBean.get(position).setIsAgree(1);
         mListApplyBean.set(position, mListApplyBean.get(position));

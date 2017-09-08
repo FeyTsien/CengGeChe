@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPageBG"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_clear_cache"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="清除缓存"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_clear_cache"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@drawable/set_right_arrows"
+                    android:text="15M"
+                    android:textColor="@color/gray" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="接收消息推送"
+                    android:textColor="@color/black" />
+
+                <com.ygst.cenggeche.ui.widget.SwitchButton
+                    android:id="@+id/sbtn_push"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_clear_chat"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/white"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/set_right_arrows"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="清空聊天记录"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_update"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/set_right_arrows"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="版本更新"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/tv_user_guide"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/set_right_arrows"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="使用指南"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_about_us"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/set_right_arrows"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="关于我们"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/white"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/set_right_arrows"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="意见反馈"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:id="@+id/tv_login_out"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/set_right_arrows"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="退出登录"
+                android:textColor="@color/black" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp">
+
+                <ImageView
+                    android:id="@+id/iv_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/logo_setting"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_1"
+                    android:layout_centerHorizontal="true"
+                    android:text="北京阳光沙滩网络科技有限公司"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

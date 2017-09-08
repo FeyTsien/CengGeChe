@@ -5,7 +5,7 @@
 
     <TextView
         android:id="@+id/jmui_send_time_txt"
-        style="@style/jmui_chat_text_date_style"/>
+        style="@style/jmui_chat_text_date_style" />
 
 
     <RelativeLayout
@@ -15,43 +15,43 @@
 
         <cn.jmessage.android.uikit.chatting.CircleImageView
             android:id="@+id/jmui_avatar_iv"
-            style="@style/jmui_chat_item_receiver_avatar_style"/>
+            style="@style/jmui_chat_item_receiver_avatar_style" />
 
         <TextView
             android:id="@+id/jmui_display_name_tv"
+            style="@style/jmui_chat_display_name_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/jmui_chat_display_name_style"
-            android:layout_toRightOf="@id/jmui_avatar_iv"
-            />
+            android:layout_toRightOf="@id/jmui_avatar_iv" />
 
         <io.github.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/jmui_msg_content"
             style="@style/jmui_msg_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_below="@id/jmui_display_name_tv"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="3dp"
             android:layout_toRightOf="@id/jmui_avatar_iv"
             android:background="@drawable/jmui_msg_receive_bg"
             android:paddingLeft="15dp"
             android:paddingRight="10dp"
-            android:textColor="#363333" />
+            android:textColor="#363333"
+            android:textSize="14sp" />
 
         <!--<TextView-->
-            <!--android:id="@+id/jmui_msg_content"-->
-            <!--style="@style/jmui_msg_text_style"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_below="@id/jmui_display_name_tv"-->
-            <!--android:layout_marginLeft="3dp"-->
-            <!--android:layout_toRightOf="@id/jmui_avatar_iv"-->
-            <!--android:background="@drawable/jmui_msg_receive_bg"-->
-            <!--android:paddingLeft="15dp"-->
-            <!--android:paddingRight="10dp"-->
-            <!--android:textColor="#363333" />-->
+        <!--android:id="@+id/jmui_msg_content"-->
+        <!--style="@style/jmui_msg_text_style"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_below="@id/jmui_display_name_tv"-->
+        <!--android:layout_marginLeft="3dp"-->
+        <!--android:layout_toRightOf="@id/jmui_avatar_iv"-->
+        <!--android:background="@drawable/jmui_msg_receive_bg"-->
+        <!--android:paddingLeft="15dp"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:textColor="#363333" />-->
 
     </RelativeLayout>
 
