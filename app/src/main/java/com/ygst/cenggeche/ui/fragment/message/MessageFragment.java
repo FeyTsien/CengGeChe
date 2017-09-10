@@ -19,7 +19,7 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
 import com.ygst.cenggeche.ui.activity.friendlist.FriendListActivity;
-import com.ygst.cenggeche.ui.activity.main.MainActivity;
+import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenu;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuCreator;
@@ -224,7 +224,7 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
         if(conversation.getUnReadMsgCnt()>0) {
             conversation.setUnReadMessageCnt(0);
         }
-        MainActivity mainActivity = (MainActivity ) getActivity();
+        MainActivity1 mainActivity = (MainActivity1) getActivity();
         mainActivity.showAllUnReadMsgCount();
         mSwipeMenuListViewAdapter.notifyDataSetChanged();
     }
