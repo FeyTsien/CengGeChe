@@ -10,11 +10,11 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class MainContract {
     interface View extends BaseView {
-        void weAreFriendSuccess();
-        void weAreFriendError();
+//        void weAreFriendSuccess();
+//        void weAreFriendError();
     }
 
     interface  Presenter extends BasePresenter<View> {
-        void weAreFriend(String myusername,String fusername);
+//        void weAreFriend(String myusername,String fusername);
     }
 }

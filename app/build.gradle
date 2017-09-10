@@ -148,8 +148,8 @@ dependencies {
 
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.github.promeg:tinypinyin:2.0.3'
-    //极光推送 // 此处以JPush 3.0.9 版本为例。
-    //    compile 'cn.jiguang.sdk:jpush:3.0.9'
+    //极光推送 // 此处以JPush 3.0.6 版本为例。
+    compile 'cn.jiguang.sdk:jpush:3.0.6'
     //极光IM
     // 此处以JMessage 2.2.1 版本为例。
     compile 'cn.jiguang.sdk:jmessage:2.2.1'

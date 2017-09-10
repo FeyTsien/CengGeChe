@@ -212,6 +212,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             //验证码登录
             map.put("smsCode", pwdOrCode);
         }
+        map.put("registrationId", AppData.getRegistrationId());
         mPresenter.login(map);
     }
 
@@ -235,7 +236,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             @Override
             public void gotResult(int responseCode, String LoginDesc) {
                 if (responseCode == 0) {
-                    ToastUtil.show(LoginActivity.this, "登录成功了");
+                    ToastUtil.show(LoginActivity.this, "登录成功");
                     timeCount.cancel();
                     timeCount.onFinish();
                     MyApplication.clearLogin();

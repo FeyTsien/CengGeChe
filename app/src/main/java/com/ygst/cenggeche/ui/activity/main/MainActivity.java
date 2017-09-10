@@ -458,15 +458,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
 
-    @Override
-    public void weAreFriendSuccess() {
-//        ToastUtil.show(this,"绑定了好友关系");
-    }
-
-    @Override
-    public void weAreFriendError() {
-//        ToastUtil.show(this,"绑定好友关系失败了");
-    }
+//    @Override
+//    public void weAreFriendSuccess() {
+////        ToastUtil.show(this,"绑定了好友关系");
+//    }
+//
+//    @Override
+//    public void weAreFriendError() {
+////        ToastUtil.show(this,"绑定好友关系失败了");
+//    }
     /**
      * 通知栏点击事件实体类NotificationClickEvent
      *

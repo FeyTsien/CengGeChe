@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.ACache;
@@ -20,15 +21,14 @@ import com.ygst.cenggeche.ui.activity.setting.SettingActivity;
 import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.utils.CommonUtils;
 
-import butterknife.OnClick;
-
 /**
  * MVPPlugin
  * 邮箱 784787081@qq.com
  */
 
-public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> implements MeContract.View {
+public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> implements MeContract.View,View.OnClickListener{
 
+    private String TAG = "MeFragment";
     public ACache mCache;
     private View mRootView;
     private CircleImageView mCivAvatar;
@@ -37,15 +37,18 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
     private TextView mTvTotalNum;
     private TextView mTvRubNum;
     private TextView mTvPassiveRubNum;
+    private TextView mTvSetting;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        LogUtils.i(TAG,"MeFragment-----onCreate");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        LogUtils.i(TAG,"MeFragment-----onCreateView");
         mRootView = inflater.inflate(R.layout.fragment_me, container, false);
         init();
         return mRootView;
@@ -57,17 +60,25 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
 //        if(myInfoBean!=null){
 //            getMyInfoSuccess(myInfoBean);
 //        }
-        //获取个人信息
-        mPresenter.getMyInfo();
         mCivAvatar = (CircleImageView) mRootView.findViewById(R.id.civ_avatar);
         mIvGender = (ImageView) mRootView.findViewById(R.id.iv_gender);
         mTvMyName = (TextView) mRootView.findViewById(R.id.tv_myname);
         mTvTotalNum = (TextView) mRootView.findViewById(R.id.tv_total_num);
         mTvRubNum = (TextView) mRootView.findViewById(R.id.tv_rub_num);
         mTvPassiveRubNum = (TextView) mRootView.findViewById(R.id.tv_passive_rub_num);
+        mTvSetting = (TextView) mRootView.findViewById(R.id.tv_setting);
 
+        mTvSetting.setOnClickListener(this);
     }
 
+
+    @Override
+    public void onResume() {
+        //获取个人信息
+        mPresenter.getMyInfo();
+        LogUtils.i(TAG,"MeFragment-----OnResume");
+        super.onResume();
+    }
 
     /**
      * 获取信息成功
@@ -105,8 +116,13 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
 
     }
 
-    @OnClick(R.id.tv_setting)
-    public void setting(){
-        CommonUtils.startActivity(getActivity(), SettingActivity.class);
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.tv_setting:
+                CommonUtils.startActivity(getActivity(), SettingActivity.class);
+                break;
+        }
     }
 }

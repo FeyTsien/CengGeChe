@@ -13,16 +13,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
+import com.ygst.cenggeche.ui.activity.friendlist.FriendListActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenu;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuCreator;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuItem;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuListView;
+import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
@@ -126,6 +129,13 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
                 intent.putExtra(JMessageUtils.TARGET_USERNAME, mEditTextTargetId.getText().toString());
                 intent.setClass(mContext, MyChatActivity.class);
                 startActivity(intent);
+            }
+        });
+        //进入我的蹭友
+        ((TextView)mRootView.findViewById(R.id.tv_show_friend_list)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonUtils.startActivity(getActivity(), FriendListActivity.class);
             }
         });
 

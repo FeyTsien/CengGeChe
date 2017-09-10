@@ -182,7 +182,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="行程记录"
+        android:text="车主认证"
         android:textColor="@color/black" />
 
     <TextView
@@ -198,11 +198,4 @@
         android:paddingRight="10dp"
         android:text="设置"
         android:textColor="@color/black" />
-
-    <Button
-        android:id="@+id/btn_login_out"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="退出登录" />
 </LinearLayout>

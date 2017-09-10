@@ -5,8 +5,8 @@
     android:background="@color/colorPageBG"
     android:orientation="vertical">
 
+    <include layout="@layout/app_toolbar_message" />
     <include layout="@layout/activity_target_user_info" />
-
     <com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
