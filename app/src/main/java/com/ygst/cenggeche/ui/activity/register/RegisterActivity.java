@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,8 +14,8 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.registerinfo.RegisterInfoActivity;
+import com.ygst.cenggeche.ui.activity.resetpwd.ResetPwdActivity;
 import com.ygst.cenggeche.ui.widget.TimeCount;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.TextViewUtils;
@@ -33,6 +34,8 @@ import butterknife.OnClick;
 public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, RegisterPresenter> implements RegisterContract.View {
 
     private String TAG = "RegisterActivity";
+    public static String TYPE="type";
+    private String type;
     private TimeCount timeCount;
 
     @BindView(R.id.tv_title)
@@ -43,6 +46,8 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
     EditText mEtSmsCode;
     @BindView(R.id.btn_get_sms_code)
     Button mBtnGetSmsCode;
+    @BindView(R.id.tv_tishi)
+    TextView mTvTiShi;
 
     /**
      * 返回
@@ -60,7 +65,14 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
             if (CommonUtils.isUserNumber(username)) {
                 //先校验账号是否被注册,成功后在获取验证码
                 try {
-                    mPresenter.checkIsRegist(mEtPhone.getText().toString());
+                    if(type.equals("register")){
+                        //如果是注册账号则走此接口
+                        mPresenter.checkIsRegist(mEtPhone.getText().toString());
+                    }else{
+                        //不是注册的时候，直接走获取验证码接口
+                        timeCount.start();
+                        mPresenter.getSMSCode(mEtPhone.getText().toString());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -105,7 +117,13 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
     }
 
     private void init() {
-        mTvTitle.setText("注册账号");
+        type = getIntent().getStringExtra(TYPE);
+        if(type.equals("register")){
+            mTvTitle.setText("注册账号");
+        }else if(type.equals("resetPwd")){
+            mTvTitle.setText("忘记密码");
+            mTvTiShi.setVisibility(View.INVISIBLE);
+        }
         timeCount = new TimeCount(60000, 1000);
         timeCount.setButton(mBtnGetSmsCode);
     }
@@ -148,7 +166,13 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
         ToastUtil.show(this, "校验成功");
         Intent intent = new Intent();
         intent.putExtra("username", mEtPhone.getText().toString());
-        intent.setClass(this, RegisterInfoActivity.class);
+        if(type.equals("register")){
+            //注册账号
+            intent.setClass(this, RegisterInfoActivity.class);
+        }else if(type.equals("resetPwd")){
+            //重置密码
+            intent.setClass(this, ResetPwdActivity.class);
+        }
         startActivity(intent);
         CommonUtils.finishActivity(this);
     }

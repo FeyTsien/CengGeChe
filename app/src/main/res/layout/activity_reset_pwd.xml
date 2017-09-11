@@ -29,9 +29,10 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_bg"
             android:hint="请输入新密码"
-            android:maxLength="16"
-            android:textColor="@color/colorEditTextFont"
-            android:textColorHint="@color/colorEditTextFont"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorHint"
             android:textSize="13sp" />
 
         <EditText
@@ -41,9 +42,10 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_bg"
             android:hint="再次输入密码"
-            android:maxLength="16"
-            android:textColor="@color/colorEditTextFont"
-            android:textColorHint="@color/colorEditTextFont"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            android:textColor="@color/black"
+            android:textColorHint="@color/colorHint"
             android:textSize="13sp" />
 
         <RelativeLayout

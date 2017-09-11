@@ -7,26 +7,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
-import com.ygst.cenggeche.bean.ApplyBean;
+import com.ygst.cenggeche.bean.B2.ApplyBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.jpush.im.android.api.ContactManager;
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetUserInfoCallback;
-import cn.jpush.im.android.api.model.UserInfo;
-import cn.jpush.im.api.BasicCallback;
 
 
 /**
@@ -92,82 +87,45 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
         targetUserName = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
         targetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
         reason = mEditTextReason.getText().toString();
-        for (int i = 0; i < mListApplyBean.size(); i++) {
-            if (targetUserName.equals(mListApplyBean.get(i).getFromUsername()) && mListApplyBean.get(i).getIsAgree() == 3) {
-                ToastUtil.show(AddFriendActivity.this, "已收到好友发的申请，直接同意");
-                mPresenter.yesAgree(AppData.getUserName(), targetUserName,i);
-                return;
-            }
-        }
-
-        JMessageClient.getUserInfo(targetUserName, targetAppKey, new GetUserInfoCallback() {
-            @Override
-            public void gotResult(int i, String s, UserInfo userInfo) {
-                if(userInfo.isFriend()){
-                    ToastUtil.show(AddFriendActivity.this, "已经是好友关系，不可申请");
-                    return;
-                }else{
-                    ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
-                        @Override
-                        public void gotResult(int responseCode, String responseMessage) {
-                            LogUtils.i(TAG, "responseMessage: " + responseMessage);
-                            if (0 == responseCode) {
-                                finish();
-                                ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
-                            } else {
-                                //好友请求发送失败
-                                ToastUtil.show(AddFriendActivity.this, "申请好友发送失败");
-                            }
-                        }
-                    });
-                }
-            }
-        });
+        Map<String,String> map = new HashMap();
+        map.put("myusername",targetUserName);
+        map.put("fusername", AppData.getUserName());
+        map.put("applyInfo",reason);
+        map.put("appkey",targetAppKey);
+        mPresenter.sendAddFriend(map);
     }
-
-    @Override
-    public void yesAgreeSuccess(int position) {
-        ToastUtil.show(this, "同意申请");
-        ContactManager.acceptInvitation(targetUserName, targetAppKey, new BasicCallback() {
-            @Override
-            public void gotResult(int responseCode, String responseMessage) {
-                if (0 == responseCode) {
-                    //接收好友请求成功
-                } else {
-                    //接收好友请求失败
-                }
-            }
-        });
-        mListApplyBean.get(position).setIsAgree(1);
-        mListApplyBean.set(position, mListApplyBean.get(position));
-        mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
-        Intent mIntent = new Intent();
-        setResult(RESULT_OK, mIntent);
-        finish();
-    }
-
-    @Override
-    public void yesAgreeError() {
-        ToastUtil.show(this, "同意申请失败了，请重试");
-    }
+//
+//    @Override
+//    public void yesAgreeSuccess(int position) {
+//        ToastUtil.show(this, "同意申请");
+//        ContactManager.acceptInvitation(targetUserName, targetAppKey, new BasicCallback() {
+//            @Override
+//            public void gotResult(int responseCode, String responseMessage) {
+//                if (0 == responseCode) {
+//                    //接收好友请求成功
+//                } else {
+//                    //接收好友请求失败
+//                }
+//            }
+//        });
+//        mListApplyBean.get(position).setIsAgree(1);
+//        mListApplyBean.set(position, mListApplyBean.get(position));
+//        mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
+//        Intent mIntent = new Intent();
+//        setResult(RESULT_OK, mIntent);
+//        finish();
+//    }
+//
+//    @Override
+//    public void yesAgreeError() {
+//        ToastUtil.show(this, "同意申请失败了，请重试");
+//    }
 
 
     @Override
     public void sendSucceed() {
 
-        ContactManager.sendInvitationRequest(targetUserName, targetAppKey, reason, new BasicCallback() {
-            @Override
-            public void gotResult(int responseCode, String responseMessage) {
-                LogUtils.i(TAG, "responseMessage: " + responseMessage);
-                if (0 == responseCode) {
-                    finish();
-                    ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
-                } else {
-                    //好友请求发送失败
-                    ToastUtil.show(AddFriendActivity.this, "申请好友发送失败");
-                }
-            }
-        });
+        ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
     }
 
     @Override

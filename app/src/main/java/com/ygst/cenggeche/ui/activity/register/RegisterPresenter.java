@@ -1,7 +1,6 @@
 package com.ygst.cenggeche.ui.activity.register;
 
 import android.app.ProgressDialog;
-import android.util.Log;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.Gson;
@@ -22,7 +21,7 @@ import rx.Observer;
  */
 
 public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> implements RegisterContract.Presenter {
-
+    private static String TAG = "RegisterPresenter";
     @Override
     public void checkIsRegist(String username) {
         final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "检测手机号是否可用");
@@ -42,7 +41,7 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
             @Override
             public void onNext(String s) {
                 progressDialog.dismiss();
-                LogUtils.i("HttpManager", "ssss:" + s);
+                LogUtils.i(TAG, "ssss:" + s);
                 Gson gson = new Gson();
                 CodeBean codeBean = gson.fromJson(s, CodeBean.class);
                 if ("0000".equals(codeBean.getCode())) {
@@ -73,12 +72,12 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
 
             @Override
             public void onError(Throwable e) {
-                Log.i("checkSMSCodeError", "onError:+ ++++++++++++++" + e.toString());
+                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
             }
 
             @Override
             public void onNext(String s) {
-                Log.i("checkSMSCodeError", "onNext:+ ++++++++++++++" + s);
+                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
                 Gson gson = new Gson();
                 CodeBean codeBean = gson.fromJson(s, CodeBean.class);
                 if ("0000".equals(codeBean.getCode())) {
@@ -109,15 +108,13 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
             @Override
             public void onError(Throwable e) {
                 progressDialog.dismiss();
-                if (mView != null)
-                    mView.checkSMSCodeError();
-                Log.i("checkSMSCodeError", "onError:+ ++++++++++++++" + e.toString());
+                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
             }
 
             @Override
             public void onNext(String s) {
                 progressDialog.dismiss();
-                Log.i("checkSMSCodeError", "onNext:+ ++++++++++++++" + s);
+                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
 //                LoginBean loginBean = (LoginBean) GsonManger.getGsonManger().gsonFromat(s, new LoginBean());
 
                 Gson gson = new Gson();

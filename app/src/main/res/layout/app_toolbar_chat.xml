@@ -8,7 +8,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/colorTheme"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         app:contentInsetStart="0.0dp"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="标题"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <ImageView
@@ -51,6 +51,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/toolbar_bg" />
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

@@ -36,6 +36,8 @@ public class UrlUtils {
     public static String REGIST = "/user/regist.do";
     //登录接口
     public static String LOGIN = "/user/login.do";
+    //重置密码
+    public static String RESET_PWD = "/user/resetPass.do";
     //退出接口
     public static String LOGIN_OUT = "/user/logout.do";
     //获取我的信息接口

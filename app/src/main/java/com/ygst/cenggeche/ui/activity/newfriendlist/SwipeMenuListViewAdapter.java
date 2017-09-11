@@ -24,10 +24,10 @@ import java.util.List;
 public class SwipeMenuListViewAdapter extends BaseAdapter {
 
     NewFriendListActivity activity;
-    List<ApplyBean> mListDataBean;
+    List<ApplyBean.DataBean> mListDataBean;
     Context mContext;
 
-    public SwipeMenuListViewAdapter(Context context, List<ApplyBean> list) {
+    public SwipeMenuListViewAdapter(Context context, List<ApplyBean.DataBean> list) {
         mContext = context;
         this.mListDataBean = list;
         this.activity = (NewFriendListActivity) context;
@@ -49,19 +49,19 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = View.inflate(mContext.getApplicationContext(), R.layout.item_list_newfriend, null);
             new ViewHolder(convertView);
         }
         final ViewHolder holder = (ViewHolder) convertView.getTag();
-        final ApplyBean newFriend = mListDataBean.get(position);
+        final ApplyBean.DataBean newFriend = mListDataBean.get(position);
         String applyName = "";
         if (newFriend != null) {
-            if(!TextUtils.isEmpty(newFriend.getFromNickname())){
-                applyName =newFriend.getFromNickname();
+            if(!TextUtils.isEmpty(newFriend.getNickname())){
+                applyName =newFriend.getNickname();
             }else{
-                applyName =newFriend.getFromUsername();
+                applyName =newFriend.getFusername();
             }
             holder.mTvTargetName.setText(applyName);
 
@@ -69,7 +69,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
             //头像
             TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
             Glide.with(mContext)
-                    .load(newFriend.getFromAvatar())
+                    .load(newFriend.getUserPic())
                     .placeholder(drawable)
                     .into(holder.mIvAvatar);
 //
@@ -82,12 +82,12 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
 //                holder.mIvAvatar.setImageDrawable(drawable);
 //            }
 
-            holder.mTvLatestMessage.setText(newFriend.getReason());
-            if (newFriend.getIsAgree() == 2) {
+            holder.mTvLatestMessage.setText(newFriend.getApplyInfo());
+            if (newFriend.getIsAgree() == 1) {
                 holder.mTvIsAgree.setText("已拒绝");
                 holder.mBtnYes.setVisibility(View.GONE);
 //                holder.mBtnNo.setVisibility(View.GONE);
-            } else if (newFriend.getIsAgree() == 1) {
+            } else if (newFriend.getIsAgree() == 2) {
                 holder.mTvIsAgree.setText("已同意");
                 holder.mBtnYes.setVisibility(View.GONE);
 //                holder.mBtnNo.setVisibility(View.GONE);
@@ -101,13 +101,13 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
         holder.mBtnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.showYesAgreeDialog(position);
+                activity.showYesAgreeDialog(newFriend);
             }
         });
         holder.mBtnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.showNoAgreeDialog(position);
+                activity.showNoAgreeDialog(newFriend);
             }
         });
 

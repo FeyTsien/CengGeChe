@@ -15,9 +15,11 @@ import android.widget.TextView;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.MD5Util;
 import com.ygst.cenggeche.utils.TextViewUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
+import com.ygst.cenggeche.utils.UsernamePwdUtils;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -108,34 +110,23 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         confirmPWD = TextViewUtils.getText(mEtConfirmPWD);
         birthday = TextViewUtils.getText(mTvBirthdate);
         if (TextUtils.isEmpty(nickname)) {
-            ToastUtil.show(this, "请输入正确昵称");
-        } else if (TextUtils.isEmpty(pwd)) {
-            ToastUtil.show(this, "请输入正确密码");
-        } else if (!pwd.equals(confirmPWD)) {
-            ToastUtil.show(this, "两次密码输入不一致");
+            ToastUtil.show(this, "给自己取个狂拽酷帅的昵称吧");
+        } else if (UsernamePwdUtils.isPasswordStandard(pwd)) {
+            if (!pwd.equals(confirmPWD)) {
+                ToastUtil.show(this, "两次密码输入不一致");
+            } else {
+                String password = MD5Util.string2MD5(pwd);
+                Map<String, String> map = new HashMap<>();
+                map.put("username", userName);
+                map.put("password", password);
+                map.put("nickname", nickname);
+                map.put("birthday", birthday);
+                map.put("gender", gender + "");
+                map.put("registrationId", AppData.getRegistrationId());
+                mPresenter.registrationConfirm(map);
+            }
         } else {
-//            JMessageClient.register(userName, JMessageUtils.JMESSAGE_LOGIN_PASSWROD, new BasicCallback() {
-//                @Override
-//                public void gotResult(int responseCode, String responseMessage) {
-//                    LogUtils.i(TAG, "s:" + responseMessage+" code:"+responseCode);
-//                    if (responseCode == 0) {
-//                        LogUtils.i(TAG, "极光注册成功了");
-                        String password = MD5Util.string2MD5(pwd);
-                        Map<String, String> map = new HashMap<>();
-                        map.put("username", userName);
-                        map.put("password", password);
-                        map.put("nickname", nickname);
-                        map.put("birthday", birthday);
-                        map.put("gender", gender + "");
-                        map.put("registrationId", AppData.getRegistrationId());
-                        mPresenter.registrationConfirm(map);
-//                    } else {
-//
-//                        ToastUtil.show(RegisterInfoActivity.this, "极光注册失败"+responseMessage);
-//                    }
-//                }
-//            });
-
+            CommonUtils.showInfoDialog(this, "密码只能为6至18位的字母、数字、下划线等，特殊符号除外", "提示", "知道了", "", null, null);
         }
     }
 

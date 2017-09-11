@@ -10,6 +10,7 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.utils.DataCleanManager;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.List;
@@ -32,6 +33,16 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
+    @BindView(R.id.tv_clear_cache)
+    TextView mTvClearCache;
+
+    /**
+     * 返回
+     */
+    @OnClick(R.id.iv_back)
+    public void goBack() {
+        finish();
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.activity_setting;
@@ -45,13 +56,24 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
 
     private void init() {
         mTvTitle.setText("设置");
+        try{
+            mTvClearCache.setText(DataCleanManager.getTotalCacheSize(this));
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     /**
      * 清除缓存
      */
     @OnClick(R.id.rl_clear_cache)
     public void clearCache(){
-
+        mListConversation = JMessageClient.getConversationList();
+        CommonUtils.showInfoDialog(this, "确定要清空聊天记录吗？", "提示", "清空", "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DataCleanManager.clearAllCache(SettingActivity.this);
+            }
+        }, null);
     }
 
     /**

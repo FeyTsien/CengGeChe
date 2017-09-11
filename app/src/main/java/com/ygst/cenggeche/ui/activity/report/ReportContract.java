@@ -1,4 +1,6 @@
-package com.ygst.cenggeche.ui.activity.resetpwd;
+package com.ygst.cenggeche.ui.activity.report;
+
+import android.content.Context;
 
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
@@ -8,14 +10,12 @@ import com.ygst.cenggeche.mvp.BaseView;
  *  邮箱 784787081@qq.com
  */
 
-public class ResetPwdContract {
+public class ReportContract {
     interface View extends BaseView {
-        void resetPwdSuccess();
-        void resetPwdError();
+        
     }
 
     interface  Presenter extends BasePresenter<View> {
-
-        void resetPwd(String username,String password);
+        
     }
 }

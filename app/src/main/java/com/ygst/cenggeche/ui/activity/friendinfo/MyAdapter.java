@@ -50,7 +50,6 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
     public void displayView(final MyHolder holder, final int position) {
         Glide.with(mContext)
                 .load(mListPic.get(position))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .placeholder(R.mipmap.icon_my_avatar)
                 .into(holder.mImageView);

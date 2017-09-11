@@ -48,10 +48,11 @@ public interface ProjectAPI {
     @POST
     Observable<String> postTouchMethod(@Url String url, @Field("flag") boolean isTouch, @Field("userId") String userId);
 
-    //上传多张图片
+    //带参数上传多张图片
+    @Headers({"os:android"})
     @Multipart
     @POST
-    Observable<ResponseBody> upLoadsImgs(@Url String url, @Part("accessToken") RequestBody accessToken, @Part("userId") RequestBody userId, @Part("deviceId") RequestBody deviceId, @Part("os") RequestBody os, @Part("id") RequestBody id, @Part MultipartBody.Part photo1, @Part MultipartBody.Part photo2, @Part MultipartBody.Part photo3, @Part MultipartBody.Part photo4, @Part MultipartBody.Part photo5, @Part MultipartBody.Part photo6, @Part MultipartBody.Part photo7, @Part MultipartBody.Part photo8, @Part MultipartBody.Part photo9, @Part MultipartBody.Part photo10, @Part MultipartBody.Part photo11);
+    Observable<ResponseBody> upLoadsImgs(@Header("deviceId")String deviceId,@Header("uid")String uid,@Header("sign")String sign,@Url String url, @PartMap Map<String, RequestBody> params, @Part MultipartBody.Part photo1, @Part MultipartBody.Part photo2, @Part MultipartBody.Part photo3, @Part MultipartBody.Part photo4, @Part MultipartBody.Part photo5, @Part MultipartBody.Part photo6);
 
     // 带参数上传单张图片
     @Multipart

@@ -76,6 +76,8 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_bg"
             android:hint="添加登录密码"
+            android:inputType="textPassword"
+            android:maxLength="18"
             android:textColor="@color/black"
             android:textColorHint="@color/colorHint"
             android:textSize="13sp" />
@@ -87,6 +89,8 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_bg"
             android:hint="重复输入密码"
+            android:inputType="textPassword"
+            android:maxLength="18"
             android:textColor="@color/black"
             android:textColorHint="@color/colorHint"
             android:textSize="13sp" />

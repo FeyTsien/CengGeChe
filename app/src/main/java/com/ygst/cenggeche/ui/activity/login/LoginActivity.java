@@ -44,7 +44,7 @@ import cn.jpush.im.api.BasicCallback;
 
 public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPresenter> implements LoginContract.View {
 
-    private String TAG = "LoginActivity";
+    private static String TAG = "LoginActivity";
     private String checkType = LoginBean.PWD_TO_LOGIN;
     private TimeCount timeCount;
 
@@ -154,9 +154,20 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     public void register() {
         timeCount.cancel();
         timeCount.onFinish();
-        CommonUtils.startActivity(this, RegisterActivity.class);
+        Intent intent = new Intent(this,RegisterActivity.class);
+        intent.putExtra(RegisterActivity.TYPE,"register");
+        startActivity(intent);
     }
 
+    /**
+     *忘记密码
+     */
+    @OnClick(R.id.tv_forgot_pwd)
+    public void resetPwd(){
+        Intent intent = new Intent(this,RegisterActivity.class);
+        intent.putExtra(RegisterActivity.TYPE,"resetPwd");
+        startActivity(intent);
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.activity_login;

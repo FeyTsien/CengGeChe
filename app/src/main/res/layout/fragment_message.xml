@@ -7,6 +7,8 @@
 
     <include layout="@layout/app_toolbar_message" />
     <include layout="@layout/activity_target_user_info" />
+    <include layout="@layout/item_system" />
+    <include layout="@layout/item_system" />
     <com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

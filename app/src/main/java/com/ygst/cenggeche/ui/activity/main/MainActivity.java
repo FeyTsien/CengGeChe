@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
-import com.ygst.cenggeche.bean.ApplyBean;
+import com.ygst.cenggeche.bean.B2.ApplyBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendlist.FriendListActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
@@ -30,7 +30,6 @@ import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -403,23 +402,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
         switch (event.getType()) {
             case invite_received://收到好友邀请
-                AppData.savaUnReadApplyCount(AppData.getUnReadApplyCount()+1);
-                mTvUnreadCount.setVisibility(View.VISIBLE);
-                mTvUnreadCount.setText("" + AppData.getUnReadApplyCount());
-                for(ApplyBean applyBean1:mListApplyBean){
-                    if(fromUsername.equals(applyBean1.getFromUsername())){
-                        mListApplyBean.remove(applyBean1);
-                    }
-                }
-                applyBean.setReason(reason);
-                applyBean.setMyUsername(AppData.getUserName());
-                applyBean.setFromUsername(fromUsername);
-                applyBean.setFromAppkey(fromAppkey);
-                applyBean.setFromNickname(userInfo.getNickname());
-                applyBean.setFromAvatar(userInfo.getAvatar());
-                applyBean.setIsAgree(3);
-                mListApplyBean.add(applyBean);
-                mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
+//                AppData.savaUnReadApplyCount(AppData.getUnReadApplyCount()+1);
+//                mTvUnreadCount.setVisibility(View.VISIBLE);
+//                mTvUnreadCount.setText("" + AppData.getUnReadApplyCount());
+//                for(ApplyBean applyBean1:mListApplyBean){
+//                    if(fromUsername.equals(applyBean1.getFromUsername())){
+//                        mListApplyBean.remove(applyBean1);
+//                    }
+//                }
+//                applyBean.setReason(reason);
+//                applyBean.setMyUsername(AppData.getUserName());
+//                applyBean.setFromUsername(fromUsername);
+//                applyBean.setFromAppkey(fromAppkey);
+//                applyBean.setFromNickname(userInfo.getNickname());
+//                applyBean.setFromAvatar(userInfo.getAvatar());
+//                applyBean.setIsAgree(3);
+//                mListApplyBean.add(applyBean);
+//                mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
                 break;
             case invite_accepted://对方接收了你的好友邀请
 //                for(int i=0;i<mListApplyBean.size();i++){

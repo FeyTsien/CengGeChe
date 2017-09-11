@@ -1,12 +1,14 @@
-package com.ygst.cenggeche.bean.B;
+package com.ygst.cenggeche.bean.B2;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/8/29.
  */
 
-public class ApplyBean {
+public class ApplyBean implements Serializable {
+
     /**
      * data : [{"applyInfo":"sdfa","fusername":"123456","id":4,"userPic":"jkljk","nickname":"ljkl","appkey":"","applyTime":"2017-08-30 14:44:16","myusername":"123","isAgree":3},{"applyInfo":"sdfa","fusername":"123456","id":1,"userPic":"jkljk","nickname":"ljkl","appkey":"","applyTime":"2017-08-30 11:28:51","myusername":"123","isAgree":3}]
      * code : 0000

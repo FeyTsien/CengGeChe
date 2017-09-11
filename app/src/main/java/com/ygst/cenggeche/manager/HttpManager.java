@@ -1,6 +1,8 @@
 package com.ygst.cenggeche.manager;
 
 
+import android.text.TextUtils;
+
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.interfaces.ProjectAPI;
@@ -71,7 +73,6 @@ public class HttpManager {
         if (AppData.getUid() != null) {
             uid = AppData.getUid();
         }
-
         String singStr = SignUtils.payParamsToString(map, false);
         String sign = RSAUtil.encryptByPublic(MyApplication.getContext(),singStr);
         Observable<String> observable = RetrofitUtil.getInstance().get(ProjectAPI.class).postMethod(deviceId, uid, sign, url, map);
@@ -137,6 +138,63 @@ public class HttpManager {
             responseBodyObservable = RetrofitUtil.getInstance().get(ProjectAPI.class).upLoadImg(url, body, assboy, dvice_id, os, userboy);
         }
         responseBodyObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
+    }
+
+
+
+    /**
+     * 上传多张图片以及文件
+     */
+
+    public void upLoadImgs(String url, String[] file, Observer<ResponseBody> observer, Map map) {
+//        RequestBody assboy = RequestBody.create(MediaType.parse("text/plain"), AppData.getToken());
+//        RequestBody userboy = RequestBody.create(MediaType.parse("text/plain"), AppData.getUserId());
+//        RequestBody dvice_id = RequestBody.create(MediaType.parse("text/plain"), MyApplication.getAndroidId());
+//        RequestBody os = RequestBody.create(MediaType.parse("text/plain"), "android");
+//        RequestBody id = RequestBody.create(MediaType.parse("text/plain"), MyApplication.getUpCarId());
+        String deviceId = "";
+        String uid = "";
+        if (AppData.getAndroidId() != null) {
+            deviceId = AppData.getAndroidId();
+        }
+        if (AppData.getUid() != null) {
+            uid = AppData.getUid();
+        }
+        String singStr = SignUtils.payParamsToString(map, false);
+        String sign = RSAUtil.encryptByPublic(MyApplication.getContext(),singStr);
+
+        MultipartBody.Part pic1body = null;
+        if (!TextUtils.isEmpty(file[0])) {
+            RequestBody requestbody = RequestBody.create(MediaType.parse("image/jpg"), new File(file[0]));
+            pic1body = MultipartBody.Part.createFormData("pic1", file[0], requestbody);
+        }
+        MultipartBody.Part pic2body = null;
+        if (!TextUtils.isEmpty(file[1])) {
+            RequestBody requestbody2 = RequestBody.create(MediaType.parse("image/jpg"), new File(file[1]));
+            pic2body = MultipartBody.Part.createFormData("pic2", file[1], requestbody2);
+        }
+        MultipartBody.Part pic3body = null;
+        if (!TextUtils.isEmpty(file[2])) {
+            RequestBody requestbody3 = RequestBody.create(MediaType.parse("image/jpg"), new File(file[2]));
+            pic3body = MultipartBody.Part.createFormData("pic3", file[2], requestbody3);
+        }
+        MultipartBody.Part pic4body = null;
+        if (!TextUtils.isEmpty(file[3])) {
+            RequestBody requestbody4 = RequestBody.create(MediaType.parse("image/jpg"), new File(file[3]));
+            pic4body = MultipartBody.Part.createFormData("pic4", file[3], requestbody4);
+        }
+        MultipartBody.Part pic5body = null;
+        if (!TextUtils.isEmpty(file[4])) {
+            RequestBody requestbody5 = RequestBody.create(MediaType.parse("image/jpg"), new File(file[4]));
+            pic5body = MultipartBody.Part.createFormData("pic5", file[4], requestbody5);
+        }
+        MultipartBody.Part pic6body = null;
+        if (!TextUtils.isEmpty(file[5])) {
+            RequestBody requestbody6 = RequestBody.create(MediaType.parse("image/jpg"), new File(file[5]));
+            pic6body = MultipartBody.Part.createFormData("pic6", file[5], requestbody6);
+        }
+        Observable<ResponseBody> observable = RetrofitUtil.getInstance().get(ProjectAPI.class).upLoadsImgs(deviceId, uid,sign,url,map, pic1body, pic2body, pic3body, pic4body, pic5body, pic6body);
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
 
@@ -31,7 +32,7 @@ public class BigPicActivity extends BaseActivity {
         ButterKnife.bind(this);
         String pic = getIntent().getStringExtra("pic_uri");
 //        Picasso.with(this).load(pic).placeholder(R.mipmap.icon_my_avatar).into(mIvBigPic);
-        Glide.with(this).load(pic).placeholder(R.mipmap.icon_my_avatar).into(mIvBigPic);
+        Glide.with(this).load(pic).placeholder(R.mipmap.icon_my_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).into(mIvBigPic);
     }
 
     @OnClick(R.id.iv_big_pic)

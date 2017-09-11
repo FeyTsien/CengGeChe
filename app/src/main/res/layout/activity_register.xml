@@ -79,7 +79,7 @@
             android:layout_marginBottom="40dp">
 
             <TextView
-                android:id="@+id/tv_tiaokuan"
+                android:id="@+id/tv_tishi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"

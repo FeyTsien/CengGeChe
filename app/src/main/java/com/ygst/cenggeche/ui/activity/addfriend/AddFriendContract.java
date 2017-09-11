@@ -16,15 +16,15 @@ public class AddFriendContract {
 
         void sendFail();
 
-        void yesAgreeSuccess(int position);
-
-        void yesAgreeError();
+//        void yesAgreeSuccess(int position);
+//
+//        void yesAgreeError();
     }
 
     interface Presenter extends BasePresenter<View> {
         void sendAddFriend(Map<String, String> map);
 
         //同意对方申请
-        void yesAgree(String myusername, String fusername, int position);
+//        void yesAgree(String myusername, String fusername, int position);
     }
 }
