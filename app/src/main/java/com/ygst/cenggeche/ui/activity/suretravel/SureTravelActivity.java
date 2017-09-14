@@ -23,10 +23,13 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.itinerary.ItineraryActivity;
+import com.ygst.cenggeche.ui.activity.releaseplan.surerelease.SureReleaseActivity;
+import com.ygst.cenggeche.ui.activity.travelinfo.TravelInfoActivity;
 import com.ygst.cenggeche.ui.view.PickValueView;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
@@ -39,6 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.umeng.analytics.pro.x.S;
 import static com.ygst.cenggeche.R.id.et_start_action;
 import static com.ygst.cenggeche.R.id.pickValue;
 
@@ -70,6 +74,12 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
     private LinearLayout mChooseLayout;
 
     private static  String  CHOOSETIME="今天-0时:0分";
+    private Intent intent;
+    private LinearLayout mLl_jumpLayout;
+    private String comment;
+    private String postedTime;
+    private String startAddr;
+    private String endAddr;
 
     @OnClick(R.id.iv_back)
     public void goBack(){
@@ -86,21 +96,32 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suretravel);
+
         initView();
         ButterKnife.bind(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        Intent intent = getIntent();
+        intent = getIntent();
         String cartype = intent.getStringExtra("CARTYPE");
         if(cartype.equals("1")){
             mUserdCarLayout.setVisibility(View.GONE);
+            mLl_jumpLayout.setVisibility(View.GONE);
+            mButReleasePlan.setVisibility(View.VISIBLE);
             isCengche=true;
         }else if(cartype.equals("2")){
             mUserdCarLayout.setVisibility(View.VISIBLE);
+            mLl_jumpLayout.setVisibility(View.VISIBLE);
             isCengche=false;
         }
+        endAddr = intent.getStringExtra("endAddr");
+        startAddr = intent.getStringExtra("startAddr");
+        postedTime = intent.getStringExtra("postedTime");
+        mEtStartAction.setText(startAddr);
+        mEtEndAction.setText(endAddr);
+        mEtUsercarTime.setText(postedTime);
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         mTvTitle.setText(AppData.getLocation());
-
+        mEtStartAction.setFocusable(false);
+        mEtEndAction.setFocusable(false);
 
     }
 
@@ -117,6 +138,9 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
         TextView mTvCancel = (TextView) findViewById(R.id.tv_cancel);
         mTvFinish = (TextView) findViewById(R.id.tv_finish);
         mChooseLayout = (LinearLayout) findViewById(R.id.ll_choosetime);
+        TextView mTvjump = (TextView) findViewById(R.id.tv_jump);
+
+        mLl_jumpLayout = (LinearLayout) findViewById(R.id.ll_jump);
 
         pickValueView = (PickValueView) findViewById(pickValue);
         pickValueView.setOnSelectedChangeListener(this);
@@ -124,8 +148,10 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
         mEtEndAction.setOnClickListener(this);
         mEtUsercarTime.setOnClickListener(this);
         mButReleasePlan.setOnClickListener(this);
+
         mTvCancel.setOnClickListener(this);
         mTvFinish.setOnClickListener(this);
+        mTvjump.setOnClickListener(this);
         pickValueView.setOnSelectedChangeListener(this);
 
         //输入框的监听事件
@@ -133,7 +159,10 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
         mEtEndAction.addTextChangedListener(textWatchEnd);
         mEtUsercarTime.addTextChangedListener(textWatchTime);
         mEtUsercarType.addTextChangedListener(textWatchType);
-
+        mEtUsercarType.setFocusable(false);
+        mEtStartAction.setFocusable(false);
+        mEtEndAction.setFocusable(false);
+        mEtUsercarTime.setFocusable(false);
         aMap = mMapView.getMap();
         aMap.setTrafficEnabled(true);// 显示实时交通状况
         //地图模式可选类型：MAP_TYPE_NORMAL,MAP_TYPE_SATELLITE,MAP_TYPE_NIGHT
@@ -168,7 +197,6 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
         switch (v.getId()){
 
             case R.id.et_usercar_time:
-
                 mChooseLayout.setVisibility(View.VISIBLE);
                 String left[]=new String[]{"今天","明天"};
                 String middle[]=new String[24];
@@ -196,9 +224,12 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
                     mStringStart=mEtStartAction.getText().toString().trim();
                     mStringTime=mEtUsercarTime.getText().toString().trim();
                     mStringType=mEtUsercarType.getText().toString().trim();
-
-                    CommonUtils.startActivity(SureTravelActivity.this, ItineraryActivity.class);
-                    Log.i(TAG,mStringEnd+""+mStringStart);
+                    Intent intents = new Intent(SureTravelActivity.this, SureReleaseActivity.class);
+                    intents.putExtra("ENDLOACTION",endAddr);
+                    intents.putExtra("STARTLOACTION",startAddr);
+                    intents.putExtra("TIME",postedTime);
+                    intents.putExtra("comment",comment);
+                    startActivity(intents);
                 }
                 break;
 
@@ -210,6 +241,20 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
                 String[] split = CHOOSETIME.split("-");
                 String time = getTime();
                 mEtUsercarTime.setText(time+" "+split[1]);
+                break;
+
+            case R.id.tv_jump:
+
+                mStringEnd=mEtEndAction.getText().toString().trim();
+                mStringStart=mEtStartAction.getText().toString().trim();
+                mStringTime=mEtUsercarTime.getText().toString().trim();
+                mStringType=mEtUsercarType.getText().toString().trim();
+                Intent intents = new Intent(SureTravelActivity.this, SureReleaseActivity.class);
+                intents.putExtra("ENDLOACTION",endAddr);
+                intents.putExtra("STARTLOACTION",startAddr);
+                intents.putExtra("TIME",postedTime);
+                intents.putExtra("comment",comment);
+                startActivity(intents);
                 break;
 
 
@@ -566,10 +611,11 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
     }
 
 
+    //时间滚轮 得到时间
     @Override
     public void onSelected(PickValueView view, Object leftValue, Object middleValue, Object rightValue) {
         CHOOSETIME =leftValue.toString()+"-"+middleValue.toString()+":"+rightValue.toString();
-        Log.i(TAG,leftValue.toString()+"-"+middleValue.toString()+":"+rightValue.toString());
+        LogUtils.i(TAG,leftValue.toString()+"-"+middleValue.toString()+":"+rightValue.toString());
 
     }
 }

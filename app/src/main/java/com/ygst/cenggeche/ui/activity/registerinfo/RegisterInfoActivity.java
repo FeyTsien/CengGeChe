@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.MD5Util;
 import com.ygst.cenggeche.utils.TextViewUtils;
@@ -22,6 +23,7 @@ import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UsernamePwdUtils;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +49,7 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
     private String pwd;
     private String confirmPWD;
     private int gender;
-
+    DatePickerDialog dateDialog;
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
@@ -72,64 +74,6 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         finish();
     }
 
-    /**
-     * 选择日期
-     */
-    @OnClick(R.id.tv_birthdate)
-    public void setBirthday() {
-        showDialog(DATE_DIALOG);
-    }
-
-    /**
-     * 选择性别--男
-     */
-    @OnClick(R.id.iv_boy)
-    public void onClickBoy() {
-        gender = 1;
-        mIvBoy.setImageResource(R.mipmap.icon_boy_radio);
-        mIvGirl.setImageResource(R.mipmap.icon_girl_radio_un);
-    }
-
-    /**
-     * 选择性别--女
-     */
-    @OnClick(R.id.iv_girl)
-    public void onClickGirl() {
-        gender = 0;
-        mIvBoy.setImageResource(R.mipmap.icon_boy_radio_un);
-        mIvGirl.setImageResource(R.mipmap.icon_girl_radio);
-    }
-
-    /**
-     * 提交注册信息
-     */
-    @OnClick(R.id.btn_submit)
-    public void registrationConfirm() {
-        nickname = mEtNickname.getText().toString();
-        pwd = TextViewUtils.getText(mEtPWD);
-        confirmPWD = TextViewUtils.getText(mEtConfirmPWD);
-        birthday = TextViewUtils.getText(mTvBirthdate);
-        if (TextUtils.isEmpty(nickname)) {
-            ToastUtil.show(this, "给自己取个狂拽酷帅的昵称吧");
-        } else if (UsernamePwdUtils.isPasswordStandard(pwd)) {
-            if (!pwd.equals(confirmPWD)) {
-                ToastUtil.show(this, "两次密码输入不一致");
-            } else {
-                String password = MD5Util.string2MD5(pwd);
-                Map<String, String> map = new HashMap<>();
-                map.put("username", userName);
-                map.put("password", password);
-                map.put("nickname", nickname);
-                map.put("birthday", birthday);
-                map.put("gender", gender + "");
-                map.put("registrationId", AppData.getRegistrationId());
-                mPresenter.registrationConfirm(map);
-            }
-        } else {
-            CommonUtils.showInfoDialog(this, "密码只能为6至18位的字母、数字、下划线等，特殊符号除外", "提示", "知道了", "", null, null);
-        }
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_register_info;
@@ -144,7 +88,7 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
 
     private void init() {
         mTvTitle.setText("注册信息");
-
+        mTvBirthdate.setText("选择出生日期");
         //也可获取当前日期
 //        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。
 //        t.setToNow(); // 取得系统时间。
@@ -156,14 +100,20 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
-        //显示当前日期
-        display();
+
+        dateDialog = new DatePickerDialog(this, mdateListener, mYear, mMonth, mDay);
+        dateDialog.setCancelable(true);
+        dateDialog.setCanceledOnTouchOutside(true);
+        DatePicker picker = dateDialog.getDatePicker();
+        Date date = new Date();//当前时间
+        long time = date.getTime();
+        picker.setMaxDate(time);//设置最大日期
+
         //性别选项默认为女
         onClickGirl();
         Intent intent = getIntent();
         userName = intent.getStringExtra("username");
     }
-
 
     private DatePickerDialog.OnDateSetListener mdateListener = new DatePickerDialog.OnDateSetListener() {
 
@@ -177,13 +127,76 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         }
     };
 
+    /**
+     * 选择日期
+     */
+    @OnClick(R.id.tv_birthdate)
+    public void setBirthday() {
+        showDialog(DATE_DIALOG);
+    }
+
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DATE_DIALOG:
-                return new DatePickerDialog(this, mdateListener, mYear, mMonth, mDay);
+                return dateDialog;
         }
         return null;
+    }
+
+
+    /**
+     * 选择性别--女
+     */
+    @OnClick(R.id.iv_girl)
+    public void onClickGirl() {
+        gender = 0;
+        mIvBoy.setImageResource(R.mipmap.icon_boy_radio_un);
+        mIvGirl.setImageResource(R.mipmap.icon_girl_radio);
+    }
+
+    /**
+     * 选择性别--男
+     */
+    @OnClick(R.id.iv_boy)
+    public void onClickBoy() {
+        gender = 1;
+        mIvBoy.setImageResource(R.mipmap.icon_boy_radio);
+        mIvGirl.setImageResource(R.mipmap.icon_girl_radio_un);
+    }
+
+
+    /**
+     * 提交注册信息
+     */
+    @OnClick(R.id.btn_submit)
+    public void registrationConfirm() {
+        nickname = mEtNickname.getText().toString();
+        pwd = TextViewUtils.getText(mEtPWD);
+        confirmPWD = TextViewUtils.getText(mEtConfirmPWD);
+        birthday = TextViewUtils.getText(mTvBirthdate);
+
+        if (TextUtils.isEmpty(nickname)) {
+            CommonUtils.showInfoDialog(this, "给自己取个狂拽酷帅的昵称吧", "提示", "知道了", "", null, null);
+        } else if (birthday.equals("选择出生日期")) {
+            CommonUtils.showInfoDialog(this, "请选择出生日期", "提示", "知道了", "", null, null);
+        } else if (UsernamePwdUtils.isPasswordStandard(pwd)) {
+            if (!pwd.equals(confirmPWD)) {
+                CommonUtils.showInfoDialog(this, "两次密码输入不一致", "提示", "知道了", "", null, null);
+            } else {
+                String password = MD5Util.string2MD5(pwd);
+                Map<String, String> map = new HashMap<>();
+                map.put("username", userName);
+                map.put("password", password);
+                map.put("nickname", nickname);
+                map.put("birthday", birthday);
+                map.put("gender", gender + "");
+                map.put("registrationId", AppData.getRegistrationId());
+                mPresenter.registrationConfirm(map);
+            }
+        } else {
+            CommonUtils.showInfoDialog(this, "密码只能为8至16位的字母和数字的组合", "提示", "知道了", "", null, null);
+        }
     }
 
     /**
@@ -203,6 +216,7 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
 //        startActivity(intent);
         finish();
         ToastUtil.show(this, "欢迎您的加入");
+        LoginActivity.instance.setUsernameAndPwd(userName,pwd);
     }
 
     @Override

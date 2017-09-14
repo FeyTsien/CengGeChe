@@ -29,6 +29,12 @@ public class MyWebViewClient extends WebViewClient {
     @SuppressWarnings("deprecation")
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        String finishUrl1 = "https://www.1yongche.com/cenggeche/index.html";
+        String finishUrl2 = "https://www.1yongche.com/cenggeche/pages/settingup/settingup.html";
+        if(url.startsWith(finishUrl1)||url.startsWith(finishUrl2)){
+            mActivity.finish();
+            return false;
+        }
         // 优酷视频跳转浏览器播放
         if (url.startsWith("http://v.youku.com/")) {
             Intent intent = new Intent();
@@ -39,7 +45,6 @@ public class MyWebViewClient extends WebViewClient {
             intent.setData(content_url);
             mActivity.startActivity(intent);
             return true;
-
             // 电话、短信、邮箱
         } else if (url.startsWith(WebView.SCHEME_TEL) || url.startsWith("sms:") || url.startsWith(WebView.SCHEME_MAILTO)) {
             try {

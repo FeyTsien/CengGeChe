@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_toolbar_cengche"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:paddingTop="20dp"
+        android:background="@color/colorTheme"
+        app:contentInsetStart="0.0dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <Button
-            android:id="@+id/btn_cengche"
-            android:layout_width="83dp"
-            android:layout_height="29dp"
-            android:background="@drawable/button_cengche1"
-            android:textColor="@color/colorTheme"
-            android:text="蹭车"
-            android:textSize="15dp" />
+        <RelativeLayout
+            android:id="@+id/rl_toolbar_cengche"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/btn_shaoren"
-            android:layout_width="83dp"
-            android:layout_height="29dp"
-            android:textColor="@color/white"
-            android:background="@drawable/button_shaoren2"
-            android:text="捎人"
-            android:textSize="15dp" />
-    </LinearLayout>
-</RelativeLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <Button
+                    android:id="@+id/btn_cengche"
+                    android:layout_width="83dp"
+                    android:layout_height="29dp"
+                    android:background="@drawable/button_cengche1"
+                    android:text="乘客"
+                    android:textColor="@color/colorTheme"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/btn_shaoren"
+                    android:layout_width="83dp"
+                    android:layout_height="29dp"
+                    android:background="@drawable/button_shaoren2"
+                    android:text="车主"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+</LinearLayout>

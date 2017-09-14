@@ -6,29 +6,32 @@
 
     <ImageView
         android:id="@+id/iv_img"
-        android:layout_width="33dp"
-        android:layout_height="33dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_above="@+id/tv_name"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:id="@+id/tv_all_unread_count"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_alignRight="@+id/iv_img"
-        android:layout_alignTop="@+id/iv_message"
+        android:layout_alignTop="@+id/iv_img"
         android:background="@mipmap/icon_circle_red"
         android:gravity="center"
         android:text="99"
-        android:visibility="gone"
         android:textColor="@color/white"
+        android:visibility="gone"
         android:textSize="10sp" />
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_img"
-        android:textColor="@color/selector_theme"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/selector_theme"
         android:textSize="10sp" />
 </RelativeLayout>

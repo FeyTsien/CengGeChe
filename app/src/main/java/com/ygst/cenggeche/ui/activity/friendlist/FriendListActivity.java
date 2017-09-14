@@ -158,7 +158,6 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
 
     @Override
     public void getFriendListSuccess(FriendListBean friendListBean) {
-        ToastUtil.show(this, "获取好友成功");
         mListData = friendListBean.getData();
         setListView(mListData);
     }

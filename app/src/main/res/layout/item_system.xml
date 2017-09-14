@@ -84,6 +84,7 @@
                 android:layout_height="16dp"
                 android:layout_alignParentRight="true"
                 android:gravity="center"
+                android:visibility="gone"
                 android:text="99"
                 android:textColor="@color/white"
                 android:background="@mipmap/icon_circle_red"

@@ -11,12 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
 import com.ygst.cenggeche.ui.activity.friendlist.FriendListActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity1;
@@ -44,9 +43,14 @@ import cn.jpush.im.android.api.model.UserInfo;
 
 public class MessageFragment extends MVPBaseFragment<MessageContract.View, MessagePresenter> implements MessageContract.View {
     private String TAG = "MessageFragment";
+    public static MessageFragment instance = null;
     private Activity mContext;
     private View mRootView;
     List<Conversation> mListConversation;
+
+    TextView mTvUnReadApplyCount;
+    TextView mTvShowFriendList;
+
 
     private SwipeMenuListViewAdapter mSwipeMenuListViewAdapter;
     private SwipeMenuListView mListView;
@@ -87,9 +91,10 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
     public void onCreate(@Nullable Bundle savedInstanceState) {
         LogUtils.i(TAG, "------------onCreate");
         //生命周期2：onCreate()；
-        super.onCreate(savedInstanceState);
         JMessageClient.registerEventReceiver(this);
+        instance = this;
         mContext = this.getActivity();
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -115,24 +120,12 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
         JMessageClient.unRegisterEventReceiver(this);
     }
 
-    private EditText mEditTextTargetId;
-    private Button mBtnGotoChatting;
-
     private void initView() {
 
-        mEditTextTargetId = (EditText) mRootView.findViewById(R.id.et_target_id);
-        mBtnGotoChatting = (Button) mRootView.findViewById(R.id.btn_goto_chatting);
-        mBtnGotoChatting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent();
-                intent.putExtra(JMessageUtils.TARGET_USERNAME, mEditTextTargetId.getText().toString());
-                intent.setClass(mContext, MyChatActivity.class);
-                startActivity(intent);
-            }
-        });
+        mTvUnReadApplyCount = (TextView)mRootView.findViewById(R.id.tv_unread_count);
         //进入我的蹭友
-        ((TextView)mRootView.findViewById(R.id.tv_show_friend_list)).setOnClickListener(new View.OnClickListener() {
+        mTvShowFriendList = (TextView)mRootView.findViewById(R.id.tv_show_friend_list);
+        mTvShowFriendList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CommonUtils.startActivity(getActivity(), FriendListActivity.class);
@@ -210,6 +203,11 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
 
 
     private void initConversationListView(){
+        if(AppData.getUnReadApplyCount()>0){
+            showUnReadApplyCount();
+        }else{
+            mTvUnReadApplyCount.setVisibility(View.GONE);
+        }
         mListConversation = JMessageClient.getConversationList();
         mSwipeMenuListViewAdapter = new SwipeMenuListViewAdapter(getActivity(),mListConversation);
         if (mListConversation != null) {
@@ -227,6 +225,11 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
         MainActivity1 mainActivity = (MainActivity1) getActivity();
         mainActivity.showAllUnReadMsgCount();
         mSwipeMenuListViewAdapter.notifyDataSetChanged();
+    }
+
+    public void showUnReadApplyCount(){
+        mTvUnReadApplyCount.setVisibility(View.VISIBLE);
+        mTvUnReadApplyCount.setText(""+AppData.getUnReadApplyCount());
     }
 
     @Override

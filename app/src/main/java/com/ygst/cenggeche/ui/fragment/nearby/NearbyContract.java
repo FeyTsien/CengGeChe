@@ -1,5 +1,6 @@
 package com.ygst.cenggeche.ui.fragment.nearby;
 
+import com.ygst.cenggeche.bean.NearByBean;
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -11,7 +12,7 @@ import com.ygst.cenggeche.mvp.BaseView;
 public class NearbyContract {
     interface View extends BaseView {
 
-        void getnearbySuccess();
+        void getnearbySuccess(NearByBean nearbybean);
         void getnearbyFail(String msg);
         
     }

@@ -71,13 +71,14 @@
             android:textSize="14sp"
             android:layout_gravity="center_vertical"/>
 
-        <Button
+        <TextView
             android:id="@+id/btn_yes"
             android:layout_width="40dp"
             android:layout_height="25dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/button_bg_yes"
             android:text="同意"
+            android:gravity="center"
             android:layout_gravity="center_vertical"
             android:textColor="@color/white"
             android:textSize="12sp"/>

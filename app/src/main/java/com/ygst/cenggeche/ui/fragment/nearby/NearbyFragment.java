@@ -2,6 +2,7 @@ package com.ygst.cenggeche.ui.fragment.nearby;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,16 +18,22 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.bean.NearByBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
+import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.view.recyclerview.PullBaseView;
 import com.ygst.cenggeche.ui.view.recyclerview.PullRecyclerView;
+import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 
+import static android.R.id.list;
 
 
 /**
@@ -41,39 +48,37 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
     private View mNearByView;
     private String TAG=this.getClass().getSimpleName();
     private PullRecyclerView recyclerView;
-    private GridView mGridView;
     private MyAdapter mNearAdapter;
     private int PAGE=1;
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
     private double LAT,ACC;
+    private ArrayList<NearByBean.DataBean> mList;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mNearByView = inflater.inflate(R.layout.fragment_nearby, container, false);
         ButterKnife.bind(this,mNearByView);
         getPermission();
+        LogUtils.i(TAG,"附近人界面");
+        mPresenter.getnearBy(LAT+"",ACC+"",PAGE);
+        mList = new ArrayList<>();
+
+        recyclerView = (PullRecyclerView) mNearByView.findViewWithTag("carport_recyclerView");
+//        recyclerView = (PullRecyclerView) mNearByView.findViewById(R.id.nearby_gridview);
+        recyclerView.setOnHeaderRefreshListener(this);//设置下拉监听
+        recyclerView.setOnFooterRefreshListener(this);//设置上拉监听
+        recyclerView.setCanPullDown(true);//设置是否可下拉
+        recyclerView.setCanPullUp(true);
+
         initLocation();
         startLocation();
-        ArrayList<String> list = new ArrayList<>();
 
-        for (int i=0;i<20;i++)
-            list.add("2222");
-        mPresenter.getnearBy("116.230000","39.5668264",PAGE);
-        recyclerView = (PullRecyclerView) mNearByView.findViewWithTag("carport_recyclerView");
-        mNearAdapter = new MyAdapter(getActivity(),list);
-        recyclerView.setAdapter(mNearAdapter);
 
         GridLayoutManager mgr = new GridLayoutManager(getActivity(),2);
         recyclerView.setLayoutManager(mgr);
-        recyclerView.setOnHeaderRefreshListener(this);//设置下拉监听
-        recyclerView.setOnFooterRefreshListener(this);//设置上拉监听
 
-          mNearAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
-              @Override
-              public void onItemClick(View view, int position) {
-                  ToastUtil.show(getActivity(),"点击了"+position);
-              }
-          });
+
 
         return mNearByView;
     }
@@ -81,8 +86,20 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
 
 
     @Override
-    public void getnearbySuccess() {
+    public void getnearbySuccess(NearByBean nearbybean) {
+        mList.addAll(nearbybean.getData());
+        mNearAdapter = new MyAdapter(getActivity(),mList);
+        recyclerView.setAdapter(mNearAdapter);
 
+        mNearAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent=new Intent(getActivity(),FriendInfoActivity.class);
+                intent.putExtra(JMessageUtils.TARGET_USERNAME,mList.get(position).getUsername());
+                startActivity(intent);
+
+            }
+        });
     }
 
     @Override
@@ -112,7 +129,7 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
                 mPresenter.getnearBy("116.230000","39.5668264",PAGE);
                 recyclerView.onHeaderRefreshComplete();
             }
-        }, 1000);
+        }, 3000);
 
     }
 
@@ -198,7 +215,7 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
                 //解析定位结果，
                 String result = sb.toString();
                 Log.i(TAG,result+"===");
-
+                mPresenter.getnearBy(location.getLongitude()+"",location.getLatitude()+"",PAGE);
             } else {
 
             }

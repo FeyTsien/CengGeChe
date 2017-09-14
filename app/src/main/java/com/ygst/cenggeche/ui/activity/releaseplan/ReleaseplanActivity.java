@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -57,8 +58,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.umeng.analytics.pro.x.l;
-import static com.ygst.cenggeche.R.id.et_start_action;
+
 import static com.ygst.cenggeche.R.id.pickValue;
 
 /**
@@ -82,7 +82,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
     private EditText mEtUsercarType;
     private LinearLayout mUserdCarLayout;
     private String mStringEnd,mStringStart,mStringType,mStringTime;
-    private boolean isStart,isEnd,isType,isTime,isCengche;
+    private boolean isStart,isEnd,isType,isTime,isCengche,isCan;
     private String TAG="ReleaseplanActivity";
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
@@ -93,7 +93,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
     private PickValueView pickValueView;
     private TextView mTvCancel;
     private TextView mTvFinish;
-    private static  String  CHOOSETIME="今天-0时:0分";
+    private static  String  CHOOSETIME="今天-0:0";
 
     /**
      * 返回
@@ -105,7 +105,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
 
     @OnClick(R.id.tv_title)
     public void changecity(){
-       CommonUtils.startActivity(this, ChangeCityActivity.class);
+//       CommonUtils.startActivity(this, ChangeCityActivity.class);
     }
 
     @Override
@@ -122,6 +122,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mTvTitle.setText(AppData.getLocation());
+//        mPresenter.getuserStatus();
     }
 
     //初始化控件
@@ -162,6 +163,11 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         mEtUsercarTime.addTextChangedListener(textWatchTime);
         mEtUsercarType.addTextChangedListener(textWatchType);
         mEtUsercarType.setFocusable(false);
+        mEtStartAction.setFocusable(false);
+        mEtEndAction.setFocusable(false);
+        mEtUsercarTime.setFocusable(false);
+
+
         isCengche=true;
         initLocation();
         startLocation();
@@ -200,7 +206,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
     */
 
     public boolean judgeIsNull(){
-            Log.i(TAG,isTime+"--"+isType+isCengche+isEnd);
+        Log.i(TAG,isTime+"--"+isType+isCengche+isEnd);
 
         //蹭车是 车辆信息隐藏
         if(isCengche){
@@ -237,12 +243,21 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                 mTvCengche.setTextColor(Color.parseColor("#8064a1"));
                 mTvShaoren.setTextColor(Color.BLACK);
                 isCengche=true;
+
+                //输入框不为空 显示按妞
+                if(!TextUtils.isEmpty(mEtStartAction.getText().toString())&&!TextUtils.isEmpty(mEtEndAction.getText().toString())&&!TextUtils.isEmpty(mEtUsercarTime.getText().toString())){
+                    mButReleasePlan.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.tv_shaoren:
                 mUserdCarLayout.setVisibility(View.VISIBLE);
                 mTvShaoren.setTextColor(Color.parseColor("#8064a1"));
                 mTvCengche.setTextColor(Color.BLACK);
                 isCengche=false;
+                //输入框不为空 显示按妞
+                if(!TextUtils.isEmpty(mEtStartAction.getText().toString())&&!TextUtils.isEmpty(mEtEndAction.getText().toString())&&!TextUtils.isEmpty(mEtUsercarTime.getText().toString())){
+                    mButReleasePlan.setVisibility(View.VISIBLE);
+                }
                 judgeIsNull();
                 break;
             case R.id.et_usercar_time:
@@ -261,24 +276,28 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                 pickValueView.setValueData(left,left[0],middle,middle[0],right,right[0]);
                 break;
             case R.id.but_release_plan:
-                if(judgeIsNull()){
-                    mStringEnd=mEtEndAction.getText().toString().trim();
-                    mStringStart=mEtStartAction.getText().toString().trim();
-                    mStringTime=mEtUsercarTime.getText().toString().trim();
-                    mStringType=mEtUsercarType.getText().toString().trim();
-                    GeocodeSearch search=new GeocodeSearch(this);
-                    search.setOnGeocodeSearchListener(this);
-                    GeocodeQuery qurey=new GeocodeQuery(mStringEnd,null);
-                    search.getFromLocationNameAsyn(qurey);
-//                    getLatlon();
-//                    CommonUtils.startActivity(this,SureReleaseActivity.class);
-                    Log.i(TAG,mStringEnd+""+mStringStart);
-                    if(isCengche){
-                        mPresenter.releaseStroke(1+"",mStringStart,mStringEnd,mStringTime,LAT+","+ACC,"192.11311,76.136344",mStringType,"白",AppData.getUid());
-                    }else{
-                        mPresenter.releaseStroke(2+"",mStringStart,mStringEnd,mStringTime,LAT+","+ACC,"192.11311,76.136344",mStringType,"白",AppData.getUid());
+                //f发布的次数是否到期
+
+                    if(judgeIsNull()){
+                        mStringEnd=mEtEndAction.getText().toString().trim();
+                        mStringStart=mEtStartAction.getText().toString().trim();
+                        mStringTime=mEtUsercarTime.getText().toString().trim();
+                        mStringType=mEtUsercarType.getText().toString().trim();
+
+                        Log.i(TAG,mStringEnd+""+mStringStart);
+                        Intent intent=new Intent(this,SureReleaseActivity.class);
+                        intent.putExtra("STARTLOACTION",mStringStart);
+                        intent.putExtra("ENDLOACTION",mStringEnd);
+                        intent.putExtra("TIME",mStringTime);
+                        if(isCengche){
+                            intent.putExtra("STATEUSER",1);
+                        }else{
+                            intent.putExtra("STATEUSER",2);
+                            intent.putExtra("TYPE",mStringType);
+                        }
+                        startActivity(intent);
+                        finish();
                     }
-              }
                 break;
             case R.id.et_start_action:
                 startActivityForResult(new Intent(ReleaseplanActivity.this, RetrievalActivity.class),  1);
@@ -297,6 +316,11 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
 
                 String[] split = CHOOSETIME.split("-");
                 String time = getTime();
+                Log.i(TAG,split[1]);
+                split[1].replaceAll("时","");
+                split[1].replaceAll("分","");
+
+                Log.i(TAG,"=="+split[1]);
                 mEtUsercarTime.setText(time+" "+split[1]);
                 break;
 
@@ -344,6 +368,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
 
 
     }
+
 
     /*
    输入框的监听
@@ -510,14 +535,14 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                     sb.append("兴趣点    : " + location.getPoiName() + "\n");
                     //定位完成的时间
                     //绘制marker
-                    if(location.getCity()!=null) {
-                        AppData.saveLocation(location.getCity());
-                        mEtStartAction.setText(location.getAddress());
-                    } else {
-                        AppData.saveLocation("北京");
-                        mEtStartAction.setText(location.getAddress());
-
-                    }
+//                    if(location.getCity()!=null) {
+//                        AppData.saveLocation(location.getCity());
+//                        mEtStartAction.setText(location.getAddress());
+//                    } else {
+//                        AppData.saveLocation("北京");
+//                        mEtStartAction.setText(location.getAddress());
+//
+//                    }
 
                 } else {
                     //定位失败
@@ -666,26 +691,27 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
 
     @Override
     public void releaseSuccess(AllStrokeBean allStrokeBean) {
-        Intent intent=new Intent(this,SureReleaseActivity.class);
-        int id = allStrokeBean.getData().get(0).getId();
-        intent.putExtra("STARTLOACTION",mStringStart);
-        intent.putExtra("ENDLOACTION",mStringEnd);
-        intent.putExtra("TIME",mStringTime);
-        intent.putExtra("ID",id+"");
-        if(isCengche){
-        intent.putExtra("STATEUSER",1);
-        }else{
-            intent.putExtra("STATEUSER",2);
-            intent.putExtra("TYPE",mStringType);
-
-        }
-        startActivity(intent);
+//        Intent intent=new Intent(this,SureReleaseActivity.class);
+//        int id = allStrokeBean.getData().get(0).getId();
+//        intent.putExtra("STARTLOACTION",mStringStart);
+//        intent.putExtra("ENDLOACTION",mStringEnd);
+//        intent.putExtra("TIME",mStringTime);
+//        intent.putExtra("ID",id+"");
+//        if(isCengche){
+//        intent.putExtra("STATEUSER",1);
+//        }else{
+//            intent.putExtra("STATEUSER",2);
+//            intent.putExtra("TYPE",mStringType);
+//
+//        }
+//        startActivity(intent);
     }
 
     @Override
     public void releaseFail(String fail) {
         ToastUtil.show(ReleaseplanActivity.this,fail);
     }
+
 
 
 
@@ -702,7 +728,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                 double dimensionality = address.getLatLonPoint().getLatitude();
                 double longitude = address.getLatLonPoint().getLongitude();
                 LatLng latlng = new LatLng(dimensionality, longitude);
-            Log.i(TAG,dimensionality+"=="+longitude);
+                Log.i(TAG,dimensionality+"=="+longitude);
 
                 aMap.animateCamera(CameraUpdateFactory
                         .newLatLngZoom(latlng, 15));
@@ -715,50 +741,53 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
 
     @Override
     public void onSelected(PickValueView view, Object leftValue, Object middleValue, Object rightValue) {
-            CHOOSETIME =leftValue.toString()+"-"+middleValue.toString()+":"+rightValue.toString();
+        String hour = middleValue.toString().substring(0, middleValue.toString().length() - 1);
+        String minu = rightValue.toString().substring(0, rightValue.toString().length() - 1);
+
+        CHOOSETIME =leftValue.toString()+"-"+hour+":"+minu;
         Log.i(TAG,leftValue.toString()+"-"+middleValue.toString()+":"+rightValue.toString());
 
     }
 
 
-    private void getLatlon(String cityName){
-
-        GeocodeSearch geocodeSearch=new GeocodeSearch(this);
-        geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
-            @Override
-            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
-
-            }
-
-            @Override
-            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
-
-                if (i==1000){
-                    if (geocodeResult!=null && geocodeResult.getGeocodeAddressList()!=null &&
-                            geocodeResult.getGeocodeAddressList().size()>0){
-
-                        GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
-                        double latitude = geocodeAddress.getLatLonPoint().getLatitude();//纬度
-                        double longititude = geocodeAddress.getLatLonPoint().getLongitude();//经度
-                        String adcode= geocodeAddress.getAdcode();//区域编码
-
-
-                        Log.e("地理编码", geocodeAddress.getAdcode()+"");
-                        Log.e("纬度latitude",latitude+"");
-                        Log.e("经度longititude",longititude+"");
-
-                    }else {
-//                        ToastUtil.show(this,"地址名出错");
-                    }
-                }
-            }
-        });
-
-        GeocodeQuery geocodeQuery=new GeocodeQuery(cityName.trim(),"29");
-        geocodeSearch.getFromLocationNameAsyn(geocodeQuery);
-
-
-    }
+//    private void getLatlon(String cityName){
+//
+//        GeocodeSearch geocodeSearch=new GeocodeSearch(this);
+//        geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+//            @Override
+//            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+//
+//            }
+//
+//            @Override
+//            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+//
+//                if (i==1000){
+//                    if (geocodeResult!=null && geocodeResult.getGeocodeAddressList()!=null &&
+//                            geocodeResult.getGeocodeAddressList().size()>0){
+//
+//                        GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
+//                        double latitude = geocodeAddress.getLatLonPoint().getLatitude();//纬度
+//                        double longititude = geocodeAddress.getLatLonPoint().getLongitude();//经度
+//                        String adcode= geocodeAddress.getAdcode();//区域编码
+//
+//
+//                        Log.e("地理编码", geocodeAddress.getAdcode()+"");
+//                        Log.e("纬度latitude",latitude+"");
+//                        Log.e("经度longititude",longititude+"");
+//
+//                    }else {
+////                        ToastUtil.show(this,"地址名出错");
+//                    }
+//                }
+//            }
+//        });
+//
+//        GeocodeQuery geocodeQuery=new GeocodeQuery(cityName.trim(),"29");
+//        geocodeSearch.getFromLocationNameAsyn(geocodeQuery);
+//
+//
+//    }
 
 
 

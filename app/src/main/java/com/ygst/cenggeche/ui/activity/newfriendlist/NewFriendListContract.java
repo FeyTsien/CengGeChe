@@ -17,7 +17,7 @@ public class NewFriendListContract {
         void deleteApplyDateError();
         void noAgreeSuccess();
         void noAgreeError();
-        void yesAgreeSuccess();
+        void yesAgreeSuccess(ApplyBean applyBean);
         void yesAgreeError();
     }
 

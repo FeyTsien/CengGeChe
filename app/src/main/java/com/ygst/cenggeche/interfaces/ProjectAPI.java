@@ -55,14 +55,16 @@ public interface ProjectAPI {
     Observable<ResponseBody> upLoadsImgs(@Header("deviceId")String deviceId,@Header("uid")String uid,@Header("sign")String sign,@Url String url, @PartMap Map<String, RequestBody> params, @Part MultipartBody.Part photo1, @Part MultipartBody.Part photo2, @Part MultipartBody.Part photo3, @Part MultipartBody.Part photo4, @Part MultipartBody.Part photo5, @Part MultipartBody.Part photo6);
 
     // 带参数上传单张图片
+    @Headers({"os:android"})
     @Multipart
     @POST
-    Observable<ResponseBody> upLoadImg(@Url String url, @Part MultipartBody.Part photo, @Part("accessToken") RequestBody accessToken, @Part("deviceId") RequestBody deviceId, @Part("os") RequestBody os, @Part("userId") RequestBody userId, @PartMap Map<String, RequestBody> params);
+    Observable<ResponseBody> upLoadImg(@Header("deviceId")String deviceId,@Header("uid")String uid,@Header("sign")String sign,@Url String url, @Part MultipartBody.Part photo, @PartMap Map<String, String> params);
 
     // 上传单张图片
+    @Headers({"os:android"})
     @Multipart
     @POST
-    Observable<ResponseBody> upLoadImg(@Url String url, @Part MultipartBody.Part photo, @Part("accessToken") RequestBody accessToken, @Part("deviceId") RequestBody deviceId, @Part("os") RequestBody os, @Part("userId") RequestBody userId);
+    Observable<ResponseBody> upLoadImg(@Header("deviceId")String deviceId,@Header("uid")String uid,@Header("sign")String sign,@Url String url, @Part MultipartBody.Part photo);
 
     //刷新token
     @FormUrlEncoded

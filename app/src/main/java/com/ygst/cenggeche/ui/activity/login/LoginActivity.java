@@ -19,6 +19,7 @@ import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.bean.LoginBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.ui.activity.register.RegisterActivity;
 import com.ygst.cenggeche.ui.widget.TimeCount;
 import com.ygst.cenggeche.utils.CommonUtils;
@@ -44,9 +45,13 @@ import cn.jpush.im.api.BasicCallback;
 
 public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPresenter> implements LoginContract.View {
 
+    public static LoginActivity instance;
+    private final static int GO_REGISTER = 1101;
     private static String TAG = "LoginActivity";
     private String checkType = LoginBean.PWD_TO_LOGIN;
     private TimeCount timeCount;
+    String username;
+    String pwdOrCode;
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
@@ -67,6 +72,37 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     @OnClick(R.id.iv_back)
     public void goBack() {
         finish();
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_login;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        instance = this;
+        ButterKnife.bind(this);
+        //找控件
+        initView();
+    }
+
+    private void initView() {
+        mTvTitle.setText("登录");
+        Intent intent = getIntent();
+        String logOut = intent.getStringExtra(MainActivity1.LOGOUT_REASON);
+        if(logOut!=null&&logOut.equals("LogOut")){
+            mEtUserName.setText(AppData.getUserName());
+            CommonUtils.showInfoDialog(this, "您的账号已在其他地点登录", "提示", "知道了", "",null,null);
+        }
+        timeCount = new TimeCount(60000, 1000);
+        timeCount.setButton(mBtnGetCode);
+    }
+
+    public void setUsernameAndPwd(String username,String pwd){
+        mEtUserName.setText(username);
+        mEtPwdCode.setText(pwd);
     }
 
     /**
@@ -101,8 +137,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      */
     @OnClick(R.id.btn_getCode)
     public void getCode() {
-        String username = TextViewUtils.getText(mEtUserName);
-        final String pwdOrCode = TextViewUtils.getText(mEtPwdCode);
+        username = TextViewUtils.getText(mEtUserName);
         if (!TextUtils.isEmpty(username)) {
             if (CommonUtils.isUserNumber(username)) {
                 try {
@@ -113,11 +148,9 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                 }
             } else {
                 CommonUtils.showInfoDialog(this, "请输入正确的手机号码");
-//                ToastUtil.show(this, "请输入正确的手机号码");
             }
         } else {
-//            CommonUtils.showInfoDialog(this, "请输入您的手机号码");
-            ToastUtil.show(this, "请输入您的手机号码");
+            CommonUtils.showInfoDialog(this, "请输入您的手机号码");
         }
     }
 
@@ -126,8 +159,8 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      */
     @OnClick(R.id.btn_login)
     public void login() {
-        final String username = TextViewUtils.getText(mEtUserName);
-        final String pwdOrCode = TextViewUtils.getText(mEtPwdCode);
+        username = TextViewUtils.getText(mEtUserName);
+        pwdOrCode = TextViewUtils.getText(mEtPwdCode);
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(pwdOrCode)) {
             //先校验账号是否被注册,成功后在获取验证码
             try {
@@ -137,11 +170,11 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             }
         } else {
             if (checkType.equals(LoginBean.PWD_TO_LOGIN)) {
-//                CommonUtils.showInfoDialog(this, "手机号码或密码不能为空");
-                ToastUtil.show(this, "手机号码或密码不能为空");
+                CommonUtils.showInfoDialog(this, "手机号码或密码不能为空");
+//                ToastUtil.show(this, "手机号码或密码不能为空");
             } else {
-//                CommonUtils.showInfoDialog(this, "手机号码或验证码不能为空");
-                ToastUtil.show(this, "手机号码或验证码不能为空");
+                CommonUtils.showInfoDialog(this, "手机号码或验证码不能为空");
+//                ToastUtil.show(this, "手机号码或验证码不能为空");
             }
         }
 
@@ -154,40 +187,19 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
     public void register() {
         timeCount.cancel();
         timeCount.onFinish();
-        Intent intent = new Intent(this,RegisterActivity.class);
-        intent.putExtra(RegisterActivity.TYPE,"register");
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra(RegisterActivity.TYPE, "register");
         startActivity(intent);
     }
 
     /**
-     *忘记密码
+     * 忘记密码
      */
     @OnClick(R.id.tv_forgot_pwd)
-    public void resetPwd(){
-        Intent intent = new Intent(this,RegisterActivity.class);
-        intent.putExtra(RegisterActivity.TYPE,"resetPwd");
+    public void resetPwd() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra(RegisterActivity.TYPE, "resetPwd");
         startActivity(intent);
-    }
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_login;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-        //找控件
-        initView();
-    }
-
-    private void initView() {
-        mTvTitle.setText("登录");
-        Intent intent = getIntent();
-        mEtUserName.setText(intent.getStringExtra("username"));
-        mEtPwdCode.setText(intent.getStringExtra("password"));
-        timeCount = new TimeCount(60000, 1000);
-        timeCount.setButton(mBtnGetCode);
     }
 
 
@@ -196,10 +208,12 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
      */
     @Override
     public void unregistered() {
-        CommonUtils.showInfoDialog(this, "账号未注册，请先注册", "小蹭提示", "前往", "不去", new DialogInterface.OnClickListener() {
+        CommonUtils.showInfoDialog(this, "账号未注册，请先注册", "提示", "前往", "不去", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                CommonUtils.startActivity(LoginActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent.putExtra(RegisterActivity.TYPE, "register");
+                startActivity(intent);
             }
         }, null);
     }
@@ -276,6 +290,6 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
 
     @Override
     public void loginError() {
-        LogUtils.i(TAG,"登录失败了");
+        LogUtils.i(TAG, "登录失败了");
     }
 }

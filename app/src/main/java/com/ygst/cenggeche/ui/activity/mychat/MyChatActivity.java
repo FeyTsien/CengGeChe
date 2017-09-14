@@ -44,6 +44,7 @@ import com.lqr.emoji.IEmotionSelectedListener;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.addfriend.AddFriendActivity;
+import com.ygst.cenggeche.ui.activity.friendoperate.FriendOperateActivity;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.TextViewUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
@@ -87,6 +88,9 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
     private String TAG = "MyChatActivity";
 
+    public static final int GO_FRIEND_OPERATE = 110;
+    //目标所处自己好友名单下的状态
+    private int isBlack;
     private static final String MEMBERS_COUNT = "membersCount";
     private static final String GROUP_NAME = "groupName";
     private static final String MsgIDs = "msgIDs";
@@ -112,6 +116,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
     private boolean mShowSoftInput = false;
     private String targetUsername;
     private String targetAppKey;
+    private String targetName;
     private boolean isFriend;
     private long mGroupId;
     private String mGroupName;
@@ -262,7 +267,7 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
         Intent intent = getIntent();
         targetUsername = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
         targetAppKey = intent.getStringExtra(JMessageUtils.TARGET_APP_KEY);
-        isFriend = intent.getBooleanExtra(JMessageUtils.IS_FRIEND,false);
+        isFriend = intent.getBooleanExtra(JMessageUtils.IS_FRIEND, false);
         if (!TextUtils.isEmpty(targetUsername)) {
             //==========单聊
             mIsSingle = true;
@@ -273,12 +278,14 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
             mUserInfo = (UserInfo) mConversation.getTargetInfo();
             if (!isFriend) {
                 //不是好友则显示添加好友按钮
-                mIvRight.setVisibility(View.VISIBLE);
+                mIvRight.setImageResource(R.mipmap.icon_add_friend);
             } else {
                 //是好友则隐藏添加好友按钮
-                mIvRight.setVisibility(View.GONE);
+                mIvRight.setImageResource(R.mipmap.icon_menu);
             }
-            if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
+            if(!TextUtils.isEmpty(mUserInfo.getNotename())){
+                mTvTitle.setText(mUserInfo.getNotename());
+            }else if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
                 mTvTitle.setText(mUserInfo.getNickname());
             } else {
                 mTvTitle.setText(mUserInfo.getUserName());
@@ -536,11 +543,29 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
                 onBackPressed();
                 break;
             case R.id.iv_right://标题栏右边按钮
-                Intent intent = new Intent();
-                intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
-                intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
-                intent.setClass(this, AddFriendActivity.class);
-                startActivityForResult(intent, IS_AGREE_KEY);
+                if (!isFriend) {
+                    //不是好友进入添加好友
+                    Intent intent = new Intent();
+                    intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
+                    intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
+                    intent.setClass(this, AddFriendActivity.class);
+                    startActivityForResult(intent, IS_AGREE_KEY);
+                } else {
+                    //是好友进入好友操作
+                    mUserInfo = (UserInfo) mConversation.getTargetInfo();
+                    if (mUserInfo.getBlacklist() == 1) {
+                        //在黑名单中
+                        isBlack = 1;
+                    } else if (mUserInfo.getBlacklist() == 0) {
+                        //不在黑名单中
+                        isBlack = 2;
+                    }
+                    Intent intent = new Intent(this, FriendOperateActivity.class);
+                    intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
+                    intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
+                    intent.putExtra(JMessageUtils.IS_BLACK, isBlack);
+                    startActivityForResult(intent, GO_FRIEND_OPERATE);
+                }
                 break;
             case R.id.btnSend://发送文字消息
                 String msgContent = TextViewUtils.getText(mEtContent);
@@ -663,6 +688,11 @@ public class MyChatActivity extends MVPBaseActivity<MyChatContract.View, MyChatP
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
+                case GO_FRIEND_OPERATE:
+                    if (data != null) {
+                        isBlack = data.getIntExtra(JMessageUtils.IS_BLACK, 0);
+                    }
+                    break;
                 case RESULT_CODE_SELECT_PICTURE:
                     try {
                         List<ImageFolderBean> list = (List<ImageFolderBean>) data.getSerializableExtra("list");

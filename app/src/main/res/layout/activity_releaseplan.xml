@@ -94,6 +94,7 @@
                             android:id="@+id/et_start_action"
                             android:layout_weight="1"
                             android:hint="你的位置"
+                            android:textSize="16sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -113,6 +114,8 @@
                             android:id="@+id/et_end_action"
                             android:layout_weight="1"
                             android:hint="去哪里"
+                            android:textSize="16sp"
+
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -123,15 +126,15 @@
                         android:layout_height="wrap_content">
                         <ImageView
                             android:layout_gravity="center_vertical"
-
                             android:src="@mipmap/iv_release_date"
-                            android:text=""
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <EditText
                             android:id="@+id/et_usercar_time"
                             android:layout_weight="1"
                             android:hint="用车时间"
+                            android:textSize="16sp"
+
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -144,6 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <ImageView
+
                             android:layout_gravity="center_vertical"
                             android:src="@mipmap/iv_cengchetype"
                             android:layout_width="wrap_content"
@@ -152,6 +156,7 @@
                             android:id="@+id/et_usercar_type"
                             android:layout_weight="1"
                             android:hint="用车类型"
+                            android:textSize="16sp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -169,7 +174,7 @@
                 android:background="#83b4ff"
                 android:id="@+id/but_release_plan"
                 android:text="确认行程"
-                android:textSize="28dp"
+                android:textSize="18sp"
                 android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

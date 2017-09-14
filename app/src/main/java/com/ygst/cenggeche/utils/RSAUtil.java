@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Base64;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -20,6 +21,10 @@ import javax.crypto.Cipher;
  * @author Administrator
  */
 public class RSAUtil {
+    /** *//**
+     * RSA最大加密明文大小
+     */
+    private static final int MAX_ENCRYPT_BLOCK = 117;
     public static final String RSA_PUBLIC = "";
     private static final String ALGORITHM = "RSA";
 
@@ -53,16 +58,34 @@ public class RSAUtil {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] plaintext = content.getBytes();
-            byte[] output = cipher.doFinal(plaintext);
 
-            String str = Base64.encodeToString(output, Base64.DEFAULT);
+            // 对数据加密
+            int inputLen = plaintext.length;
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int offSet = 0;
+            byte[] cache;
+            int i = 0;
+            // 对数据分段加密
+            while (inputLen - offSet > 0) {
+                if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {
+                    cache = cipher.doFinal(plaintext, offSet, MAX_ENCRYPT_BLOCK);
+                } else {
+                    cache = cipher.doFinal(plaintext, offSet, inputLen - offSet);
+                }
+                out.write(cache, 0, cache.length);
+                i++;
+                offSet = i * MAX_ENCRYPT_BLOCK;
+            }
+            byte[] encryptedData = out.toByteArray();
+            out.close();
+
+            String str = Base64.encodeToString(encryptedData, Base64.NO_WRAP);
             return replaceBlank(str);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
 
     /**
      * 获取公钥

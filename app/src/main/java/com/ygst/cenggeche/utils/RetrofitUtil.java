@@ -16,8 +16,6 @@
 
 package com.ygst.cenggeche.utils;
 
-import com.ygst.cenggeche.interfaces.TokenInterceptor;
-
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
@@ -102,7 +100,7 @@ public class RetrofitUtil {
                                     public boolean verify(String hostname, SSLSession session) {
                                         return true;
                                     }
-                                }).connectTimeout(20000, TimeUnit.SECONDS).addInterceptor(new TokenInterceptor()).build();
+                                }).connectTimeout(20, TimeUnit.SECONDS).build();
                         sRetrofit = new Retrofit.Builder().client(sOkHttpClient)
                                 .baseUrl(UrlUtils.BASEURl)
                                 .addConverterFactory(ScalarsConverterFactory.create())

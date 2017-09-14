@@ -17,11 +17,14 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.ApplyBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
+import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenu;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuCreator;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuItem;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuListView;
 import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.List;
@@ -33,24 +36,26 @@ import butterknife.OnClick;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
 public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract.View, NewFriendListPresenter> implements NewFriendListContract.View {
     private String TAG = "NewFriendListActivity";
     List<ApplyBean.DataBean> mListDataBean;
     ApplyBean applyBean;
-
+    private String targetUserName;
+    private String targetAppkey;
     private SwipeMenuListViewAdapter mSwipeMenuListViewAdapter;
     private SwipeMenuListView mListView;
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
+
     /**
      * 返回
      */
     @OnClick(R.id.iv_back)
-    public void goBack(){
+    public void goBack() {
         finish();
     }
 
@@ -70,6 +75,7 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
             menu.addMenuItem(deleteItem);
         }
     };
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_new_friend_list;
@@ -86,21 +92,14 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
         mTvTitle.setText("验证消息");
         AppData.savaUnReadApplyCount(0);
 
-//        applyBean = (ApplyBean) mCache.getAsObject(JMessageUtils.APPLE_BEAN);
-//
-//        if(applyBean!= null) {
-//            mListDataBean = applyBean.getData();
-//            setListView(mListDataBean);
-//        }
-
-        if(applyBean == null){
+        if (applyBean == null) {
             mPresenter.getApplyList(AppData.getUserName());
-        }else{
+        } else {
             mListDataBean = applyBean.getData();
             setListView(mListDataBean);
         }
 
-        mListView = (SwipeMenuListView)findViewById(R.id.lv_new_friend);
+        mListView = (SwipeMenuListView) findViewById(R.id.lv_new_friend);
         // set creator
         mListView.setMenuCreator(creator);
         // 滑动某一个Item
@@ -125,7 +124,7 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
                 switch (index) {
                     case 0:
                         // delete删除某个会话
-                        mPresenter.deleteApplyDate(AppData.getUserName(), dataBeanItem.getFusername(),position);
+                        mPresenter.deleteApplyDate(AppData.getUserName(), dataBeanItem.getFusername(), position);
                         break;
                 }
             }
@@ -135,7 +134,9 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ApplyBean.DataBean dataBeanItem = mListDataBean.get(position);
-                final Intent intent = new Intent();
+                Intent intent = new Intent(NewFriendListActivity.this, FriendInfoActivity.class);
+                intent.putExtra(JMessageUtils.TARGET_USERNAME, dataBeanItem.getFusername());
+                startActivity(intent);
             }
         });
     }
@@ -143,15 +144,17 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
 
     /**
      * 设置显示所有申请信息
+     *
      * @param listDataBean
      */
-    private void setListView(List<ApplyBean.DataBean> listDataBean){
+    private void setListView(List<ApplyBean.DataBean> listDataBean) {
         if (listDataBean != null) {
             mSwipeMenuListViewAdapter = new SwipeMenuListViewAdapter(this, listDataBean);
             mListView.setAdapter(mSwipeMenuListViewAdapter);
             mSwipeMenuListViewAdapter.notifyDataSetChanged();
         }
     }
+
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
@@ -165,66 +168,76 @@ public class NewFriendListActivity extends MVPBaseActivity<NewFriendListContract
 
     @Override
     public void getApplyListError() {
-        ToastUtil.show(this,"未获取到信息");
+        ToastUtil.show(this, "未获取到信息");
     }
 
     @Override
     public void deleteApplyDateSuccess(int position) {
         mListDataBean.remove(position);
-        if(mSwipeMenuListViewAdapter!=null){
+        if (mSwipeMenuListViewAdapter != null) {
             mSwipeMenuListViewAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void deleteApplyDateError() {
-        ToastUtil.show(this,"删除申请失败，请重试");
+        ToastUtil.show(this, "删除申请失败，请重试");
     }
 
 
     /**
-     *拒绝申请提示框
+     * 拒绝申请提示框
      */
-    public void showNoAgreeDialog(final ApplyBean.DataBean dataBean){
+    public void showNoAgreeDialog(final ApplyBean.DataBean dataBean) {
         CommonUtils.showInfoDialog(this, "拒绝该用户的好友申请吗？", "提示", "拒绝", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mPresenter.noAgree(AppData.getUserName(),dataBean.getFusername());
+                mPresenter.noAgree(AppData.getUserName(), dataBean.getFusername());
             }
         }, null);
     }
+
     @Override
     public void noAgreeSuccess() {
-        ToastUtil.show(this,"拒绝成功");
+        ToastUtil.show(this, "拒绝成功");
         setListView(mListDataBean);
     }
 
     @Override
     public void noAgreeError() {
-        ToastUtil.show(this,"拒绝申请失败，请重试");
+        ToastUtil.show(this, "拒绝申请失败，请重试");
     }
 
     /**
-     *同意申请提示框
+     * 同意申请提示框
      */
-    public void showYesAgreeDialog(final ApplyBean.DataBean dataBean){
+    public void showYesAgreeDialog(final ApplyBean.DataBean dataBean) {
         CommonUtils.showInfoDialog(this, "同意该用户的好友申请吗？", "提示", "同意", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mPresenter.yesAgree(AppData.getUserName(),dataBean.getFusername());
+                targetUserName =dataBean.getFusername();
+                targetAppkey =dataBean.getAppkey();
+                mPresenter.yesAgree(AppData.getUserName(), dataBean.getFusername());
             }
         }, null);
     }
 
     @Override
-    public void yesAgreeSuccess() {
-        ToastUtil.show(this,"同意申请");
+    public void yesAgreeSuccess(ApplyBean applyBean) {
+        ToastUtil.show(this, "同意申请");
+        mListDataBean = applyBean.getData();
         setListView(mListDataBean);
+        Intent mIntent = new Intent(NewFriendListActivity.this, MyChatActivity.class);
+        mIntent.putExtra(JMessageUtils.TARGET_USERNAME, targetUserName);
+        mIntent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppkey);
+        mIntent.putExtra(JMessageUtils.IS_FRIEND, true);
+        mIntent.putExtra(JMessageUtils.IS_AGREE_KEY, JMessageUtils.YES_AGREE);
+        startActivity(mIntent);
     }
 
     @Override
     public void yesAgreeError() {
-        ToastUtil.show(this,"同意申请失败，请重试");
+        ToastUtil.show(this, "同意申请失败，请重试");
     }
 
 

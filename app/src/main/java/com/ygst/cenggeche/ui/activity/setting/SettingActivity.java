@@ -7,11 +7,15 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.DataCleanManager;
 import com.ygst.cenggeche.utils.ToastUtil;
+import com.ygst.cenggeche.utils.UrlUtils;
+import com.ygst.cenggeche.webview.WebViewActivity;
 
 import java.util.List;
 
@@ -28,6 +32,13 @@ import cn.jpush.im.android.api.model.Conversation;
  */
 
 public class SettingActivity extends MVPBaseActivity<SettingContract.View, SettingPresenter> implements SettingContract.View {
+
+    //使用指南
+    private final String URL_USER_GUIDE= UrlUtils.URL_H5+"/cenggeche/pages/help/help.html";
+    //关于我们
+    private final String URL_ABOUT_US= UrlUtils.URL_H5+"/cenggeche/pages/about/about.html";
+    //意见反馈
+    private final String URL_FEEDBACK= UrlUtils.URL_H5+"/cenggeche/pages/feedback/feedback.html";
 
     List<Conversation> mListConversation;
 
@@ -68,10 +79,12 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
     @OnClick(R.id.rl_clear_cache)
     public void clearCache(){
         mListConversation = JMessageClient.getConversationList();
-        CommonUtils.showInfoDialog(this, "确定要清空聊天记录吗？", "提示", "清空", "取消", new DialogInterface.OnClickListener() {
+        CommonUtils.showInfoDialog(this, "确定要清空缓存吗？", "提示", "清空", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DataCleanManager.clearAllCache(SettingActivity.this);
+                mTvClearCache.setText("0K");
+                ToastUtil.show(SettingActivity.this,"清空成功");
             }
         }, null);
     }
@@ -114,7 +127,8 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
      */
     @OnClick(R.id.tv_user_guide)
     public void userGuide(){
-
+        String url = URL_USER_GUIDE+"?deviceId="+ AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
+        WebViewActivity.loadUrl(this,url,"");
     }
 
     /**
@@ -122,7 +136,8 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
      */
     @OnClick(R.id.tv_about_us)
     public void aboutUs(){
-
+        String url = URL_ABOUT_US+"?deviceId="+ AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
+        WebViewActivity.loadUrl(this,url,"");
     }
 
     /**
@@ -130,7 +145,8 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
      */
     @OnClick(R.id.tv_feedback)
     public void feedback(){
-
+        String url = URL_FEEDBACK+"?deviceId="+ AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
+        WebViewActivity.loadUrl(this,url,"");
     }
 
     /**
@@ -150,6 +166,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
     public void loginOutSuccess() {
         JMessageClient.logout();
         MyApplication.clearLogin();
+        MainActivity1.instance.setPagerOne();
         finish();
     }
 

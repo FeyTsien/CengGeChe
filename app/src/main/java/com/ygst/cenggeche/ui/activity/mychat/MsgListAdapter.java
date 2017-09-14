@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.ygst.cenggeche.app.AppData;
+import com.ygst.cenggeche.ui.activity.friendinfo.BigPicActivity;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.widget.MyTextDrawable;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
@@ -158,7 +159,7 @@ public class MsgListAdapter extends BaseAdapter {
     }
 
     private void reverse(List<Message> list) {
-        if (list.size() >0 ){
+        if (list.size() > 0) {
             Collections.reverse(list);
         }
     }
@@ -563,13 +564,13 @@ public class MsgListAdapter extends BaseAdapter {
                             holder.headIcon.setImageBitmap(bitmap);
                         } else {
                             String name = "";
-                            if(!TextUtils.isEmpty(userInfo.getNotename())){
+                            if (!TextUtils.isEmpty(userInfo.getNotename())) {
                                 //备注名
                                 name = userInfo.getNotename();
-                            }else if(!TextUtils.isEmpty(userInfo.getNickname())){
+                            } else if (!TextUtils.isEmpty(userInfo.getNickname())) {
                                 //昵称
                                 name = userInfo.getNickname();
-                            }else{
+                            } else {
                                 //用户名
                                 name = userInfo.getUserName();
                             }
@@ -594,7 +595,7 @@ public class MsgListAdapter extends BaseAdapter {
                     Intent intent = new Intent();
                     if (msg.getDirect() == MessageDirect.send) {
                         intent.putExtra(JMessageUtils.TARGET_USERNAME, AppData.getUserName());
-                        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS,1105);
+                        intent.putExtra(JMessageUtils.TARGET_FRIENDSTATUS, 1105);
                         intent.setClass(mContext, FriendInfoActivity.class);
                         mContext.startActivity(intent);
                     } else {
@@ -1056,7 +1057,7 @@ public class MsgListAdapter extends BaseAdapter {
                         showResendDialog(holder, msg);
                     } else {
                         Toast.makeText(mContext, mContext.getString(IdHelper.getString(mContext,
-                                        "jmui_sdcard_not_exist_toast")),
+                                "jmui_sdcard_not_exist_toast")),
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -1100,7 +1101,7 @@ public class MsgListAdapter extends BaseAdapter {
                             public void onComplete(int status, String desc, File file) {
                                 if (status != 0) {
                                     Toast.makeText(mContext, IdHelper.getString(mContext,
-                                                    "jmui_voice_fetch_failed_toast"),
+                                            "jmui_voice_fetch_failed_toast"),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
                                     Log.i("VoiceMessage", "reload success");
@@ -1217,7 +1218,7 @@ public class MsgListAdapter extends BaseAdapter {
 
         @Override
         public boolean onLongClick(View v) {
-            onContentLongClick((Integer)v.getTag(), v);
+            onContentLongClick((Integer) v.getTag(), v);
             return true;
         }
 
@@ -1306,10 +1307,26 @@ public class MsgListAdapter extends BaseAdapter {
                 }
             } else if (holder.picture != null && v.getId() == holder.picture.getId()) {
                 //TODO jump to BrowserViewPagerActivity
-//                Intent intent = new Intent();
+//                if (msg.getContentType() == ContentType.image) {
+                Intent intent = new Intent(mContext, BigPicActivity.class);
+                ImageContent imgContent = (ImageContent) msg.getContent();
+                if (TextUtils.isEmpty(imgContent.getLocalPath())) {
+                    imgContent.downloadOriginImage(msg, new DownloadCompletionCallback() {
+                        @Override
+                        public void onComplete(int i, String s, File file) {
+                            if (i == 0) {
+                                BigPicActivity.instance.showImg(file.toString());
+                            }
+                        }
+                    });
+                    intent.putExtra("pic_uri", imgContent.getLocalThumbnailPath());
+                } else {
+                    intent.putExtra("pic_uri", imgContent.getLocalPath());
+                }
+                mContext.startActivity(intent);
+
 //                intent.putExtra(JChatDemoApplication.TARGET_ID, mTargetId);
 //                intent.putExtra("msgId", msg.getId());
-//                intent.putExtra(JChatDemoApplication.GROUP_ID, mGroupId);
 //                intent.putExtra(JChatDemoApplication.TARGET_APP_KEY, mTargetAppKey);
 //                intent.putExtra("msgCount", mMsgList.size());
 //                intent.putIntegerArrayListExtra(JChatDemoApplication.MsgIDs, getImgMsgIDList());

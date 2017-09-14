@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:src="@mipmap/icon_my_avatar"
+        android:id="@+id/iv_chooseuserimg"
+        android:layout_width="150dp"
+        android:layout_height="100dp" />
+
+    <ImageView
+        android:visibility="gone"
+        android:src="@mipmap/ic_del"
+        android:id="@+id/isselected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        />
+
+</RelativeLayout>

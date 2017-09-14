@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +34,7 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
     WebView webView;
     // 全屏时视频加载view
     FrameLayout videoFullView;
-    Toolbar mTitleToolBar;
+//    Toolbar mTitleToolBar;
     // 进度条是否加载到90%
     public boolean mProgress90;
     // 网页是否加载完成
@@ -67,9 +65,9 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
         mProgressBar = (ProgressBar) findViewById(R.id.pb_progress);
         webView = (WebView) findViewById(R.id.webview_detail);
         videoFullView = (FrameLayout) findViewById(R.id.video_fullView);
-        mTitleToolBar = (Toolbar) findViewById(R.id.title_tool_bar);
+//        mTitleToolBar = (Toolbar) findViewById(R.id.title_tool_bar);
 //        setToolBar(mTitleToolBar, mTitle, true);
-        setSupportActionBar(mTitleToolBar);
+//        setSupportActionBar(mTitleToolBar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             //去除默认Title显示
@@ -79,13 +77,13 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
             actionBar.setHomeAsUpIndicator(R.mipmap.ic_back);
         }
         setTitle(mTitle);
-        mTitleToolBar.setOverflowIcon(ContextCompat.getDrawable(this, R.mipmap.actionbar_more));
-        mTitleToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+//        mTitleToolBar.setOverflowIcon(ContextCompat.getDrawable(this, R.mipmap.actionbar_more));
+//        mTitleToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
 //        mTitleToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 //            @Override
 //            public boolean onMenuItemClick(MenuItem item) {
@@ -122,9 +120,9 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
         }
     }
 
-    public void setTitle(String mTitle) {
-        mTitleToolBar.setTitle(mTitle);
-    }
+//    public void setTitle(String mTitle) {
+//        mTitleToolBar.setTitle(mTitle);
+//    }
 
     private void initWebView() {
         mProgressBar.setVisibility(View.VISIBLE);

@@ -24,7 +24,7 @@ public class AddFriendPresenter extends BasePresenterImpl<AddFriendContract.View
 
     @Override
     public void sendAddFriend(Map<String, String> map) {
-        final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "发送");
+        final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "发送中。。。");
         HttpManager.getHttpManager().postMethod(UrlUtils.APPLY_FRIEND, new Observer<String>() {
 
             @Override
@@ -39,6 +39,7 @@ public class AddFriendPresenter extends BasePresenterImpl<AddFriendContract.View
 
             @Override
             public void onNext(String s) {
+                progressDialog.dismiss();
                 Gson gson = new Gson();
                 CodeBean codeBean = gson.fromJson(s, CodeBean.class);
 

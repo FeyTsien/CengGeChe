@@ -6,11 +6,23 @@
     android:orientation="vertical">
 
     <include layout="@layout/app_toolbar_message" />
-    <include layout="@layout/activity_target_user_info" />
+
     <include layout="@layout/item_system" />
-    <include layout="@layout/item_system" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
+    <include layout="@layout/item_notice" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
     <com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </LinearLayout>

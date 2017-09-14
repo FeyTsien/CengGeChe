@@ -25,7 +25,37 @@
 
 
             <LinearLayout
-                android:background="@drawable/linear_right_corner_border"
+                android:id="@+id/ll_jump"
+                android:background="@drawable/viewpager_bg"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center_vertical"
+                    android:padding="7dp"
+                    android:text="把你的蹭车计划告诉对方吧"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:background="@drawable/viewpager_bg"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/tv_jump"
+                    android:text="跳过"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/viewpager_bg"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="20dp"
                 android:layout_gravity="bottom"
@@ -125,8 +155,8 @@
                 android:layout_marginBottom="25dp"
                 android:background="#83b4ff"
                 android:id="@+id/but_release_plan"
-                android:text="发布行程"
-                android:textSize="28dp"
+                android:text="确认行程"
+                android:textSize="22sp"
                 android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

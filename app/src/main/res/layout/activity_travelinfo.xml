@@ -3,15 +3,18 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/colorPageBG"
     android:layout_height="match_parent">
 
     <include layout="@layout/app_toolbar" />
 
     <LinearLayout
-
+        android:visibility="gone"
+        android:id="@+id/ll_canceltravel"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:background="@color/white"
+        android:background="#fff"
         android:layout_height="match_parent">
         <LinearLayout
 
@@ -20,6 +23,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/travel_info_background"
                 android:layout_gravity="center_vertical"
@@ -30,7 +34,7 @@
                 <TextView
                     android:id="@+id/tv_cengorshao"
                     android:textColor="@color/white"
-                    android:text="好心人 ，可以蹭个车吗？"
+                    android:text="行程信息"
                     android:textSize="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -50,6 +54,8 @@
             android:background="@color/deep_violet"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_gravity="center_horizontal"
             ></View>
 
@@ -109,7 +115,21 @@
             android:textColor="@color/text_line_color"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
+            android:padding="10dp"
             android:layout_height="wrap_content" />
+
+        <TextView
+
+            android:id="@+id/tv_wait_go"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="等待同行"
+            android:textColor="@color/accept_btn_default"
+            android:gravity="center_vertical"
+            android:background="@drawable/down_white_corner_backgroud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
 
 
         <!--接收行程-->
@@ -219,6 +239,7 @@
 
         <!--车主发布捎人需求-->
         <LinearLayout
+            android:id="@+id/ll_ischezhu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ListView
@@ -229,6 +250,27 @@
 
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_empty"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+
+            android:src="@mipmap/iv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/deep_violet"
+            android:text="空空如也"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

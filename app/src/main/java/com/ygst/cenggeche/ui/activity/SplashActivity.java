@@ -47,7 +47,7 @@ public class SplashActivity extends BaseActivity {
 
         //绑定activity
         bind = ButterKnife.bind(this);
-        ivPic.setImageResource(R.drawable.img);
+        ivPic.setImageResource(R.mipmap.img_splash);
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {

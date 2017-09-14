@@ -94,38 +94,11 @@ public class AddFriendActivity extends MVPBaseActivity<AddFriendContract.View, A
         map.put("appkey",targetAppKey);
         mPresenter.sendAddFriend(map);
     }
-//
-//    @Override
-//    public void yesAgreeSuccess(int position) {
-//        ToastUtil.show(this, "同意申请");
-//        ContactManager.acceptInvitation(targetUserName, targetAppKey, new BasicCallback() {
-//            @Override
-//            public void gotResult(int responseCode, String responseMessage) {
-//                if (0 == responseCode) {
-//                    //接收好友请求成功
-//                } else {
-//                    //接收好友请求失败
-//                }
-//            }
-//        });
-//        mListApplyBean.get(position).setIsAgree(1);
-//        mListApplyBean.set(position, mListApplyBean.get(position));
-//        mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
-//        Intent mIntent = new Intent();
-//        setResult(RESULT_OK, mIntent);
-//        finish();
-//    }
-//
-//    @Override
-//    public void yesAgreeError() {
-//        ToastUtil.show(this, "同意申请失败了，请重试");
-//    }
-
 
     @Override
     public void sendSucceed() {
-
         ToastUtil.show(AddFriendActivity.this, "申请好友发送成功，等待对方回应");
+        finish();
     }
 
     @Override

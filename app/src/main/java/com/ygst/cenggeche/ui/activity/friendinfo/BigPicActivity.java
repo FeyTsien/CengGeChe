@@ -1,5 +1,6 @@
 package com.ygst.cenggeche.ui.activity.friendinfo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -17,7 +18,7 @@ import butterknife.OnClick;
  */
 
 public class BigPicActivity extends BaseActivity {
-
+    public static BigPicActivity instance;
     @BindView(R.id.iv_big_pic)
     ImageView mIvBigPic;
 
@@ -29,12 +30,17 @@ public class BigPicActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         ButterKnife.bind(this);
-        String pic = getIntent().getStringExtra("pic_uri");
-//        Picasso.with(this).load(pic).placeholder(R.mipmap.icon_my_avatar).into(mIvBigPic);
+        Intent intent = getIntent();
+        String pic = intent.getStringExtra("pic_uri");
         Glide.with(this).load(pic).placeholder(R.mipmap.icon_my_avatar).diskCacheStrategy(DiskCacheStrategy.ALL).into(mIvBigPic);
+//        Picasso.with(this).load(pic).placeholder(R.mipmap.icon_my_avatar).into(mIvBigPic);
     }
 
+    public void showImg(String path){
+        Glide.with(this).load(path).diskCacheStrategy(DiskCacheStrategy.ALL).into(mIvBigPic);
+    }
     @OnClick(R.id.iv_big_pic)
     public void offBigPic() {
         finish();

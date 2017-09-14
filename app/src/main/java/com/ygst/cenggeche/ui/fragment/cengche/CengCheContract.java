@@ -14,9 +14,18 @@ public class CengCheContract {
         void getAllInfoSuccess(AllStrokeBean allStrokeBean);
         void getAllInfoFail();
 
+        //检测是否可以拼车
+        void checkApplySuccess();
+        void checkApplyFail(String msg);
+
+
+
     }
 
     interface  Presenter extends BasePresenter<View> {
         void getAllinfo(String type, int page);
+
+        void checkApplyinfo(String userFlag,String sid);
+
     }
 }

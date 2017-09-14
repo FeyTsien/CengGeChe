@@ -20,7 +20,6 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.UserBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.addfriend.AddFriendActivity;
 import com.ygst.cenggeche.ui.activity.friendoperate.FriendOperateActivity;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.FlowLayout;
@@ -46,14 +45,16 @@ import cn.jpush.im.android.api.model.UserInfo;
 
 public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View, FriendInfoPresenter> implements FriendInfoContract.View {
 
-    public static final int GO_FRIEND_OPERATE = 11051;
+    public static FriendInfoActivity instance;
+    public static final int GO_FRIEND_OPERATE = 110;
 
     private UserInfo mUserInfo;
     private boolean isFriend;
     private int theBtnSendMsgCode = -1;
-    private String targetUsername;
+    private String targetUsername="";
     private String targetAppKey;
     private String UserAvatarUri;
+    private String targetName;
     //目标所处自己好友名单下的状态
     private int isBlack;
 
@@ -100,12 +101,14 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         ButterKnife.bind(this);
         initViews();
     }
 
     private void initViews() {
         mTvTitle.setText("详细资料");
+        mBtnSendMsg.setText("发消息");
         Intent intent = getIntent();
         targetUsername = intent.getStringExtra(JMessageUtils.TARGET_USERNAME);
 
@@ -130,12 +133,10 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
                         theBtnSendMsgCode = 1;
                         //是好友则显示可以好友操作菜单
                         mIvMenu.setVisibility(View.VISIBLE);
-                        mBtnSendMsg.setText("发消息");
                     } else {
                         theBtnSendMsgCode = 2;
                         //不是好友不显示
                         mIvMenu.setVisibility(View.GONE);
-                        mBtnSendMsg.setText("加好友");
                     }
                 } else {
 
@@ -149,31 +150,30 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
 
     @Override
     public void getFriendInfoError() {
-        ToastUtil.show(this, "获取好友信息失败");
+        ToastUtil.show(this, "获取信息失败");
     }
 
     @Override
     public void getFriendInfoSuccess(UserBean userBean) {
-        ToastUtil.show(this, "获取成功");
         setFriendInfo(userBean);
     }
 
     private void setFriendInfo(UserBean friendInfo) {
 
         mRecyclerView.setAdapter(new RVAdapter(this, friendInfo.getPic()));
-        String name = "";
         if (!TextUtils.isEmpty(friendInfo.getData().getNickname())) {
-            name = friendInfo.getData().getNickname();
+            targetName = friendInfo.getData().getNickname();
         } else if (!TextUtils.isEmpty(friendInfo.getData().getUsername())) {
-            name = friendInfo.getData().getNickname();
+            targetName = friendInfo.getData().getNickname();
         }
         //名字
-        mTvName.setText(name);
+        mTvName.setText(targetName);
         //头像
         UserAvatarUri = friendInfo.getData().getUserPic();
-        TextDrawable drawable = MyTextDrawable.getTextDrawable(name);
+        TextDrawable drawable = MyTextDrawable.getTextDrawable(targetName);
         Glide.with(this)
                 .load(UserAvatarUri)
+                .centerCrop()
                 .placeholder(drawable)
                 .into(mIvAvatar);
         //性别符号
@@ -246,7 +246,7 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
      */
     @OnClick(R.id.btn_send_msg)
     public void btnOnClick() {
-        if (theBtnSendMsgCode == 1) {
+//        if (theBtnSendMsgCode == 1) {
             //去发消息
             Intent intent = new Intent();
             intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
@@ -254,14 +254,14 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
             intent.putExtra(JMessageUtils.IS_FRIEND,isFriend);
             intent.setClass(this, MyChatActivity.class);
             startActivity(intent);
-        } else if (theBtnSendMsgCode == 2) {
-            //去加好友
-            Intent intent = new Intent();
-            intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
-            intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
-            intent.setClass(this, AddFriendActivity.class);
-            startActivity(intent);
-        }
+//        } else if (theBtnSendMsgCode == 2) {
+//            //去加好友
+//            Intent intent = new Intent();
+//            intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
+//            intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
+//            intent.setClass(this, AddFriendActivity.class);
+//            startActivity(intent);
+//        }
     }
 
     /**
@@ -271,6 +271,7 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     public void friendOperate() {
         Intent intent = new Intent(this, FriendOperateActivity.class);
         intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
+        intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
         intent.putExtra(JMessageUtils.IS_BLACK, isBlack);
         startActivityForResult(intent, GO_FRIEND_OPERATE);
     }
@@ -278,10 +279,12 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GO_FRIEND_OPERATE) {
-            if (data != null) {
-                isBlack = data.getIntExtra(JMessageUtils.IS_BLACK, 0);
-            }
+        switch (requestCode){
+            case GO_FRIEND_OPERATE:
+                if (data != null) {
+                    isBlack = data.getIntExtra(JMessageUtils.IS_BLACK, 0);
+                }
+                break;
         }
     }
 }

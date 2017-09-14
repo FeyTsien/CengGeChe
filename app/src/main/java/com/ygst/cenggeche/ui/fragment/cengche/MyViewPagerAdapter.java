@@ -14,10 +14,8 @@ import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.AllStrokeBean;
-import com.ygst.cenggeche.ui.activity.SplashActivity;
+import com.ygst.cenggeche.ui.activity.alltravelinfo.AllTravelInfoActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
-import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -55,7 +53,7 @@ public class MyViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(final ViewGroup container, final int position) {
-       ViewHolder holder = null;
+        ViewHolder holder = null;
         View convertView = null;
         if (mViewCache.size() == 0) {
             convertView = View.inflate(context, R.layout.item_viewpager, null);
@@ -92,14 +90,14 @@ public class MyViewPagerAdapter extends PagerAdapter {
         holder.ivPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jumpuserInfo(list.get(position).getUid()+"");
+                jumpuserInfo(list.get(position).getId()+"");
             }
         });
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jumpuserInfo(list.get(position).getUid()+"");
+                jumpuserInfo(list.get(position).getId()+"");
             }
         });
 
@@ -127,8 +125,8 @@ public class MyViewPagerAdapter extends PagerAdapter {
     public void jumpuserInfo(String userid){
 
         if(AppData.isLoginEd()){
-            Intent intent=new Intent(context, SplashActivity.class);
-            intent.putExtra("USERID",userid);
+            Intent intent=new Intent(context, AllTravelInfoActivity.class);
+            intent.putExtra("SID",userid);
             context.startActivity(intent);
         }else{
             Intent intent=new Intent(context, LoginActivity.class);

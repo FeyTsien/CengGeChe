@@ -21,7 +21,6 @@ import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.ReleaseplanActivity;
 import com.ygst.cenggeche.ui.view.LetterSideBar;
-import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.ArrayList;
@@ -132,7 +131,6 @@ public class CartypeActivity extends MVPBaseActivity<CartypeContract.View, Carty
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String carcolor = mColorList.get(position);
-                ToastUtil.show(CartypeActivity.this,CARTYPE+"=="+carcolor+"--"+CARBRAND);
                 Intent intent = new Intent(CartypeActivity.this, ReleaseplanActivity.class);
                 intent.putExtra("result", CARBRAND+"-"+CARTYPE+"-"+carcolor);
                 setResult(5, intent);
@@ -165,7 +163,9 @@ public class CartypeActivity extends MVPBaseActivity<CartypeContract.View, Carty
     public void getCarBrand() {
         Map<String, String> map = new HashMap<>();
         map.put("s","1");
-        HttpManager.getHttpManager().postMethod(UrlUtils.BASEURl+ UrlUtils.GETALLCARBRAND, new Observer<String>() {
+        LogUtils.i(TAG,"Url地址："+UrlUtils.GETALLCARBRAND);
+
+        HttpManager.getHttpManager().postMethod(UrlUtils.GETALLCARBRAND, new Observer<String>() {
 
 
             @Override
@@ -184,27 +184,28 @@ public class CartypeActivity extends MVPBaseActivity<CartypeContract.View, Carty
                 Gson gson = new Gson();
                 CodeBean codeBean = gson.fromJson(s, CodeBean.class);
                 AllCarBrandBean allCarBrandBean = gson.fromJson(s, AllCarBrandBean.class);
-//                if ("0000".equals(codeBean.getCode())) {
+                if ("0000".equals(codeBean.getCode())) {
 
-                brandBeanList = allCarBrandBean.getBrand();
+                    brandBeanList = allCarBrandBean.getBrand();
 
-                Collections.sort(brandBeanList, new Comparator<AllCarBrandBean.BrandBean>() {
-                    @Override
-                    public int compare(AllCarBrandBean.BrandBean lhs, AllCarBrandBean.BrandBean rhs) {
-                        if (lhs.getInitials().equals(rhs.getInitials())) {
-                            return lhs.getBrand().compareTo(rhs.getBrand());
-                        } else {
-                            if ("#".equals(lhs.getInitials())) {
-                                return 1;
-                            } else if ("#".equals(rhs.getInitials())) {
-                                return -1;
+                    Collections.sort(brandBeanList, new Comparator<AllCarBrandBean.BrandBean>() {
+                        @Override
+                        public int compare(AllCarBrandBean.BrandBean lhs, AllCarBrandBean.BrandBean rhs) {
+                            if (lhs.getInitials().equals(rhs.getInitials())) {
+                                return lhs.getBrand().compareTo(rhs.getBrand());
+                            } else {
+                                if ("#".equals(lhs.getInitials())) {
+                                    return 1;
+                                } else if ("#".equals(rhs.getInitials())) {
+                                    return -1;
+                                }
+                                return lhs.getInitials().compareTo(rhs.getInitials());
                             }
-                            return lhs.getInitials().compareTo(rhs.getInitials());
                         }
-                    }
-                });
-                mAdapter = new CityAdapter(CartypeActivity.this, brandBeanList);
-                mListView.setAdapter(mAdapter);
+                    });
+                    mAdapter = new CityAdapter(CartypeActivity.this, brandBeanList);
+                    mListView.setAdapter(mAdapter);
+                }
             }
         }, map);
     }

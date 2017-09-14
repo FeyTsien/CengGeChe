@@ -35,7 +35,7 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
 
     private String TAG = "RegisterActivity";
     public static String TYPE="type";
-    private String type;
+    private String type="";
     private TimeCount timeCount;
 
     @BindView(R.id.tv_title)

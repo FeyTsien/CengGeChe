@@ -13,10 +13,15 @@ import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import rx.Observer;
+
+import static com.amap.api.mapcore.util.ij.a;
 
 /**
  * MVPPlugin
@@ -76,6 +81,54 @@ public class ReleaseplanPresenter extends BasePresenterImpl<ReleaseplanContract.
             }
         }, map);
     }
+
+//    @Override
+//    public void getuserStatus() {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("s","a");
+//        HttpManager.getHttpManager().postMethod(UrlUtils.BASEURl+ UrlUtils.CHECKUSERSTATUS, new Observer<String>() {
+//
+//            @Override
+//            public void onCompleted() {
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                ToastUtil.show(mView.getContext(), "请求失败，请重试");
+//                LogUtils.e(TAG, "返回的onError", e);
+//            }
+//
+//            @Override
+//            public void onNext(String s) {
+//                LogUtils.i("HttpManager", "ssss:" + s);
+//                try {
+//                    JSONObject jsonObject=new JSONObject(s);
+//                    String code = jsonObject.getString("code");
+//                    String msg = jsonObject.getString("msg");
+//                    if(code.equals("0000")){
+//                        String cancelNum = jsonObject.getString("cancelNum");
+//                        mView.checkuserstatusSuccess(cancelNum);
+//                    }else{
+//                        mView.checkuserFail(msg);
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                Gson gson = new Gson();
+////                if ("0000".equals(allStrokeBean.getCode())) {
+////
+////                    //已注册，可以登录
+////                    if (mView != null) {
+////                        mView.releaseSuccess(allStrokeBean);
+////                    }
+////                } else {
+////                    if (mView != null) {
+////                        mView.releaseFail(msg);
+////                    }
+////                }
+//            }
+//        }, map);
+//    }
 
 
 }

@@ -50,7 +50,8 @@ public class UsernamePwdUtils {
             return false;
         }
         //正则匹配= \\w{6,18}匹配所有字母、数字、下划线 字符串长度6到18（不含空格）
-        String format = "\\w{6,18}+";
+//        String format = "\\w{6,18}+";
+        String format = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$";
         if (text.matches(format)) {
             return true;
         }

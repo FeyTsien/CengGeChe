@@ -44,8 +44,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="10dp"
-            android:src="@mipmap/icon_add_friend"
-            android:visibility="gone"/>
+            android:src="@mipmap/icon_add_friend"/>
     </android.support.v7.widget.Toolbar>
 
     <View

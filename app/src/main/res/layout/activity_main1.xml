@@ -8,14 +8,13 @@
     <com.ygst.cenggeche.ui.activity.main.MyViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@mipmap/icon_menu_bar_line" />
+        android:background="@color/colorTheme" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout"

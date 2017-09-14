@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
-import com.ygst.cenggeche.bean.B2.ApplyBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
@@ -19,7 +18,6 @@ import com.ygst.cenggeche.ui.fragment.cengche.CengCheFragment;
 import com.ygst.cenggeche.ui.fragment.me.MeFragment;
 import com.ygst.cenggeche.ui.fragment.message.MessageFragment;
 import com.ygst.cenggeche.ui.fragment.nearby.NearbyFragment;
-import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
 
 import java.util.ArrayList;
@@ -38,14 +36,14 @@ import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
-import im.sdk.debug.activity.setting.ShowLogoutReasonActivity;
-import im.sdk.debug.activity.showinfo.ShowMyInfoUpdateActivity;
 
 /**
  * 主页面
  * Created by lijuan on 2016/8/23.
  */
 public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View {
+    public static MainActivity1 instance;
+    private int GO_LOGIN = 123;
     private String TAG = "MainActivity";
     private String[] titles = new String[]{"蹭车", "附近", "消息", "我"};
     private TabLayout mTabLayout;
@@ -71,6 +69,7 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         ButterKnife.bind(this);
         JMessageClient.registerEventReceiver(this);
         initView();
@@ -115,11 +114,6 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
                 if (i == 2) {
                     mTextViewAllUnreadCount = (TextView) itemTab.getCustomView().findViewById(R.id.tv_all_unread_count);
                 }
-                if (itemTab.getCustomView() != null) {
-                    View tabView = (View) itemTab.getCustomView().getParent(); //重点是这一句
-                    tabView.setTag(i);
-//                    tabView.setOnClickListener(mTabOnClickListener);
-                }
             }
         }
         mTabLayout.getTabAt(0).getCustomView().setSelected(true);
@@ -133,7 +127,8 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
             //选中了tab的逻辑
             if (tab.getPosition() == 2 || tab.getPosition() == 3) {
                 if (!AppData.isLoginEd() || JMessageClient.getMyInfo() == null) {
-                    CommonUtils.startActivity(MainActivity1.this, LoginActivity.class);
+                    Intent intent = new Intent(MainActivity1.this, LoginActivity.class);
+                    startActivityForResult(intent, GO_LOGIN);
                 }
             }
         }
@@ -174,6 +169,20 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
         JMessageClient.unRegisterEventReceiver(this);
     }
 
+    public void setPagerOne() {
+        // 切换到指定第一页
+        mViewPager.setCurrentItem(0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GO_LOGIN) {
+            setPagerOne();
+//            mTabLayout.getTabAt(0).getCustomView().setSelected(true);
+        }
+    }
+
     /**
      * 显示全部未读消息数
      */
@@ -186,17 +195,6 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
             mTextViewAllUnreadCount.setVisibility(View.GONE);
         }
     }
-
-//    @Override
-//    public void weAreFriendSuccess() {
-//
-//    }
-//
-//    @Override
-//    public void weAreFriendError() {
-//
-//    }
-
 
     public static final String SET_DOWNLOAD_PROGRESS = "set_download_progress";
     public static final String IS_DOWNLOAD_PROGRESS_EXISTS = "is_download_progress_exists";
@@ -217,38 +215,8 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
      */
     public void onEvent(ContactNotifyEvent event) {
         LogUtils.i(TAG, "onEvent-----新增联系人相关通知事件ContactNotifyEvent");
-        String reason = event.getReason();
-        String fromUsername = event.getFromUsername();
-        String fromAppkey = event.getfromUserAppKey();
-
-        Conversation mConversation = JMessageClient.getSingleConversation(fromUsername, fromAppkey);
-        UserInfo userInfo = (UserInfo) mConversation.getTargetInfo();
-
-        List<ApplyBean> mListApplyBean = (List<ApplyBean>) mCache.getAsObject(JMessageUtils.APPLE_BEAN);
-        if (mListApplyBean == null) {
-            mListApplyBean = new ArrayList<>();
-
-        }
-        ApplyBean applyBean = new ApplyBean();
-        Intent mIntent = new Intent(this, MyChatActivity.class);
-
         switch (event.getType()) {
             case invite_received://收到好友邀请
-//                AppData.savaUnReadApplyCount(AppData.getUnReadApplyCount() + 1);
-//                for (ApplyBean applyBean1 : mListApplyBean) {
-//                    if (fromUsername.equals(applyBean1.getFromUsername())) {
-//                        mListApplyBean.remove(applyBean1);
-//                    }
-//                }
-//                applyBean.setReason(reason);
-//                applyBean.setMyUsername(AppData.getUserName());
-//                applyBean.setFromUsername(fromUsername);
-//                applyBean.setFromAppkey(fromAppkey);
-//                applyBean.setFromNickname(userInfo.getNickname());
-//                applyBean.setFromAvatar(userInfo.getAvatar());
-//                applyBean.setIsAgree(3);
-//                mListApplyBean.add(applyBean);
-//                mCache.put(JMessageUtils.APPLE_BEAN, (Serializable) mListApplyBean);
                 break;
             case invite_accepted://对方接收了你的好友邀请
                 break;
@@ -270,7 +238,7 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
         LogUtils.i(TAG, "onEvent-----通知栏点击事件实体类NotificationClickEvent");
         Message msg = event.getMessage();
 
-        final Intent notificationIntent = new Intent(getApplicationContext(), MyChatActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), MyChatActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable(JMessageUtils.MESSAGE, msg);
         notificationIntent.putExtras(mBundle);
@@ -296,9 +264,12 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
         LogUtils.i(TAG, "onEvent-----用户下线事件UserLogoutEvent (已过时，请使用LoginStateChangeEvent代替)");
         LoginStateChangeEvent.Reason reason = event.getReason();
         UserInfo myInfo = event.getMyInfo();
-        Intent intent = new Intent(getApplicationContext(), ShowLogoutReasonActivity.class);
-        intent.putExtra(LOGOUT_REASON, "reason = " + reason + "\n" + "logout user name = " + myInfo.getUserName());
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.putExtra(LOGOUT_REASON, "LogOut");
         startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), ShowLogoutReasonActivity.class);
+//        intent.putExtra(LOGOUT_REASON, "reason = " + reason + "\n" + "logout user name = " + myInfo.getUserName());
+//        startActivity(intent);
     }
 
     /**
@@ -346,9 +317,9 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
      */
     public void onEvent(MyInfoUpdatedEvent event) {
         LogUtils.i(TAG, "onEvent-----当前登录用户信息被更新事件实体类 MyInfoUpdatedEvent");
-        UserInfo myInfo = event.getMyInfo();
-        Intent intent = new Intent(this, ShowMyInfoUpdateActivity.class);
-        intent.putExtra(INFO_UPDATE, myInfo.getUserName());
-        startActivity(intent);
+//        UserInfo myInfo = event.getMyInfo();
+//        Intent intent = new Intent(this, ShowMyInfoUpdateActivity.class);
+//        intent.putExtra(INFO_UPDATE, myInfo.getUserName());
+//        startActivity(intent);
     }
 }

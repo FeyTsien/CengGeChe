@@ -90,18 +90,18 @@ public class AppData {
         return SharedPreferencesUtils.getString("NICKNAME", null);
     }
 
-    /**
-     * 保存token
-     */
-    public static void saveToken(String token) {
-        SharedPreferencesUtils.saveString("TOKEN", token);
-    }
-    /**
-     * 获取token
-     */
-    public static String getToken() {
-        return SharedPreferencesUtils.getString("TOKEN", null);
-    }
+//    /**
+//     * 保存token
+//     */
+//    public static void saveToken(String token) {
+//        SharedPreferencesUtils.saveString("TOKEN", token);
+//    }
+//    /**
+//     * 获取token
+//     */
+//    public static String getToken() {
+//        return SharedPreferencesUtils.getString("TOKEN", null);
+//    }
 
     /**
      * 保存头像

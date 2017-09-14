@@ -83,6 +83,8 @@
         <!--测试页2-->
         <activity android:name=".ui.test.TestActivity2"
             android:theme="@style/AppTheme" />
+        <!--WebView页-->
+        <activity android:name=".webview.WebViewActivity" />
         <!--登录页-->
         <activity android:name=".ui.activity.login.LoginActivity" />
         <!--注册页-->
@@ -109,6 +111,8 @@
         <activity android:name=".ui.activity.newfriendlist.NewFriendListActivity" />
         <!--好友详细信息-->
         <activity android:name=".ui.activity.friendinfo.FriendInfoActivity" />
+        <!--好友详细信息-->
+        <activity android:name=".ui.activity.setnotename.SetNoteNameActivity" />
         <!--展示大图-->
         <activity android:name=".ui.activity.friendinfo.BigPicActivity" />
         <!--好友操作-->
@@ -135,6 +139,9 @@
 
         <!-- 地理位置检索 -->
         <activity android:name=".ui.activity.releaseplan.retrieval.RetrievalActivity" />
+        <!-- 从资料中选取图片 -->
+        <activity android:name=".ui.activity.releaseplan.choosepic.ChoosePicActivity" />
+
 
         <!-- 确定发布信息 -->
         <activity android:name=".ui.activity.releaseplan.surerelease.SureReleaseActivity" />
@@ -146,6 +153,9 @@
 
         <!-- 切换城市列表 -->
         <activity android:name=".ui.activity.changecity.ChangeCityActivity" />
+
+        <!-- 详细资料-->
+        <activity android:name=".ui.activity.alltravelinfo.AllTravelInfoActivity" />
 
 
         <!-- User defined.  For test only  用户自定义的广播接收器-->

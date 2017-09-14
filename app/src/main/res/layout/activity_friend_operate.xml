@@ -7,24 +7,80 @@
 
     <include layout="@layout/app_toolbar" />
 
-    <LinearLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_avatar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true">
+
+            <com.ygst.cenggeche.ui.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/civ_avatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@mipmap/icon_my_avatar"
+                app:civ_border_color="@color/colorTheme"
+                app:civ_border_width="1dp" />
+
+            <ImageView
+                android:id="@+id/iv_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/civ_avatar"
+                android:layout_alignRight="@+id/civ_avatar"
+                android:src="@mipmap/icon_boy" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/rl_target"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/rl_avatar"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:textColor="@color/colorTheme"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@color/gray"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_set_note"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:drawableRight="@drawable/set_right_arrows"
-            android:text="设置备注"
-            android:textColor="@color/black" />
-
-    </LinearLayout>
+        android:background="@color/white"
+        android:drawableRight="@drawable/set_right_arrows"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="设置备注"
+        android:textColor="@color/black" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,33 +97,28 @@
             android:text="加入黑名单"
             android:textColor="@color/black" />
 
-        <com.ygst.cenggeche.ui.widget.SwitchButton
+        <Switch
             android:id="@+id/sbtn_add_blacklist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:textOff="黑"
+            android:textOn="白" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_report"
+    <TextView
+        android:id="@+id/tv_report"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:drawableRight="@drawable/set_right_arrows"
-            android:text="举报"
-            android:textColor="@color/black" />
-
-    </LinearLayout>
+        android:background="@color/white"
+        android:drawableRight="@drawable/set_right_arrows"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="举报"
+        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/btn_del_friend"

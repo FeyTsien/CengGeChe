@@ -23,13 +23,13 @@ import com.amap.api.services.help.Tip;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.ReleaseplanActivity;
 import com.ygst.cenggeche.ui.activity.suretravel.InputTask;
 import com.ygst.cenggeche.ui.activity.suretravel.PoiListAdapter;
 import com.ygst.cenggeche.ui.activity.suretravel.SearchAdapter;
 import com.ygst.cenggeche.utils.AMapUtil;
-import com.ygst.cenggeche.utils.SharedPreferencesUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.io.ByteArrayInputStream;
@@ -58,7 +58,6 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
     private ListView mPoiSearchList;
     private Button mSearchbtn;
     private String TAG="RetrievalActivity";
-    private String city = "北京";
     private AutoCompleteTextView autoCompleteTextView;
     private PoiListAdapter mpoiadapter;
     private SearchAdapter mAdapter;
@@ -85,9 +84,10 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        mTvTitle.setText("北京");
+        mTvTitle.setText("选择地址");
         mPoiSearchList = (ListView) findViewById(R.id.listView);
         mHisTtoryList = (ListView) findViewById(R.id.hislistView);
+
 
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.tv_keyword);
         mAdapter = new SearchAdapter(this);
@@ -136,18 +136,20 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String s = listString.get(position);
+                Log.i(TAG,"点击的地名"+s);
                 Intent intent = new Intent(RetrievalActivity.this, ReleaseplanActivity.class);
                 String passString = s;
-                intent.putExtra("result", passString);
+                intent.putExtra("result", s);
                 setResult(3, intent);
                 finish();
+                listString.clear();
 
             }
         });
     }
 
     private void poi_Search(String str){
-        PoiSearch.Query mPoiSearchQuery = new PoiSearch.Query(str, "", city);
+        PoiSearch.Query mPoiSearchQuery = new PoiSearch.Query(str, "", AppData.getLocation());
         mPoiSearchQuery.requireSubPois(true);   //true 搜索结果包含POI父子关系; false
         mPoiSearchQuery.setPageSize(10);
         mPoiSearchQuery.setPageNum(0);
@@ -235,7 +237,7 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         String newText = s.toString().trim();
         if (!AMapUtil.IsEmptyOrNullString(newText)) {
-            InputtipsQuery inputquery = new InputtipsQuery(newText, city);
+            InputtipsQuery inputquery = new InputtipsQuery(newText, AppData.getLocation());
             inputquery.setCityLimit(true);
             Inputtips inputTips = new Inputtips(RetrievalActivity.this, inputquery);
             inputTips.setInputtipsListener(this);
@@ -251,8 +253,11 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
 
         if (rCode == AMapException.CODE_AMAP_SUCCESS) {
             listString = new ArrayList<String>();
+            listString.clear();
             for (int i = 0; i < tipList.size(); i++) {
                 listString.add(tipList.get(i).getName());
+                Log.i(TAG,"===tipList.get(i).getName()=="+tipList.get(i).getName());
+
             }
             ArrayAdapter<String> aAdapter = new ArrayAdapter<String>(
                     getApplicationContext(),

@@ -126,7 +126,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
         //申请理由
         TextView mTvLatestMessage;
         //同意
-        Button mBtnYes;
+        TextView mBtnYes;
         //拒绝
         Button mBtnNo;
         //已同意或拒绝的状态
@@ -138,7 +138,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
             mIvGender = (ImageView) view.findViewById(R.id.iv_gender);
             mTvTargetName = (TextView) view.findViewById(R.id.tv_target_name);
             mTvLatestMessage = (TextView) view.findViewById(R.id.tv_reason);
-            mBtnYes = (Button) view.findViewById(R.id.btn_yes);
+            mBtnYes = (TextView) view.findViewById(R.id.btn_yes);
             mBtnNo = (Button) view.findViewById(R.id.btn_no);
             mTvIsAgree = (TextView) view.findViewById(R.id.tv_isagree);
             view.setTag(this);

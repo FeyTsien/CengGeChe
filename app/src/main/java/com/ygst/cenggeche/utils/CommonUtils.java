@@ -116,15 +116,9 @@ public class CommonUtils {
         AlertDialog.Builder localBuilder = new AlertDialog.Builder(context);
         localBuilder.setTitle(titleStr);
         localBuilder.setMessage(message);
-        if (positiveOnClickListener == null)
-            positiveOnClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            };
         localBuilder.setPositiveButton(positiveStr, positiveOnClickListener);
         localBuilder.setNegativeButton(negativeStr, negativeOnClickListener);
+        localBuilder.setCancelable(false);
         localBuilder.show();
     }
 

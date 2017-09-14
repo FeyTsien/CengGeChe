@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPageBG"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/app_toolbar"></include>
+    <com.ygst.cenggeche.ui.view.NoScrollGridView
+        android:id="@+id/recycler_view"
+        android:numColumns="3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.ygst.cenggeche.ui.view.NoScrollGridView>
+
+</LinearLayout>

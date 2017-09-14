@@ -3,156 +3,147 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/shape_bg_item"
     android:orientation="vertical"
+    >
 
-   >
-    <!--android:background="@drawable/shape_bg_item"-->
 
-    <android.support.v7.widget.CardView
+
+    <!-- 设置参照物 -->
+    <View
+        android:id="@+id/strut"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_layout"
+        android:layout_weight="2.2"
         android:layout_width="match_parent"
-        android:elevation="100dp"
-        android:layout_height="match_parent">
+        android:layout_height="0dp">
+
+        <com.ygst.cenggeche.ui.view.RoundImageView
+            android:id="@+id/iv_title_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:src="@mipmap/default_user_icon"
+            android:scaleType="centerCrop"
+            app:type="round"/>
+
+        <TextView
+            android:layout_alignParentBottom="true"
+            android:id="@+id/tv_exper_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#70000000"
+            android:padding="5dp"
+            android:text="蹭个车呗"
+            android:textColor="@android:color/white"
+            android:typeface="sans"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/strut"
+        android:background="#fff"
+        android:orientation="vertical"
+        >
+
+
+
 
         <LinearLayout
-            android:orientation="vertical"
-            android:background="@color/colorPageBG"
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical"
+            >
 
-            <!-- 设置参照物 -->
-            <View
-                android:id="@+id/strut"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_centerVertical="true"/>
 
-            <RelativeLayout
-                android:id="@+id/rl_layout"
-                android:layout_weight="1"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.ygst.cenggeche.ui.view.RoundImageView
-                    android:id="@+id/iv_title_pic"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:src="@mipmap/default_user_icon"
-                    app:type="round"/>
-
+                android:layout_height="wrap_content">
                 <TextView
-                    android:layout_alignParentBottom="true"
-                    android:id="@+id/tv_exper_name"
-                    android:layout_width="match_parent"
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#70000000"
-                    android:padding="5dp"
-                    android:text="蹭个车呗"
-                    android:textColor="@android:color/white"
-                    android:typeface="sans"
+                    android:text="用户名"
+                    android:textColor="@color/text_user_name"
                     />
-            </RelativeLayout>
+            </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/rl_bottom"
+
+            <LinearLayout
+                android:gravity="center_vertical"
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignTop="@+id/strut"
-                android:background="#fff"
-                android:orientation="vertical"
-                >
-
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@mipmap/iv_release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/tv_release_date"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="vertical"
-                    android:paddingTop="20dp">
+                    android:text="8月15（今天）09:30"
+                    android:textColor="@color/text_cengche"
+                    />
+            </LinearLayout>
 
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@mipmap/iv_start_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_marginLeft="10dp"
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:id="@+id/tv_user_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="用户名"
-                            android:textColor="@color/text_user_name"
-                            />
-                    </LinearLayout>
+                    android:id="@+id/tv_start_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="嘉捷双子座"
+                    android:textColor="@color/text_cengche"
+                    />
+            </LinearLayout>
 
+            <LinearLayout
 
-                    <LinearLayout
-                        android:layout_marginTop="15dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:src="@mipmap/iv_release_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
 
-                            android:id="@+id/tv_release_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="8月15（今天）09:30"
-                            android:textColor="@color/text_cengche"
-                            />
-                    </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@mipmap/iv_end_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/tv_end_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="宋家庄"
+                    android:textColor="@color/text_cengche"
+                    />
+            </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_marginTop="15dp"
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:src="@mipmap/iv_start_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:layout_marginLeft="20dp"
-
-                            android:id="@+id/tv_start_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="嘉捷双子座"
-                            android:textColor="@color/text_cengche"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_marginTop="15dp"
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:src="@mipmap/iv_end_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:layout_marginLeft="20dp"
-                            android:id="@+id/tv_end_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="宋家庄"
-                            android:textColor="@color/text_cengche"
-                            />
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-            </RelativeLayout>
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+
+
+
 </LinearLayout>

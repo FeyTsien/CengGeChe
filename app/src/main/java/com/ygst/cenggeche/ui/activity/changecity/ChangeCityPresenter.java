@@ -36,7 +36,7 @@ public class ChangeCityPresenter extends BasePresenterImpl<ChangeCityContract.Vi
         final ProgressDialog progressDialog = CommonUtils.showProgressDialog(mView.getContext(), "获取信息");
         Map<String, String> map = new HashMap<>();
 
-        HttpManager.getHttpManager().postMethod(UrlUtils.BASEURl+ UrlUtils.GETCITYNAME, new Observer<String>() {
+        HttpManager.getHttpManager().postMethod(UrlUtils.GETCITYNAME, new Observer<String>() {
 
             @Override
             public void onCompleted() {

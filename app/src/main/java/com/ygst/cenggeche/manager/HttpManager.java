@@ -80,18 +80,6 @@ public class HttpManager {
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 
-//    private String getSign(Map map) {
-//        String stringA = "";
-//        //遍历list得到map里面排序后的元素
-//        Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
-//        while (it.hasNext()) {
-//            Map.Entry<String, String> entry = it.next();
-//            stringA = stringA + entry.getKey() + "=" + entry.getValue() + "&";
-//        }
-//        stringA = stringA.substring(0, stringA.length() - 1);
-//        return RSAUtil.encryptByPublic(MyApplication.getContext(), stringA);
-//    }
-
     /**
      * Post方式请求
      * 封装时，传递observer
@@ -100,8 +88,8 @@ public class HttpManager {
      * @param observer
      */
     public void postMethod2(String url, Observer<String> observer, Map map) {
-        if (AppData.getToken() != null)
-            map.put("accessToken", AppData.getToken());
+//        if (AppData.getToken() != null)
+//            map.put("accessToken", AppData.getToken());
         if (AppData.getUid() != null)
             map.put("userId", AppData.getUid());
         if (AppData.getAndroidId() != null) {
@@ -123,19 +111,26 @@ public class HttpManager {
     /**
      * 上传单张图片
      */
-    public void upLoadIcon(String url, String path, Map map, String picname, Observer<ResponseBody> observer) {
+    public void upLoadIcon(String url, String path, Map map, Observer<ResponseBody> observer) {
+        String deviceId = "";
+        String uid = "";
+        if (AppData.getAndroidId() != null) {
+            deviceId = AppData.getAndroidId();
+        }
+        if (AppData.getUid() != null) {
+            uid = AppData.getUid();
+        }
+        String singStr = SignUtils.payParamsToString(map, false);
+        String sign = RSAUtil.encryptByPublic(MyApplication.getContext(),singStr);
+
         File file = new File(path);
         RequestBody requestbody = RequestBody.create(MediaType.parse("image/jpg"), file);
-        RequestBody assboy = RequestBody.create(MediaType.parse("text/plain"), AppData.getToken());
-        RequestBody userboy = RequestBody.create(MediaType.parse("text/plain"), AppData.getUid());
-        RequestBody dvice_id = RequestBody.create(MediaType.parse("text/plain"), AppData.getAndroidId());
-        RequestBody os = RequestBody.create(MediaType.parse("text/plain"), "android");
-        MultipartBody.Part body = MultipartBody.Part.createFormData(picname, file.getName(), requestbody);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("pic", file.getName(), requestbody);
         Observable<ResponseBody> responseBodyObservable;
         if (map != null) {
-            responseBodyObservable = RetrofitUtil.getInstance().get(ProjectAPI.class).upLoadImg(url, body, assboy, dvice_id, os, userboy, map);
+            responseBodyObservable = RetrofitUtil.getInstance().get(ProjectAPI.class).upLoadImg(deviceId, uid,sign,url, body, map);
         } else {
-            responseBodyObservable = RetrofitUtil.getInstance().get(ProjectAPI.class).upLoadImg(url, body, assboy, dvice_id, os, userboy);
+            responseBodyObservable = RetrofitUtil.getInstance().get(ProjectAPI.class).upLoadImg(deviceId, uid,sign,url, body);
         }
         responseBodyObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }

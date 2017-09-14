@@ -145,15 +145,16 @@ public class NewFriendListPresenter extends BasePresenterImpl<NewFriendListContr
             public void onNext(String s) {
                 LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
                 Gson gson = new Gson();
-                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+                ApplyBean applyBean = gson.fromJson(s, ApplyBean.class);
+//                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
 
-                if ("0000".equals(codeBean.getCode())) {
+                if ("0000".equals(applyBean.getCode())) {
                     if (mView != null)
-                        mView.yesAgreeSuccess();
+                        mView.yesAgreeSuccess(applyBean);
                 } else {
                     if (mView != null)
                         mView.yesAgreeError();
-                    LogUtils.i(TAG,"code:"+codeBean.getCode());
+                    LogUtils.i(TAG,"code:"+applyBean.getCode());
                 }
             }
         }, map);
