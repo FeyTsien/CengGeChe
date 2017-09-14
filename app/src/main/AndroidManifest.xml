@@ -83,6 +83,14 @@
         <!--测试页2-->
         <activity android:name=".ui.test.TestActivity2"
             android:theme="@style/AppTheme" />
+        <!--引导页-->
+        <activity android:name=".ui.activity.guidepage.GuidePageActivity" />
+        <!--引导页1-->
+        <activity android:name=".ui.activity.guidepage.GradientBackgroundExampleActivity" />
+        <!--引导页2-->
+        <activity android:name=".ui.activity.guidepage.SolidBackgroundExampleActivity" />
+        <!--引导页3-->
+        <activity android:name=".ui.activity.guidepage.ImageBackgroundExampleActivity" />
         <!--WebView页-->
         <activity android:name=".webview.WebViewActivity" />
         <!--登录页-->

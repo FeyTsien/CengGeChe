@@ -9,6 +9,7 @@ import com.tsien.myapplication.asimplecachedemo.ACacheMainActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
+import com.ygst.cenggeche.ui.activity.guidepage.GuidePageActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.utils.CommonUtils;
@@ -80,7 +81,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void toIMActivity(){
-        CommonUtils.startActivity(this, ACacheMainActivity.class);
+        CommonUtils.startActivity(this, GuidePageActivity.class);
         finish();
     }
 

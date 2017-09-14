@@ -27,8 +27,7 @@
         android:background="@drawable/button_bg_click"
         android:layout_margin="10dp"
         android:onClick="btnJChat"
-        android:visibility="gone"
-        android:text="JChat功能界面"/>
+        android:text="测试功能界面"/>
 
     <TextView
         android:id="@+id/tv_jump"
