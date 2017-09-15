@@ -15,16 +15,14 @@
         <cn.jmessage.android.uikit.chatting.CircleImageView
             android:id="@+id/iv_avatar"
             android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_height="40dp" />
 
         <ImageView
             android:id="@+id/iv_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_girl" />
+            android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -35,7 +33,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
+        <io.github.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tv_target_name"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -45,7 +43,7 @@
             android:textColor="@color/butaihei"
             android:textSize="15sp" />
 
-        <TextView
+        <io.github.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tv_reason"
             android:layout_width="wrap_content"
             android:layout_height="0dp"

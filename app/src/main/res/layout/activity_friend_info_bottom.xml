@@ -117,7 +117,7 @@
         android:background="@color/white"
         android:padding="10dp">
 
-        <TextView
+        <io.github.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tv_miaoshu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

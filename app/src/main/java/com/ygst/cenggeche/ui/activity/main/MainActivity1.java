@@ -1,9 +1,11 @@
 package com.ygst.cenggeche.ui.activity.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
+import com.ygst.cenggeche.bean.NewAppVersionBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
@@ -18,6 +21,7 @@ import com.ygst.cenggeche.ui.fragment.cengche.CengCheFragment;
 import com.ygst.cenggeche.ui.fragment.me.MeFragment;
 import com.ygst.cenggeche.ui.fragment.message.MessageFragment;
 import com.ygst.cenggeche.ui.fragment.nearby.NearbyFragment;
+import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
 
 import java.util.ArrayList;
@@ -73,6 +77,12 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
         ButterKnife.bind(this);
         JMessageClient.registerEventReceiver(this);
         initView();
+        //每次进入此页获取是否有最新版本
+        if(!AppData.isNewApp()){
+            mPresenter.getNewAppVersion();
+        }else{
+
+        }
     }
 
     private void initView() {
@@ -172,6 +182,31 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
     public void setPagerOne() {
         // 切换到指定第一页
         mViewPager.setCurrentItem(0);
+    }
+
+    /**
+     * 获取新版APP信息，比对当前版本
+     */
+    @Override
+    public void getNewAppVersionSuccess(NewAppVersionBean newAppVersionBean) {
+        //获取当前应用版本信息
+        getAppVersionName(this);
+        String code = newAppVersionBean.getData().getVersion();
+        String name = newAppVersionBean.getData().getVersionName();
+        String updateDate = newAppVersionBean.getData().getUpdateDate();
+        final String url = newAppVersionBean.getData().getPath();
+        if (Double.parseDouble(code) > versioncode) {
+            AppData.setIsNewApp(true);
+            CommonUtils.showInfoDialog(this, "新版本号： "+name+"\n新版日期： "+updateDate, "发现新版本", "更新", "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //执行下载
+                    download(url);
+                }
+            }, null);
+        }else{
+            AppData.setIsNewApp(false);
+        }
     }
 
     @Override
@@ -321,5 +356,22 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
 //        Intent intent = new Intent(this, ShowMyInfoUpdateActivity.class);
 //        intent.putExtra(INFO_UPDATE, myInfo.getUserName());
 //        startActivity(intent);
+    }
+
+    /**
+     * 按返回键不退出应用。
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // 不退出程序，进入后台
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

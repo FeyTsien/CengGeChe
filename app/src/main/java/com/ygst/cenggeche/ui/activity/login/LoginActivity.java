@@ -267,6 +267,8 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                     MyApplication.clearLogin();
                     // 储存登陆状态
                     AppData.setIsLoginEd(true);
+                    // 储存登陆状态
+                    AppData.savaUserStatus(loginBean.getData().getUserStatus());
                     // 保存 uid
                     AppData.saveUid(loginBean.getData().getId() + "");
                     // 保存 username
@@ -275,6 +277,8 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                     AppData.saveUserName(loginBean.getData().getUsername());
                     // 保存昵称 nickname
                     AppData.saveNickname(loginBean.getData().getNickname());
+                    // 保存昵称 gender
+                    AppData.saveGenders(loginBean.getData().getGender()+"");
 
                     //开启友盟账号统计
                     //（如果是使用第三方账号登录时，如新浪微博：MobclickAgent.onProfileSignIn("WB"，"userID")）;

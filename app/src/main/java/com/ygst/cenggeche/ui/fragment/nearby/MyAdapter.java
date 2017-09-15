@@ -1,7 +1,6 @@
 package com.ygst.cenggeche.ui.fragment.nearby;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.utils.LogUtils;
 import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.NearByBean;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ygst.cenggeche.R.id.iv_gender;
-import static com.ygst.cenggeche.R.id.linear_label;
 
 /**
  * Created by Administrator on 2017/9/4.
@@ -60,7 +55,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
         //  设置千米数
         String distance = mList.get(position).getDistance();
-        LogUtils.i(TAG,distance+"--距离");
+
         if(distance!=null&&!distance.equals("0.00")){
             double pass = Double.parseDouble(distance);
             if(pass<=10){

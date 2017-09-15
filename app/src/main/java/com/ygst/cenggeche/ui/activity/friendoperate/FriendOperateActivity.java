@@ -16,6 +16,7 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
+import com.ygst.cenggeche.ui.activity.friendoperate.report.ReportTypeActivity;
 import com.ygst.cenggeche.ui.activity.setnotename.SetNoteNameActivity;
 import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.utils.CommonUtils;
@@ -169,6 +170,16 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
         intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
         intent.putExtra("NoteName", noteName);
         startActivityForResult(intent, GO_SET_NOTENAME);
+    }
+
+    /**
+     * 举报
+     */
+    @OnClick(R.id.tv_report)
+    public void report(){
+        Intent intent = new Intent(this, ReportTypeActivity.class);
+        intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
+        startActivity(intent);
     }
 
     /**

@@ -90,14 +90,14 @@ public class MyViewPagerAdapter extends PagerAdapter {
         holder.ivPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jumpuserInfo(list.get(position).getId()+"");
+                jumpuserInfo(list,position);
             }
         });
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jumpuserInfo(list.get(position).getId()+"");
+                jumpuserInfo(list,position);
             }
         });
 
@@ -122,11 +122,14 @@ public class MyViewPagerAdapter extends PagerAdapter {
         public RelativeLayout relativeLayout;
     }
 
-    public void jumpuserInfo(String userid){
+    public void jumpuserInfo(ArrayList<AllStrokeBean.DataBean> list,int position){
 
         if(AppData.isLoginEd()){
             Intent intent=new Intent(context, AllTravelInfoActivity.class);
-            intent.putExtra("SID",userid);
+            intent.putExtra("SID",list.get(position).getId()+"");
+            intent.putExtra("EndAddr",list.get(position).getEndAddr());
+            intent.putExtra("StartAddr",list.get(position).getStartAddr());
+            intent.putExtra("PostedTime",list.get(position).getPostedTime());
             context.startActivity(intent);
         }else{
             Intent intent=new Intent(context, LoginActivity.class);

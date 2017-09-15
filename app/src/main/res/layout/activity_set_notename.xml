@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
 
-        <EditText
+        <io.github.rockerhieu.emojicon.EmojiconEditText
             android:id="@+id/et_note_name"
             android:layout_width="match_parent"
             android:layout_height="43dp"

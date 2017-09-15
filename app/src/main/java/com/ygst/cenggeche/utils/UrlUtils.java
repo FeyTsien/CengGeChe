@@ -6,13 +6,15 @@ package com.ygst.cenggeche.utils;
 
 public class UrlUtils {
     //BaseUrl本地
-//    public static String BASEURl_BENDI = "http://192.168.0.133";
-    public static String BASEURl_BENDI = "http://gqj19940824.vicp.io";
+    public static String BASEURl_BENDI = "http://192.168.0.133";
+//    public static String BASEURl_BENDI = "http://gqj19940824.vicp.io";
+
     // BaseUrl测试(暂时没有)
 //     public static String BASEURl_TEST = "http://192.168.0.147:8180";
     //BaseUrl线上
-//    public static String BASEURL_XIANSHANG = "https://www.1yongche.com/apiJ/";
-    public static String BASEURL_XIANSHANG = "https://47.93.6.225/apiJ/";
+    public static String BASEURL_XIANSHANG = "https://www.1yongche.com/apiJ/";
+//    public static String BASEURL_XIANSHANG = "https://47.93.6.225/apiJ/";
+//    public static String BASEURL_XIANSHANG = "http://47.93.6.225:8180/";
 
     //服务端地址
     public static String BASEURl = BASEURL_XIANSHANG;
@@ -41,6 +43,19 @@ public class UrlUtils {
     public static String RESET_PWD = "user/resetPass.do";
     //退出接口
     public static String LOGIN_OUT = "user/logout.do";
+
+    //获取系统通知接口
+    public static String GET_SYSTEM_NOTIFY_HEAD= "inform/systemInformHead.do";
+    //获取系统通知列表接口
+    public static String GET_SYSTEM_NOTIFY_LIST= "inform/informList.do";
+
+    //获取活动公告接口
+    public static String GET_NOTICE_HEAD = "notice/noticeHead.do";
+    //获取活动公告列表接口
+    public static String GET_NOTICE_LIST = "notice/noticeList.do";
+    //获取活动公告详情接口
+    public static String GET_NOTICE_INFO = "notice/noticeInfo.do";
+
     //获取我的信息接口
     public static String GET_MY_INFO = "user/getMyInfo.do";
     //获取用户信息接口
@@ -71,9 +86,12 @@ public class UrlUtils {
     public static String REMOVE_BLACKLIST="friendOperate/removeBlackList.do";
     //修改好友备注
     public static String UPDATE_FRIEND_NOTE="friendOperate/updateFriendNote.do";
+    //获取最新的app版本接口
+    public static String GET_NEW_APP_VERSION="version/getNewAppVersion.do";
 
     // 刷新token
     public static String REFRESHTOKEN = "login/refreshToken.do";
+
 
     //获取全部行程（蹭车/捎人）
     public static String ALLTRAVEL = "stroke/getAllStroke.do";

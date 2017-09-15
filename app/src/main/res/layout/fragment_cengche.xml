@@ -1,84 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorPageBG"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
-    <include layout="@layout/app_toolbar_cengche"></include>
+    <include layout="@layout/app_toolbar_cengche"/>
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-
-    <RelativeLayout
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:clipChildren="false">
-
-
-        <android.support.v4.view.ViewPager
-            android:layout_marginTop="30dp"
-            android:id="@+id/tab_viewpager"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:clipChildren="false">
-
-        </android.support.v4.view.ViewPager>
-
-
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-
-            android:id="@+id/iv_release_plan"
-            android:src="@mipmap/iv_release_plan"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
 
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:clipChildren="false">
 
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/iv_take_her"
-            android:src="@mipmap/iv_cengtache"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-            <ImageView
-                android:id="@+id/iv_cengtache"
-                android:src="@mipmap/iv_tasahgnta"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <android.support.v4.view.ViewPager
+                android:id="@+id/tab_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:clipChildren="false">
+
+            </android.support.v4.view.ViewPager>
+
 
         </RelativeLayout>
-        <ImageView
-            android:id="@+id/iv_trip_info"
-            android:src="@mipmap/iv_trip_info"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:layout_marginTop="17dp">
+
+            <ImageView
+
+                android:id="@+id/iv_release_plan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@mipmap/iv_release_plan" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
 
+                <ImageView
+                    android:id="@+id/iv_take_her"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/iv_cengtache" />
 
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_cengtache"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/iv_tasahgnta" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/iv_trip_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@mipmap/iv_trip_info" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

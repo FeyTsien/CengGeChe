@@ -44,12 +44,12 @@
             android:layout_weight="1"
             android:gravity="bottom">
 
-            <TextView
+            <io.github.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_target_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:layout_toLeftOf="@+id/tv_last_time"
-                android:text="小明"
                 android:textColor="@color/butaihei"
                 android:textSize="15sp" />
 
@@ -74,7 +74,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="小明是个傻逼"
                 android:textColor="@color/gray"
                 android:textSize="12sp" />
 

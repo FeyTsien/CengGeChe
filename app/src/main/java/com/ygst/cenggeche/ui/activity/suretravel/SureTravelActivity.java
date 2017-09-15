@@ -2,7 +2,6 @@ package com.ygst.cenggeche.ui.activity.suretravel;
 
 
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -27,12 +26,8 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.itinerary.ItineraryActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.surerelease.SureReleaseActivity;
-import com.ygst.cenggeche.ui.activity.travelinfo.TravelInfoActivity;
 import com.ygst.cenggeche.ui.view.PickValueView;
-import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,7 +37,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.umeng.analytics.pro.x.S;
 import static com.ygst.cenggeche.R.id.et_start_action;
 import static com.ygst.cenggeche.R.id.pickValue;
 

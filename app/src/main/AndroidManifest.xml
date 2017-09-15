@@ -105,6 +105,10 @@
         <activity android:name=".ui.activity.main.MainActivity" />
         <!--主界面1-->
         <activity android:name=".ui.activity.main.MainActivity1" />
+        <!--系统通知-->
+        <activity android:name=".ui.activity.systemnotify.SystemNotifyActivity" />
+        <!--活动公告-->
+        <activity android:name=".ui.activity.notice.NoticeActivity" />
         <!--自定义的聊天页-->
         <activity android:name=".ui.activity.mychat.MyChatActivity"
             android:theme="@style/ChatTheme"
@@ -119,12 +123,16 @@
         <activity android:name=".ui.activity.newfriendlist.NewFriendListActivity" />
         <!--好友详细信息-->
         <activity android:name=".ui.activity.friendinfo.FriendInfoActivity" />
-        <!--好友详细信息-->
-        <activity android:name=".ui.activity.setnotename.SetNoteNameActivity" />
         <!--展示大图-->
         <activity android:name=".ui.activity.friendinfo.BigPicActivity" />
         <!--好友操作-->
         <activity android:name=".ui.activity.friendoperate.FriendOperateActivity" />
+        <!--修改好友备注-->
+        <activity android:name=".ui.activity.setnotename.SetNoteNameActivity" />
+        <!--举报类型-->
+        <activity android:name=".ui.activity.friendoperate.report.ReportTypeActivity" />
+        <!--举报他人-->
+        <activity android:name=".ui.activity.friendoperate.report.ReportActivity" />
         <!--设置-->
         <activity android:name=".ui.activity.setting.SettingActivity" />
 
@@ -155,9 +163,6 @@
         <activity android:name=".ui.activity.releaseplan.surerelease.SureReleaseActivity" />
         <!-- 获取车辆信息 -->
         <activity android:name=".ui.activity.releaseplan.cartype.CartypeActivity" />
-
-        <!-- 获取附近人详细信息 -->
-        <activity android:name=".ui.activity.nearbyuserinfo.NearByUserInfoActivity" />
 
         <!-- 切换城市列表 -->
         <activity android:name=".ui.activity.changecity.ChangeCityActivity" />

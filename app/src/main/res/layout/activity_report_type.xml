@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPageBG"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_toolbar" />
+
+    <TextView
+        android:id="@+id/tv_harass"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:drawableRight="@drawable/set_right_arrows"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="广告骚扰"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_pornographic"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:drawableRight="@drawable/set_right_arrows"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="1dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="色情低俗"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/tv_politics"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:drawableRight="@drawable/set_right_arrows"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="1dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="政治敏感"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/tv_fraud"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:drawableRight="@drawable/set_right_arrows"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="1dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="欺诈骗钱"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_illegal"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:drawableRight="@drawable/set_right_arrows"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="1dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="违法（暴力恐怖、违禁品等）"
+        android:textColor="@color/black" />
+
+</LinearLayout>

@@ -9,11 +9,40 @@ import com.ygst.cenggeche.utils.SharedPreferencesUtils;
 
 public class AppData {
 
+    private static final String IS_NEW_APP = "isNewApp";
     private static final String IS_LOGIN_ED = "isLoginEd";
     private static final String IS_NOTIFICATION = "isNotification";
     private static final String IS_LOCATION = "北京";
 
 
+    public static void savaFirstOpen(int firstOpen) {
+        SharedPreferencesUtils.saveInt("FirstOpen", firstOpen);
+    }
+
+    /**
+     * 设置车主认证状态
+     */
+    public static int getFirstOpen(){
+        return SharedPreferencesUtils.getInt("FirstOpen", 1);
+    }
+
+    /**
+     * 查询是否是最新版APP
+     *
+     * @return
+     */
+    public static boolean isNewApp() {
+        return SharedPreferencesUtils.getBoolean(IS_NEW_APP, false);
+    }
+
+    /**
+     * 设置是否是最新版APP
+     *
+     * @param isNewApp
+     */
+    public static void setIsNewApp(boolean isNewApp) {
+        SharedPreferencesUtils.saveBoolean(IS_NEW_APP, isNewApp);
+    }
 
 
     /**
@@ -33,6 +62,24 @@ public class AppData {
     public static void setIsLoginEd(boolean isLoginEd) {
         SharedPreferencesUtils.saveBoolean(IS_LOGIN_ED, isLoginEd);
     }
+
+    /**
+     * 查询是否车主认证通过
+     *
+     * @param userStatus
+     */
+    // 保存验证信息未读取条数
+    public static void savaUserStatus(int userStatus) {
+        SharedPreferencesUtils.saveInt("userStatus", userStatus);
+    }
+
+    /**
+     * 设置车主认证状态
+     */
+    public static int getUserStatus(){
+        return SharedPreferencesUtils.getInt("userStatus", 0);
+    }
+
 
     /**
      * 查询是否勾选不再提示（开始通知栏权限时）
@@ -58,6 +105,7 @@ public class AppData {
     public static void saveUid(String username) {
         SharedPreferencesUtils.saveString("UID", username);
     }
+
     /**
      * 获取UserId
      */
@@ -174,5 +222,19 @@ public class AppData {
     public static String getLocation() {
         return SharedPreferencesUtils.getString("LOCATION", null);
     }
+
+    /**
+     * 保存性别
+     */
+    public static void saveGenders(String gender) {
+        SharedPreferencesUtils.saveString("GENDER", gender);
+    }
+    /**
+     * 获取性别
+     */
+    public static String getGenders() {
+        return SharedPreferencesUtils.getString("GENDER", null);
+    }
+
 
 }

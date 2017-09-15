@@ -78,17 +78,33 @@
                 android:text="清空聊天记录"
                 android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/tv_update"
+            <RelativeLayout
+                android:id="@+id/rl_update_app"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="1dp"
                 android:background="@color/white"
-                android:gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="版本更新"
-                android:textColor="@color/black" />
+                android:paddingRight="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentLeft="true"
+                    android:text="版本更新"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_new_app"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:text="有新的"
+                    android:textColor="@color/colorTheme" />
+            </RelativeLayout>
+
             <TextView
                 android:id="@+id/tv_user_guide"
                 android:layout_width="match_parent"
@@ -153,9 +169,10 @@
                     android:id="@+id/iv_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/logo_setting"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    android:src="@mipmap/logo_setting" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -163,7 +180,7 @@
                     android:layout_centerHorizontal="true"
                     android:text="北京阳光沙滩网络科技有限公司"
                     android:textColor="@color/black"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

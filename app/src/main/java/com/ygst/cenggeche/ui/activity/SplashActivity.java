@@ -1,16 +1,15 @@
 package com.ygst.cenggeche.ui.activity;
 
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
 import android.widget.ImageView;
 
 import com.blankj.utilcode.utils.LogUtils;
-import com.tsien.myapplication.asimplecachedemo.ACacheMainActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
-import com.ygst.cenggeche.ui.activity.guidepage.GuidePageActivity;
-import com.ygst.cenggeche.ui.activity.login.LoginActivity;
+import com.ygst.cenggeche.ui.activity.guidepage.GradientBackgroundExampleActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.utils.CommonUtils;
 
@@ -49,40 +48,24 @@ public class SplashActivity extends BaseActivity {
         //绑定activity
         bind = ButterKnife.bind(this);
         ivPic.setImageResource(R.mipmap.img_splash);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                initData();
-//            }
-//        }, 2000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                start();
+            }
+        }, 2000);
 
     }
 
-    private void toMainActivity() {
-//        if(MyApplication.isLoginEd()){
-            CommonUtils.startActivity(this,LoginActivity.class);
-//        }else{
-//            CommonUtils.startActivity(this,LoginActivity.class);
-//        }
-        finish();
-    }
-
-    public void btnMain(View view){
-        initData();
-    }
-    public void btnJChat(View view){
-        toIMActivity();
-//        CommonUtils.startActivity(this, com.jarek.imageselect.activity.MainActivity.class);
-    }
-
-    private void initData() {
-        CommonUtils.startActivity(this,MainActivity1.class);
-        finish();
-    }
-
-    private void toIMActivity(){
-        CommonUtils.startActivity(this, GuidePageActivity.class);
-        finish();
+    private void start() {
+        // 如果是第一次启动，则先进入功能引导页
+        if (AppData.getFirstOpen()==1) {
+            CommonUtils.startActivity(this, GradientBackgroundExampleActivity.class);
+            finish();
+        }else {
+            CommonUtils.startActivity(this, MainActivity1.class);
+            finish();
+        }
     }
 
     @Override

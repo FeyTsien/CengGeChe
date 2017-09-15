@@ -31,7 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-
             android:id="@+id/iv_release_plan"
             android:src="@mipmap/iv_release_plan"
             android:layout_weight="1"
@@ -40,7 +39,6 @@
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/iv_take_her"
-            android:src="@mipmap/iv_take_her"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_width="0dp"

@@ -114,7 +114,7 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
             @Override
             public void run() {
                 ++PAGE;
-                mPresenter.getnearBy("116.230000","39.5668264",PAGE);
+//                mPresenter.getnearBy("116.230000","39.5668264",PAGE);
                 recyclerView.onFooterRefreshComplete();
             }
         }, 1000);
@@ -126,10 +126,10 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
             @Override
             public void run() {
                 PAGE=1;
-                mPresenter.getnearBy("116.230000","39.5668264",PAGE);
+//                mPresenter.getnearBy("116.230000","39.5668264",PAGE);
                 recyclerView.onHeaderRefreshComplete();
             }
-        }, 3000);
+        }, 1000);
 
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPageBG"
@@ -17,12 +18,11 @@
             android:layout_above="@+id/ll_jilu">
 
 
-            <com.ygst.cenggeche.ui.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.ygst.cenggeche.ui.widget.CircleImageView
                 android:id="@+id/civ_avatar"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/loli"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="2dp" />
 
@@ -31,16 +31,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/civ_avatar"
-                android:layout_alignRight="@+id/civ_avatar"/>
+                android:layout_alignRight="@+id/civ_avatar" />
 
-            <TextView
+            <io.github.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_myname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/civ_avatar"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:text="测试"
                 android:textColor="@color/white" />
         </RelativeLayout>
 
@@ -152,7 +151,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="个人信息"
+        android:text="我的资料"
         android:textColor="@color/black" />
 
     <TextView

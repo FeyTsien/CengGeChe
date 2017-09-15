@@ -1,4 +1,4 @@
-package com.ygst.cenggeche.ui.activity.report;
+package com.ygst.cenggeche.ui.activity.friendoperate.report;
 
 import android.content.Context;
 

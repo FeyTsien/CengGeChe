@@ -1,5 +1,6 @@
 package com.ygst.cenggeche.ui.activity.setting;
 
+import com.ygst.cenggeche.bean.NewAppVersionBean;
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -10,11 +11,14 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class SettingContract {
     interface View extends BaseView {
+        void getNewAppVersionSuccess(NewAppVersionBean newAppVersionBean);
         void loginOutSuccess();
         void loginOutError();
     }
 
     interface  Presenter extends BasePresenter<View> {
+
+        void getNewAppVersion();
         void loginOut();
     }
 }

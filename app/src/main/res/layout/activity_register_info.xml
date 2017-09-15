@@ -20,6 +20,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/edit_bg"
             android:hint="请输入您的昵称"
+            android:maxLength="12"
             android:textColor="@color/black"
             android:textColorHint="@color/colorHint"
             android:textSize="13sp" />

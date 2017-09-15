@@ -110,6 +110,7 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
 
         MyInfoBean.DataBean dataBean = myInfoBean.getData();
         userStatus =dataBean.getUserStatus();
+        AppData.savaUserStatus(dataBean.getUserStatus());
         //头像
         Glide.with(this).load(dataBean.getUserPic()).placeholder(R.mipmap.icon_my_avatar).into(mCivAvatar);
         //性别

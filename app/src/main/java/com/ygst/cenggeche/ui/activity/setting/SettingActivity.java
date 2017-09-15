@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.app.MyApplication;
+import com.ygst.cenggeche.bean.NewAppVersionBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.utils.CommonUtils;
@@ -46,6 +47,8 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
     TextView mTvTitle;
     @BindView(R.id.tv_clear_cache)
     TextView mTvClearCache;
+    @BindView(R.id.tv_new_app)
+    TextView mTvNewApp;
 
     /**
      * 返回
@@ -71,6 +74,11 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
             mTvClearCache.setText(DataCleanManager.getTotalCacheSize(this));
         }catch (Exception e) {
             e.printStackTrace();
+        }
+        if(AppData.isNewApp()){
+            mTvNewApp.setText("点击更新最新版本");
+        }else{
+            mTvNewApp.setText("当前已是最新版本");
         }
     }
     /**
@@ -117,9 +125,9 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
     /**
      * 版本更新
      */
-    @OnClick(R.id.tv_update)
-    public void update(){
-
+    @OnClick(R.id.rl_update_app)
+    public void updateApp(){
+        mPresenter.getNewAppVersion();
     }
 
     /**
@@ -160,6 +168,31 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
                 mPresenter.loginOut();
             }
         }, null);
+    }
+
+    @Override
+    public void getNewAppVersionSuccess(NewAppVersionBean newAppVersionBean) {
+        //获取当前应用版本信息
+        getAppVersionName(this);
+        String code = newAppVersionBean.getData().getVersion();
+        String name = newAppVersionBean.getData().getVersionName();
+        String updateDate = newAppVersionBean.getData().getUpdateDate();
+        final String url = newAppVersionBean.getData().getPath();
+        if (Double.parseDouble(code) > versioncode) {
+            AppData.setIsNewApp(true);
+            mTvNewApp.setText("点击更新最新版本");
+            CommonUtils.showInfoDialog(this, "新版本号： "+name+"\n新版日期： "+updateDate, "发现新版本", "更新", "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //执行下载
+                    download(url);
+                }
+            }, null);
+        }else{
+            AppData.setIsNewApp(false);
+            mTvNewApp.setText("当前已是最新版本");
+            CommonUtils.showInfoDialog(SettingActivity.this, "当前已经是最新版本", "提示", "知道了", "", null, null);
+        }
     }
 
     @Override

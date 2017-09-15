@@ -2,6 +2,7 @@ package com.ygst.cenggeche.ui.activity.alltravelinfo;
 
 import android.content.Context;
 
+import com.ygst.cenggeche.bean.UserDetailsInfoBean;
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -13,7 +14,7 @@ import com.ygst.cenggeche.mvp.BaseView;
 public class AllTravelInfoContract {
     interface View extends BaseView {
 
-        void getUserInfoSuccess();
+        void getUserInfoSuccess(UserDetailsInfoBean userDetailsInfoBean);
         void getUserInfoFail();
 
 

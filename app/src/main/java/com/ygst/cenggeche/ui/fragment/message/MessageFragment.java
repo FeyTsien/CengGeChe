@@ -11,15 +11,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
+import com.ygst.cenggeche.bean.notice.NoticeHeadBean;
+import com.ygst.cenggeche.bean.systemNotify.SystemNotityHeadBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
 import com.ygst.cenggeche.ui.activity.friendlist.FriendListActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
+import com.ygst.cenggeche.ui.activity.notice.NoticeActivity;
+import com.ygst.cenggeche.ui.activity.systemnotify.SystemNotifyActivity;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenu;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuCreator;
 import com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuItem;
@@ -41,15 +46,22 @@ import cn.jpush.im.android.api.model.UserInfo;
  * Created by Administrator on 2017/8/16.
  */
 
-public class MessageFragment extends MVPBaseFragment<MessageContract.View, MessagePresenter> implements MessageContract.View {
+public class MessageFragment extends MVPBaseFragment<MessageContract.View, MessagePresenter> implements MessageContract.View,View.OnClickListener {
     private String TAG = "MessageFragment";
     public static MessageFragment instance = null;
     private Activity mContext;
     private View mRootView;
     List<Conversation> mListConversation;
 
-    TextView mTvUnReadApplyCount;
-    TextView mTvShowFriendList;
+    private TextView mTvUnReadApplyCount;
+    private TextView mTvShowFriendList;
+
+    private LinearLayout mLlSystemNotify;
+    private TextView mTvLatestSystemMsg;
+    private TextView mTvSystemUnreadCount;
+    private LinearLayout mLlNotice;
+    private TextView mTvLatestNoticeMsg;
+    private TextView mTvNoticeUnreadCount;
 
 
     private SwipeMenuListViewAdapter mSwipeMenuListViewAdapter;
@@ -123,14 +135,17 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
     private void initView() {
 
         mTvUnReadApplyCount = (TextView)mRootView.findViewById(R.id.tv_unread_count);
-        //进入我的蹭友
         mTvShowFriendList = (TextView)mRootView.findViewById(R.id.tv_show_friend_list);
-        mTvShowFriendList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CommonUtils.startActivity(getActivity(), FriendListActivity.class);
-            }
-        });
+        mLlSystemNotify = (LinearLayout) mRootView.findViewById(R.id.ll_system_notify);
+        mTvLatestSystemMsg = (TextView) mRootView.findViewById(R.id.tv_latest_system_msg);
+        mTvSystemUnreadCount = (TextView) mRootView.findViewById(R.id.tv_system_unread_count);
+        mLlNotice = (LinearLayout) mRootView.findViewById(R.id.ll_notice);
+        mTvLatestNoticeMsg = (TextView) mRootView.findViewById(R.id.tv_latest_notice_msg);
+        mTvNoticeUnreadCount = (TextView) mRootView.findViewById(R.id.tv_notice_unread_count);
+
+        mTvShowFriendList.setOnClickListener(this);
+        mLlSystemNotify.setOnClickListener(this);
+        mLlNotice.setOnClickListener(this);
 
         mListView = (SwipeMenuListView) mRootView.findViewById(R.id.listView);
         // set creator
@@ -146,7 +161,7 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
             @Override
             public void onSwipeEnd(int position) {
                 // swipe end
-                LogUtils.i(TAG, "swipe start");
+                LogUtils.i(TAG, "swipe End");
             }
         });
         //点击侧滑出来的菜单按钮
@@ -156,7 +171,7 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
                 Conversation item = mListConversation.get(position);
                 switch (index) {
                     case 0:
-                        // open
+                        // 标记为已读
                         setIsRead(menu,item);
                         break;
                     case 1:
@@ -202,12 +217,43 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
     }
 
 
+    /**
+     * 点击事件
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.tv_show_friend_list:
+                //进入我的蹭友
+                CommonUtils.startActivity(getActivity(), FriendListActivity.class);
+                break;
+            case R.id.ll_system_notify:
+                //进入系统通知
+                CommonUtils.startActivity(getActivity(), SystemNotifyActivity.class);
+                break;
+            case R.id.ll_notice:
+                //进入活动公告
+                CommonUtils.startActivity(getActivity(), NoticeActivity.class);
+                break;
+        }
+    }
+
     private void initConversationListView(){
+        //获取系统通知
+        mPresenter.getsystemInformHead();
+        //获取活动公告
+        mPresenter.getNoticeHead();
+
         if(AppData.getUnReadApplyCount()>0){
+            //显示未读的验证消息条数
             showUnReadApplyCount();
         }else{
+            //隐藏未读的验证消息数
             mTvUnReadApplyCount.setVisibility(View.GONE);
         }
+        //获取显示会话列表
         mListConversation = JMessageClient.getConversationList();
         mSwipeMenuListViewAdapter = new SwipeMenuListViewAdapter(getActivity(),mListConversation);
         if (mListConversation != null) {
@@ -246,6 +292,28 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
     @Override
     public void getDeleteConversationError() {
         ToastUtil.show(getActivity(), "删除会话失败");
+    }
+
+    @Override
+    public void getNoticeHeadSuccess(NoticeHeadBean noticeHeadBean) {
+        //最新的活动公告
+        mTvLatestNoticeMsg.setText(noticeHeadBean.getData());
+    }
+
+    @Override
+    public void getNoticeHeadError() {
+
+    }
+
+    @Override
+    public void getsystemInformHeadSuccess(SystemNotityHeadBean systemNotityHeadBean) {
+        //最新的系统通知
+        mTvLatestSystemMsg.setText(systemNotityHeadBean.getData());
+    }
+
+    @Override
+    public void getsystemInformHeadError() {
+
     }
 
     private int dp2px(int dp) {

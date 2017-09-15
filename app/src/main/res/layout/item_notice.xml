@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_notice"
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:paddingLeft="10dp"
@@ -70,16 +71,15 @@
             android:gravity="bottom">
 
             <io.github.rockerhieu.emojicon.EmojiconTextView
-                android:id="@+id/tv_latest_message"
+                android:id="@+id/tv_latest_notice_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="小明是个傻逼"
                 android:textColor="@color/gray"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tv_unread_count"
+                android:id="@+id/tv_notice_unread_count"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_alignParentRight="true"

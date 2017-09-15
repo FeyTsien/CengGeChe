@@ -4,11 +4,13 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.AppData;
+import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.ui.onboarder.AhoyOnboarderActivity;
 import com.ygst.cenggeche.ui.onboarder.AhoyOnboarderCard;
+import com.ygst.cenggeche.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +21,8 @@ public class GradientBackgroundExampleActivity extends AhoyOnboarderActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("City Guide", "Detailed guides to help you plan your trip.", R.drawable.backpack);
-        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Travel Blog", "Share your travel experiences with a vast network of fellow travellers.", R.drawable.chalk);
+        AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("City Guide", "Detailed guides to help you plan your trip.", R.mipmap.logo);
+        AhoyOnboarderCard ahoyOnboarderCard2 = new AhoyOnboarderCard("Travel Blog", "Share your travel experiences with a vast network of fellow travellers.", R.mipmap.logo_setting);
         AhoyOnboarderCard ahoyOnboarderCard3 = new AhoyOnboarderCard("Chat", "Connect with like minded people and exchange your travel stories.", R.drawable.chat);
 
         ahoyOnboarderCard1.setBackgroundColor(R.color.black_transparent);
@@ -58,6 +60,7 @@ public class GradientBackgroundExampleActivity extends AhoyOnboarderActivity {
 
     @Override
     public void onFinishButtonPressed() {
-        Toast.makeText(this, "Finish Pressed", Toast.LENGTH_SHORT).show();
+        AppData.savaFirstOpen(0);
+        CommonUtils.startActivity(this, MainActivity1.class);
     }
 }

@@ -26,6 +26,7 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.ReleaseplanActivity;
+import com.ygst.cenggeche.ui.activity.releaseplan.surerelease.SureReleaseAdapter;
 import com.ygst.cenggeche.ui.activity.suretravel.InputTask;
 import com.ygst.cenggeche.ui.activity.suretravel.PoiListAdapter;
 import com.ygst.cenggeche.ui.activity.suretravel.SearchAdapter;
@@ -262,6 +263,7 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
             ArrayAdapter<String> aAdapter = new ArrayAdapter<String>(
                     getApplicationContext(),
                     R.layout.route_inputs, listString);
+
             autoCompleteTextView.setAdapter(aAdapter);
             aAdapter.notifyDataSetChanged();
         } else {

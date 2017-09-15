@@ -17,6 +17,7 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.B2.ApplyBean;
+import com.ygst.cenggeche.bean.NewAppVersionBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendlist.FriendListActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
@@ -731,5 +732,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         Intent intent = new Intent(this, ShowMyInfoUpdateActivity.class);
         intent.putExtra(INFO_UPDATE, myInfo.getUserName());
         startActivity(intent);
+    }
+
+    @Override
+    public void getNewAppVersionSuccess(NewAppVersionBean newAppVersionBean) {
+
     }
 }

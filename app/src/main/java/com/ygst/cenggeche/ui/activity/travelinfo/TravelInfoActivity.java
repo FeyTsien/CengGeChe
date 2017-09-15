@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jmessage.android.uikit.chatting.CircleImageView;
 
-import static com.ygst.cenggeche.R.id.tv_remarks;
 
 
 /**
@@ -57,7 +56,7 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
     TextView tvEndLocation;
     @BindView(R.id.tv_release_date)
     TextView tvReleaseDate;
-    @BindView(tv_remarks)
+    @BindView(R.id.tv_remarks)
     TextView tvRemarks;
     @BindView(R.id.user_smallicon)
     CircleImageView userSmallicon;
@@ -88,10 +87,6 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
     LinearLayout  ll_ischezhu;
     @BindView(R.id.tv_wait_go)
     TextView tv_wait_go;
-
-
-
-
 
 
     @BindView(R.id.lv_shaoren)
@@ -155,7 +150,7 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_delete:
-                CommonUtils.showInfoDialog(TravelInfoActivity.this, "确定要删除行程吗？", "提示", "确定", "取消", new DialogInterface.OnClickListener() {
+                CommonUtils.showInfoDialog(TravelInfoActivity.this, "确定要取消行程吗？", "提示", "确定", "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mPresenter.changeInfo(data.getUserFlag()+"",data.getId()+"",data.getUid()+"","50");

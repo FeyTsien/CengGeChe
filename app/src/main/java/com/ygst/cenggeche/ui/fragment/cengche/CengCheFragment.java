@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
@@ -31,6 +33,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 
 /**
@@ -54,6 +58,10 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     ImageView ivTakeHer;
     @BindView(R.id.iv_cengtache)
     ImageView ivCengTaChe;
+//    @BindView(R.id.rl_empty)
+//    RelativeLayout rlEmpty;
+//    @BindView(R.id.ll_cenglayout)
+//    LinearLayout ll_cenglayout;
 
     private String TAG = "CengCheFragment";
     private ArrayList<AllStrokeBean.DataBean> list;
@@ -83,6 +91,19 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                 case R.id.iv_take_her:
                     PERSONSTATUS = 1;
                     mPresenter.checkApplyinfo("1", sid + "");
+
+                    String genders = AppData.getGenders();
+                    if(genders!=null){
+                        int i = Integer.parseInt(genders);
+                        if(i==1){
+                            ToastUtil.show(getActivity(),"男性乘客不能蹭车");
+                        }else if(i==0){
+                            mPresenter.checkApplyinfo("2", sid + "");
+                        }
+
+                    }else{
+
+                    }
 //                    if(endAddr!=null&&startAddr!=null&&postedTime!=null&&comment!=null) {
 //                        intent.putExtra("endAddr", endAddr);
 //                        intent.putExtra("startAddr", startAddr);
@@ -95,10 +116,8 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                 case R.id.iv_trip_info:
                     CommonUtils.startActivity(getActivity(), TravelInfoActivity.class);
                     break;
-
                 case R.id.iv_cengtache:
                     PERSONSTATUS = 2;
-
                     mPresenter.checkApplyinfo("2", sid + "");
 
                     break;
@@ -114,7 +133,7 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mCengCheView = inflater.inflate(R.layout.fragment_cengche, container, false);
         ButterKnife.bind(this, mCengCheView);
-        mPresenter.getAllinfo(2 + "", PAGE);
+        mPresenter.getAllinfo(1 + "", PAGE);
         initView();
 
         return mCengCheView;
@@ -181,7 +200,7 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
 
                             if (currentPage == list.size() - 1) {
                                 ++PAGE;
-                                mPresenter.getAllinfo(2 + "", PAGE);
+                                mPresenter.getAllinfo(1 + "", PAGE);
                             }
                         }
 
@@ -210,11 +229,15 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
 
         }
         setData();
+//        rlEmpty.setVisibility(View.GONE);
+//        ll_cenglayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void getAllInfoFail() {
         Log.i(TAG, "fails");
+//        rlEmpty.setVisibility(View.VISIBLE);
+//        ll_cenglayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -287,7 +310,7 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                 btnShaoren.setBackgroundResource(R.drawable.button_shaoren2);
                 list.clear();
 
-                mPresenter.getAllinfo(2 + "", PAGE);
+                mPresenter.getAllinfo(1 + "", PAGE);
 
                 setData();
                 break;
@@ -303,7 +326,7 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                 btnCengche.setBackgroundResource(R.drawable.button_cengche2);
 
                 list.clear();
-                mPresenter.getAllinfo(1 + "", PAGE);
+                mPresenter.getAllinfo(2 + "", PAGE);
                 setData();
 //                mAdapter.notifyDataSetChanged();
                 break;

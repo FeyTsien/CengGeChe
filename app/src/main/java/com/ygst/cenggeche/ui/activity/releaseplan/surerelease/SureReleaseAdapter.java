@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class SureReleaseAdapter extends BaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
 
-//        vh.title.setText(mList.get(position).getTitle());
+        vh.title.setText(mList.get(position));
 //        vh.text.setText(mList.get(position).getText());
         return convertView;
     }

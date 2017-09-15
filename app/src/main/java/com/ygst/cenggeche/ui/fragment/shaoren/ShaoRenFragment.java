@@ -71,7 +71,7 @@ public class ShaoRenFragment extends MVPBaseFragment<ShaoRenContract.View, ShaoR
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mShaoRenView = inflater.inflate(R.layout.fragment_shaoren, container, false);
+//        mShaoRenView = inflater.inflate(R.layout.fragment_shaoren, container, false);
         initView();
         ButterKnife.bind(this,mShaoRenView);
 

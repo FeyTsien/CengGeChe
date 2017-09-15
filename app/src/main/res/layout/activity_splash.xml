@@ -9,25 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY" />
-    <Button
-        android:id="@+id/btn_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="10dp"
-        android:background="@drawable/button_bg_click"
-        android:onClick="btnMain"
-        android:text="正式界面"/>
-
-    <Button
-        android:id="@+id/btn_jchat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/btn_main"
-        android:background="@drawable/button_bg_click"
-        android:layout_margin="10dp"
-        android:onClick="btnJChat"
-        android:text="测试功能界面"/>
 
     <TextView
         android:id="@+id/tv_jump"

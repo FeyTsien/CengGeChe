@@ -1,33 +1,25 @@
 package com.ygst.cenggeche.ui.activity.releaseplan.choosepic;
 
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
-import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.ChoosePicBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.friendlist.CommonUtil;
-import com.ygst.cenggeche.ui.activity.friendoperate.FriendOperateActivity;
 import com.ygst.cenggeche.ui.view.NoScrollGridView;
 import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.umeng.analytics.pro.x.S;
 
 
 /**

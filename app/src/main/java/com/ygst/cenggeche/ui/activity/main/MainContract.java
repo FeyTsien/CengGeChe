@@ -1,5 +1,6 @@
 package com.ygst.cenggeche.ui.activity.main;
 
+import com.ygst.cenggeche.bean.NewAppVersionBean;
 import com.ygst.cenggeche.mvp.BasePresenter;
 import com.ygst.cenggeche.mvp.BaseView;
 
@@ -10,11 +11,10 @@ import com.ygst.cenggeche.mvp.BaseView;
 
 public class MainContract {
     interface View extends BaseView {
-//        void weAreFriendSuccess();
-//        void weAreFriendError();
+        void getNewAppVersionSuccess(NewAppVersionBean newAppVersionBean);
     }
 
     interface  Presenter extends BasePresenter<View> {
-//        void weAreFriend(String myusername,String fusername);
+        void getNewAppVersion();
     }
 }

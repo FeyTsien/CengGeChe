@@ -5,6 +5,7 @@ import android.content.Context;
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.Gson;
 import com.ygst.cenggeche.bean.UserBean;
+import com.ygst.cenggeche.bean.UserDetailsInfoBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.UrlUtils;
@@ -27,7 +28,6 @@ public class AllTravelInfoPresenter extends BasePresenterImpl<AllTravelInfoContr
             Map<String, String> map = new HashMap<>();
             map.put("sid", sid);
             HttpManager.getHttpManager().postMethod(UrlUtils.GETSTROKEUSERINFO, new Observer<String>() {
-
                 @Override
                 public void onCompleted() {
 
@@ -40,12 +40,13 @@ public class AllTravelInfoPresenter extends BasePresenterImpl<AllTravelInfoContr
 
                 @Override
                 public void onNext(String s) {
-                    LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
                     Gson gson = new Gson();
-                    UserBean userBean = gson.fromJson(s, UserBean.class);
+                    UserDetailsInfoBean userBean = gson.fromJson(s, UserDetailsInfoBean.class);
+
                     if ("0000".equals(userBean.getCode())) {
                         if (mView != null)
-                            mView.getUserInfoSuccess();
+                            mView.getUserInfoSuccess(userBean);
+
 //                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                     } else {
                         if (mView != null)

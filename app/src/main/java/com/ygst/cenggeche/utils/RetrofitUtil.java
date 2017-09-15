@@ -100,7 +100,12 @@ public class RetrofitUtil {
                                     public boolean verify(String hostname, SSLSession session) {
                                         return true;
                                     }
-                                }).connectTimeout(20, TimeUnit.SECONDS).build();
+                                })
+                                .readTimeout(100, TimeUnit.SECONDS)//设置读取超时时间
+                                .writeTimeout(100,TimeUnit.SECONDS)//设置写的超时时间
+                                .connectTimeout(1, TimeUnit.HOURS)//设置连接超时时间
+                                .build();
+
                         sRetrofit = new Retrofit.Builder().client(sOkHttpClient)
                                 .baseUrl(UrlUtils.BASEURl)
                                 .addConverterFactory(ScalarsConverterFactory.create())

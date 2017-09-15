@@ -2,10 +2,16 @@ package com.ygst.cenggeche.ui.activity.base;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -14,11 +20,18 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.Window;
 
-import com.ygst.cenggeche.app.ACache;
+import com.blankj.utilcode.utils.LogUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.ACache;
 import com.ygst.cenggeche.http.LifeSubscription;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +44,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public abstract class BaseActivity extends AppCompatActivity implements LifeSubscription {
 
+    private String TAG = "BaseActivity";
     // 管理运行的所有的activity
     public final static List<AppCompatActivity> mActivities = new LinkedList<AppCompatActivity>();
 
@@ -150,6 +164,80 @@ public abstract class BaseActivity extends AppCompatActivity implements LifeSubs
         if (this.mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
             this.mCompositeSubscription.unsubscribe();
         }
+    }
+
+    public String versionName;
+    public int versioncode;
+
+    /**
+     * 返回当前程序版本名
+     */
+    public void getAppVersionName(Context context) {
+        try {
+            // ---get the package info---
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            versioncode = pi.versionCode;
+
+        } catch (Exception e) {
+            LogUtils.e("VersionInfo", "Exception", e);
+        }
+
+    }
+
+    //下载具体操作
+    protected void download(String downloadUrl) {
+        try {
+            URL url = new URL(downloadUrl);
+            //打开连接
+            URLConnection conn = url.openConnection();
+            //打开输入流
+            InputStream is = conn.getInputStream();
+            //获得长度
+            int contentLength = conn.getContentLength();
+            LogUtils.e(TAG, "contentLength = " + contentLength);
+            //创建文件夹 CengGeChe，在存储卡下
+            String dirName = Environment.getExternalStorageDirectory() + "/CengGeChe/";
+            File file = new File(dirName);
+            //不存在创建
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            //下载后的文件名
+            String fileName = dirName + "cenggeche.apk";
+            File file1 = new File(fileName);
+            if (file1.exists()) {
+                file1.delete();
+            }
+            //创建字节流
+            byte[] bs = new byte[1024];
+            int len;
+            OutputStream os = new FileOutputStream(fileName);
+            //写数据
+            while ((len = is.read(bs)) != -1) {
+                os.write(bs, 0, len);
+            }
+            //完成后关闭流
+            LogUtils.e(TAG, "download-finish");
+            os.close();
+            is.close();
+
+            //下载完打开此文件
+            getAllIntent(fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Android获取一个用于打开所有文件的intent
+    public static Intent getAllIntent( String param ) {
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(new File(param ));
+        intent.setDataAndType(uri,"*/*");
+        return intent;
     }
 
     public void killAll() {

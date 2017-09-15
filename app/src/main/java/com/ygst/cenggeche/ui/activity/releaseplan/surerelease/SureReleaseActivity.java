@@ -313,7 +313,7 @@ public class SureReleaseActivity extends MVPBaseActivity<SureReleaseContract.Vie
 
     @Override
     public void sureReleaseFail(String msg) {
-
+            ToastUtil.show(SureReleaseActivity.this,msg);
     }
 
     //上传图片成功与失败
