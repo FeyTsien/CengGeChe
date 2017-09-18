@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_avatar"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp">
 
@@ -21,8 +21,8 @@
             android:id="@+id/iv_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignRight="@+id/iv_avatar"
+            android:layout_alignBottom="@+id/iv_avatar"/>
     </RelativeLayout>
 
     <LinearLayout

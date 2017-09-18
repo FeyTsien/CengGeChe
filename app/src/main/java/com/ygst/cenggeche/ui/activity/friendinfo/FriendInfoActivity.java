@@ -170,11 +170,10 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
         mTvName.setText(targetName);
         //头像
         UserAvatarUri = friendInfo.getData().getUserPic();
-        TextDrawable drawable = MyTextDrawable.getTextDrawable(targetName);
         Glide.with(this)
                 .load(UserAvatarUri)
                 .centerCrop()
-                .placeholder(drawable)
+                .placeholder(R.mipmap.icon_my_avatar)
                 .into(mIvAvatar);
         //性别符号
         if (friendInfo.getData().getGender() == 0) {

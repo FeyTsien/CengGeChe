@@ -78,11 +78,11 @@
         </activity>
 
         <!--测试页-->
-        <activity android:name=".ui.test.TestActivity"
-            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.test.TestActivity" />
         <!--测试页2-->
-        <activity android:name=".ui.test.TestActivity2"
-            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.test.TestActivity2" />
+        <!--测试页3-->
+        <activity android:name=".ui.test.TestActivity3" />
         <!--引导页-->
         <activity android:name=".ui.activity.guidepage.GuidePageActivity" />
         <!--引导页1-->
@@ -170,6 +170,9 @@
         <!-- 详细资料-->
         <activity android:name=".ui.activity.alltravelinfo.AllTravelInfoActivity" />
 
+
+        <!--注册DownloadService-->
+        <service android:name=".download.service.DownloadService" />
 
         <!-- User defined.  For test only  用户自定义的广播接收器-->
         <receiver

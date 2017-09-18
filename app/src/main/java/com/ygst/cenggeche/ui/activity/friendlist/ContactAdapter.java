@@ -82,6 +82,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
             TextDrawable drawable = MyTextDrawable.getTextDrawable(friendName);
             Glide.with(mContext)
                     .load(bean.getUserPic())
+                    .centerCrop()
                     .placeholder(drawable)
                     .into(holder.iv_img);
 //            if(!TextUtils.isEmpty(bean.getUserPic())){

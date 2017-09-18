@@ -108,7 +108,7 @@ public class UrlUtils {
     //根据车辆品牌获取车系接口
     public static String GETALLCARTYPEBRAND = "car/getCarTypeByBrand.do";
 
-    //获取附近联系人
+    //获取附近的人
     public static String GETNEARBYPERSON = "lookAround/list.do";
 
     //获取城市列表

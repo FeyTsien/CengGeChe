@@ -14,13 +14,16 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.NewAppVersionBean;
+import com.ygst.cenggeche.download.service.DownloadService;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
+import com.ygst.cenggeche.ui.activity.setting.SettingActivity;
 import com.ygst.cenggeche.ui.fragment.cengche.CengCheFragment;
 import com.ygst.cenggeche.ui.fragment.me.MeFragment;
 import com.ygst.cenggeche.ui.fragment.message.MessageFragment;
 import com.ygst.cenggeche.ui.fragment.nearby.NearbyFragment;
+import com.ygst.cenggeche.ui.fragment.nearby.NearbyFragment1;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
 
@@ -96,7 +99,7 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
         }
 
         Fragment fmCengChe = new CengCheFragment();
-        Fragment fmNearby = new NearbyFragment();
+        Fragment fmNearby = new NearbyFragment1();
         Fragment fmMessage = new MessageFragment();
         Fragment fmMe = new MeFragment();
         mListFragments = new ArrayList<>();
@@ -201,7 +204,9 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //执行下载
-                    download(url);
+                    Intent intent = new Intent(MainActivity1.this, DownloadService.class);
+                    intent.putExtra("url","https://pro-app-qn.fir.im/2bfccf3789a41da17b9bec41c93d811d7d41ce2c.apk?attname=app-yiyongche-release.apk_1.0.3.apk&e=1505502883&token=LOvmia8oXF4xnLh0IdH05XMYpH6ENHNpARlmPc-T:QFpO80MNGSBBMOG4w0QLGX4sYW4=");
+                    startService(intent);
                 }
             }, null);
         }else{

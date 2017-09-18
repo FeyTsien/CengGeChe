@@ -186,60 +186,6 @@ public abstract class BaseActivity extends AppCompatActivity implements LifeSubs
 
     }
 
-    //下载具体操作
-    protected void download(String downloadUrl) {
-        try {
-            URL url = new URL(downloadUrl);
-            //打开连接
-            URLConnection conn = url.openConnection();
-            //打开输入流
-            InputStream is = conn.getInputStream();
-            //获得长度
-            int contentLength = conn.getContentLength();
-            LogUtils.e(TAG, "contentLength = " + contentLength);
-            //创建文件夹 CengGeChe，在存储卡下
-            String dirName = Environment.getExternalStorageDirectory() + "/CengGeChe/";
-            File file = new File(dirName);
-            //不存在创建
-            if (!file.exists()) {
-                file.mkdir();
-            }
-            //下载后的文件名
-            String fileName = dirName + "cenggeche.apk";
-            File file1 = new File(fileName);
-            if (file1.exists()) {
-                file1.delete();
-            }
-            //创建字节流
-            byte[] bs = new byte[1024];
-            int len;
-            OutputStream os = new FileOutputStream(fileName);
-            //写数据
-            while ((len = is.read(bs)) != -1) {
-                os.write(bs, 0, len);
-            }
-            //完成后关闭流
-            LogUtils.e(TAG, "download-finish");
-            os.close();
-            is.close();
-
-            //下载完打开此文件
-            getAllIntent(fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Android获取一个用于打开所有文件的intent
-    public static Intent getAllIntent( String param ) {
-        Intent intent = new Intent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(android.content.Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(new File(param ));
-        intent.setDataAndType(uri,"*/*");
-        return intent;
-    }
-
     public void killAll() {
         // 复制了一份mActivities 集合Å
         List<AppCompatActivity> copy;

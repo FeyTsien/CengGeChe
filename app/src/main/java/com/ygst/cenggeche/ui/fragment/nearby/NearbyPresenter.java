@@ -36,25 +36,21 @@ public class NearbyPresenter extends BasePresenterImpl<NearbyContract.View> impl
 
             @Override
             public void onError(Throwable e) {
-                if (mView != null) {
-                    ToastUtil.show(mView.getContext(), "请求失败，请重试");
-                }
                 LogUtils.e(TAG, "返回的onError", e);
             }
 
             @Override
             public void onNext(String s) {
-                LogUtils.i("HttpManager", "ssss:" + s);
+                LogUtils.i(TAG, "ssss:" + s);
                 Gson gson = new Gson();
                 NearByBean nearByBean = gson.fromJson(s, NearByBean.class);
-                String msg = nearByBean.getMsg();
                 if ("0000".equals(nearByBean.getCode())) {
                     if (mView != null) {
                         mView.getnearbySuccess(nearByBean);
                     }
                 } else {
                     if (mView != null) {
-                        mView.getnearbyFail(msg);
+                        mView.getnearbyFail(nearByBean.getMsg());
                     }
                 }
             }

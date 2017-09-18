@@ -22,12 +22,12 @@ import java.util.List;
  */
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements View.OnClickListener {
-    private  ArrayList<NearByBean.DataBean> mList;
+    private  List<NearByBean.DataBean> mList;
     private  Context context;
     private String TAG="MyAdapter";
     private OnItemClickListener mOnItemClickListener = null;
 
-    public MyAdapter(Context context,ArrayList<NearByBean.DataBean> list){
+    public MyAdapter(Context context,List<NearByBean.DataBean> list){
         this.context=context;
         this.mList=list;
     }

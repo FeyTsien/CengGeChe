@@ -40,4 +40,10 @@
     <string name="shot">拍摄</string>
     <string name="location">位置</string>
     <string name="red_pack">红包</string>
+
+    <string name="pull_down_refresh_label">下拉可以刷新</string>
+    <string name="pull_down_release_label">松开立即刷新</string>
+    <string name="pull_down_refreshing_label">正在刷新数据</string>
+    <string name="pull_up_load_label">上拉加载</string>
+    <string name="pull_up_loading_label">正在加载数据</string>
 </resources>

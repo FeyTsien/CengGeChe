@@ -76,4 +76,14 @@
         <attr name="transition_duration" format="integer"/>
     </declare-styleable>
 
+
+    <!--下拉刷新上拉加载-->
+    <declare-styleable name="PullRefreshLayout">
+        <attr name="refreshMode">
+            <flag name="disabled" value="0x0" />
+            <flag name="pullFromStart" value="0x1" />
+            <flag name="pullFromEnd" value="0x2" />
+            <flag name="both" value="0x3" />
+        </attr>
+    </declare-styleable>
 </resources>

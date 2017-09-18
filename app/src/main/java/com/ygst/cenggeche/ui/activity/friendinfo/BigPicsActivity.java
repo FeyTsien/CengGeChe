@@ -2,24 +2,23 @@ package com.ygst.cenggeche.ui.activity.friendinfo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.github.chrisbanes.photoview.PhotoView;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jmessage.android.uikit.chatting.photoview.PhotoView;
 
 /**
  * Created by Administrator on 2017/9/5.
  */
 
-public class BigPicActivity extends BaseActivity {
-    public static BigPicActivity instance;
+public class BigPicsActivity extends BaseActivity {
+    public static BigPicsActivity instance;
     @BindView(R.id.iv_big_pic)
     PhotoView mIvBigPic;
 

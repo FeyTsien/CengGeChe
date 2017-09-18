@@ -47,7 +47,6 @@ public class FriendOperatePresenter extends BasePresenterImpl<FriendOperateContr
                 if ("0000".equals(codeBean.getCode())) {
                     if (mView != null)
                         mView.delFriendSuccess();
-                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 } else {
                     if (mView != null)
                         mView.delFriendError();
@@ -82,7 +81,6 @@ public class FriendOperatePresenter extends BasePresenterImpl<FriendOperateContr
                 if ("0000".equals(codeBean.getCode())) {
                     if (mView != null)
                         mView.addBlackListSuccess();
-                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 } else {
                     if (mView != null)
                         mView.addBlackListError();
@@ -117,7 +115,6 @@ public class FriendOperatePresenter extends BasePresenterImpl<FriendOperateContr
                 if ("0000".equals(codeBean.getCode())) {
                     if (mView != null)
                         mView.removeBlackListSuccess();
-                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 } else {
                     if (mView != null)
                         mView.removeBlackListError();
