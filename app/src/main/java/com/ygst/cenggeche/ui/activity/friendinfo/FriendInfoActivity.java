@@ -21,10 +21,10 @@ import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.UserBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendoperate.FriendOperateActivity;
+import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.FlowLayout;
-import com.ygst.cenggeche.ui.widget.MyTextDrawable;
-import com.ygst.cenggeche.ui.widget.TextDrawable;
+import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
@@ -51,7 +51,7 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     private UserInfo mUserInfo;
     private boolean isFriend;
     private int theBtnSendMsgCode = -1;
-    private String targetUsername="";
+    private String targetUsername = "";
     private String targetAppKey;
     private String UserAvatarUri;
     private String targetName;
@@ -67,7 +67,7 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     @BindView(R.id.iv_menu)
     ImageView mIvMenu;
     @BindView(R.id.iv_avatar)
-    ImageView mIvAvatar;
+    CircleImageView mIvAvatar;
     @BindView(R.id.iv_gender)
     ImageView mIvGender;
     @BindView(R.id.tv_name)
@@ -177,8 +177,10 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
                 .into(mIvAvatar);
         //性别符号
         if (friendInfo.getData().getGender() == 0) {
+            mIvAvatar.setBorderColor(R.color.colorGirl);
             mIvGender.setImageResource(R.mipmap.icon_girl);
         } else if (friendInfo.getData().getGender() == 1) {
+            mIvAvatar.setBorderColor(R.color.colorBoy);
             mIvGender.setImageResource(R.mipmap.icon_boy);
         }
         //年龄
@@ -246,13 +248,18 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     @OnClick(R.id.btn_send_msg)
     public void btnOnClick() {
 //        if (theBtnSendMsgCode == 1) {
+        if (!AppData.isLoginEd() || JMessageClient.getMyInfo() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        } else {
             //去发消息
             Intent intent = new Intent();
             intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
             intent.putExtra(JMessageUtils.TARGET_APP_KEY, targetAppKey);
-            intent.putExtra(JMessageUtils.IS_FRIEND,isFriend);
+            intent.putExtra(JMessageUtils.IS_FRIEND, isFriend);
             intent.setClass(this, MyChatActivity.class);
             startActivity(intent);
+        }
 //        } else if (theBtnSendMsgCode == 2) {
 //            //去加好友
 //            Intent intent = new Intent();
@@ -278,7 +285,7 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case GO_FRIEND_OPERATE:
                 if (data != null) {
                     isBlack = data.getIntExtra(JMessageUtils.IS_BLACK, 0);

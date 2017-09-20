@@ -49,9 +49,6 @@ import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
-import im.sdk.debug.activity.friend.ShowFriendReasonActivity;
-import im.sdk.debug.activity.setting.ShowLogoutReasonActivity;
-import im.sdk.debug.activity.showinfo.ShowMyInfoUpdateActivity;
 
 
 /**
@@ -397,7 +394,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
         }
         ApplyBean applyBean = new ApplyBean();
-        Intent intent = new Intent(this, ShowFriendReasonActivity.class);
 
         Intent mIntent = new Intent(this, MyChatActivity.class);
 
@@ -448,9 +444,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                startActivity(intent);
                 break;
             case contact_deleted://对方将你从好友中删除
-                intent.putExtra("contact_deleted", "对方将你从好友中删除");
-                intent.setFlags(4);
-                startActivity(intent);
                 break;
             default:
                 break;
@@ -675,12 +668,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
      * @param event
      */
     public void onEvent(LoginStateChangeEvent event) {
-        LogUtils.i(TAG, "onEvent-----用户下线事件UserLogoutEvent (已过时，请使用LoginStateChangeEvent代替)");
-        LoginStateChangeEvent.Reason reason = event.getReason();
-        UserInfo myInfo = event.getMyInfo();
-        Intent intent = new Intent(getApplicationContext(), ShowLogoutReasonActivity.class);
-        intent.putExtra(LOGOUT_REASON, "reason = " + reason + "\n" + "logout user name = " + myInfo.getUserName());
-        startActivity(intent);
     }
 
     /**
@@ -727,11 +714,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
      * @param event
      */
     public void onEvent(MyInfoUpdatedEvent event) {
-        LogUtils.i(TAG, "onEvent-----当前登录用户信息被更新事件实体类 MyInfoUpdatedEvent");
-        UserInfo myInfo = event.getMyInfo();
-        Intent intent = new Intent(this, ShowMyInfoUpdateActivity.class);
-        intent.putExtra(INFO_UPDATE, myInfo.getUserName());
-        startActivity(intent);
     }
 
     @Override

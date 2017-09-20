@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -54,6 +53,8 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
     //意见反馈
     private final String URL_FEEDBACK= UrlUtils.URL_H5+"/cenggeche/pages/feedback/feedback.html";
 
+    private String appUrl;
+
     List<Conversation> mListConversation;
 
     private LocalBroadcastManager bManager;
@@ -79,7 +80,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
                 progress.setProgress(download.getProgress());
                 if (download.getProgress() == 100) {
 
-                    progress_text.setText("File Download Complete");
+                    progress_text.setText("最新安装包下载成功");
 
                 } else {
 
@@ -225,7 +226,6 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
             }
         }, null);
     }
-    String url;
     @Override
     public void getNewAppVersionSuccess(NewAppVersionBean newAppVersionBean) {
         //获取当前应用版本信息
@@ -233,7 +233,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
         String code = newAppVersionBean.getData().getVersion();
         String name = newAppVersionBean.getData().getVersionName();
         String updateDate = newAppVersionBean.getData().getUpdateDate();
-        url = newAppVersionBean.getData().getPath();
+        appUrl = newAppVersionBean.getData().getPath();
         if (Double.parseDouble(code) > versioncode) {
             AppData.setIsNewApp(true);
             mTvNewApp.setText("点击更新最新版本");
@@ -243,7 +243,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
                     mLlUpdateApp.setVisibility(View.VISIBLE);
                     //执行下载
                     Intent intent = new Intent(SettingActivity.this, DownloadService.class);
-                    intent.putExtra("url","https://pro-app-qn.fir.im/2bfccf3789a41da17b9bec41c93d811d7d41ce2c.apk?attname=app-yiyongche-release.apk_1.0.3.apk&e=1505502883&token=LOvmia8oXF4xnLh0IdH05XMYpH6ENHNpARlmPc-T:QFpO80MNGSBBMOG4w0QLGX4sYW4=");
+                    intent.putExtra("url",appUrl);
                     startService(intent);
                 }
             }, null);

@@ -1,7 +1,10 @@
 package com.ygst.cenggeche.ui.activity.releaseplan.choosepic;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,6 +23,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+
 
 
 /**
@@ -53,7 +58,7 @@ public class ChoosePicActivity extends MVPBaseActivity<ChoosePicContract.View, C
         mPresenter.getUserPic();
         tvTitle.setText("选择图片");
 
-
+        getPermission();
     }
 
 
@@ -91,4 +96,20 @@ public class ChoosePicActivity extends MVPBaseActivity<ChoosePicContract.View, C
     public void onViewClicked( ) {
                 finish();
     }
+
+    public void getPermission(){
+        PackageManager packageManager =getPackageManager();
+        boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                packageManager.checkPermission("android.permission.CAMERA", "com.ygst.cenggeche"));
+        boolean permission1 = (PackageManager.PERMISSION_GRANTED ==
+                packageManager.checkPermission("android.permission.READ_EXTERNAL_STORAGE", "com.ygst.cenggeche"));
+        if(permission1&&permission){
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA}, 1);
+            }
+        }
+
+    }
+
 }

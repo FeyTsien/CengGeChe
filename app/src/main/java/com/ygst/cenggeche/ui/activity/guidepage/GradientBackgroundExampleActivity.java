@@ -43,7 +43,7 @@ public class GradientBackgroundExampleActivity extends AhoyOnboarderActivity {
             //page.setIconLayoutParams(width, height, marginTop, marginLeft, marginRight, marginBottom);
         }
 
-        setFinishButtonTitle("Finish");
+        setFinishButtonTitle("开启蹭车之旅");
         showNavigationControls(true);
         setGradientBackground();
 

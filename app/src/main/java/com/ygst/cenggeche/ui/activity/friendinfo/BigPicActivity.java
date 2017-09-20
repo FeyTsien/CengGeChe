@@ -2,7 +2,6 @@ package com.ygst.cenggeche.ui.activity.friendinfo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;

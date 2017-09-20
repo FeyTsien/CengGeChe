@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPageBG"
     android:orientation="vertical">
 
     <TextView
@@ -13,7 +14,6 @@
         android:paddingLeft="15px"
         android:paddingTop="10px"
         android:text="A"
-        android:textSize="24px"
         android:visibility="gone" />
 
     <LinearLayout
@@ -24,7 +24,6 @@
         android:paddingBottom="20px"
         android:paddingTop="20px">
 
-
         <TextView
             android:id="@+id/id_tv_city_name"
             android:layout_width="wrap_content"
@@ -33,7 +32,7 @@
             android:gravity="center_vertical"
             android:text="安庆"
             android:textColor="@color/black"
-            android:textSize="20dp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 

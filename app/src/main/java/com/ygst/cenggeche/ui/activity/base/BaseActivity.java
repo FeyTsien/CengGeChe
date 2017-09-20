@@ -3,19 +3,14 @@ package com.ygst.cenggeche.ui.activity.base;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.Window;
@@ -24,25 +19,15 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.ACache;
-import com.ygst.cenggeche.http.LifeSubscription;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
-
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Fey Tesin on 2017/07/05.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements LifeSubscription {
+public abstract class BaseActivity extends AppCompatActivity{
 
     private String TAG = "BaseActivity";
     // 管理运行的所有的activity
@@ -144,25 +129,11 @@ public abstract class BaseActivity extends AppCompatActivity implements LifeSubs
         });
     }
 
-    private CompositeSubscription mCompositeSubscription;
-
-    //用于添加rx的监听的在onDestroy中记得关闭不然会内存泄漏。
-    @Override
-    public void bindSubscription(Subscription subscription) {
-        if (this.mCompositeSubscription == null) {
-            this.mCompositeSubscription = new CompositeSubscription();
-        }
-        this.mCompositeSubscription.add(subscription);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         synchronized (mActivities) {
             mActivities.remove(this);
-        }
-        if (this.mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
-            this.mCompositeSubscription.unsubscribe();
         }
     }
 
@@ -267,57 +238,57 @@ public abstract class BaseActivity extends AppCompatActivity implements LifeSubs
     }
 
     //    需要测滑关闭时在打开这个注释
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        mVelocityTracker.addMovement(ev);
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                startX = (int) ev.getRawX();
-                startY = (int) ev.getRawY();
-                if (startX < getWindow().getDecorView().getWidth() / 32) {
-                    return true;
-                } else {
-                    return super.dispatchTouchEvent(ev);
-                }
-            case MotionEvent.ACTION_MOVE:
-                endX = (int) ev.getRawX();
-                endY = (int) ev.getRawY();
-                deltaX = endX - startX;
-                deltaY = endY - startY;
-                if (deltaX > deltaY && startX < getWindow().getDecorView().getWidth() / 32) {
-                    decorView.scrollTo(-deltaX, 0);
-                    decorView.getBackground().setColorFilter((Integer) evaluateColor((float) deltaX / (float) decorView.getWidth(), Color.BLACK, Color.TRANSPARENT), PorterDuff.Mode.SRC_OVER);
-                    return true;
-                } else {
-                    return super.dispatchTouchEvent(ev);
-                }
-            case MotionEvent.ACTION_UP:
-                mVelocityTracker.computeCurrentVelocity(1000);
-                float xVelocity = mVelocityTracker.getXVelocity();
-                if (-25 < xVelocity && xVelocity <= 50 && deltaX > decorView.getWidth() / 3 && startX < getWindow().getDecorView().getWidth() / 32
-                        || xVelocity > 50 && startX < getWindow().getDecorView().getWidth() / 32) {
-                    isClose = true;
-                    closeAnimator(deltaX);
-                    return true;
-                } else {
-                    if (deltaX > 0 && startX < getWindow().getDecorView().getWidth() / 32) {
-                        isClose = false;
-                        closeAnimator(deltaX);
-                        return true;
-                    } else {
-                        if (startX < getWindow().getDecorView().getWidth() / 32) {
-                            decorView.scrollTo(0, 0);
-                        }
-                        return super.dispatchTouchEvent(ev);
-                    }
-                }
-            case MotionEvent.ACTION_CANCEL:
-                mVelocityTracker.clear();
-                mVelocityTracker.recycle();
-                return super.dispatchTouchEvent(ev);
-        }
-        return super.dispatchTouchEvent(ev);
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        mVelocityTracker.addMovement(ev);
+//        switch (ev.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                startX = (int) ev.getRawX();
+//                startY = (int) ev.getRawY();
+//                if (startX < getWindow().getDecorView().getWidth() / 32) {
+//                    return true;
+//                } else {
+//                    return super.dispatchTouchEvent(ev);
+//                }
+//            case MotionEvent.ACTION_MOVE:
+//                endX = (int) ev.getRawX();
+//                endY = (int) ev.getRawY();
+//                deltaX = endX - startX;
+//                deltaY = endY - startY;
+//                if (deltaX > deltaY && startX < getWindow().getDecorView().getWidth() / 32) {
+//                    decorView.scrollTo(-deltaX, 0);
+//                    decorView.getBackground().setColorFilter((Integer) evaluateColor((float) deltaX / (float) decorView.getWidth(), Color.BLACK, Color.TRANSPARENT), PorterDuff.Mode.SRC_OVER);
+//                    return true;
+//                } else {
+//                    return super.dispatchTouchEvent(ev);
+//                }
+//            case MotionEvent.ACTION_UP:
+//                mVelocityTracker.computeCurrentVelocity(1000);
+//                float xVelocity = mVelocityTracker.getXVelocity();
+//                if (-25 < xVelocity && xVelocity <= 50 && deltaX > decorView.getWidth() / 3 && startX < getWindow().getDecorView().getWidth() / 32
+//                        || xVelocity > 50 && startX < getWindow().getDecorView().getWidth() / 32) {
+//                    isClose = true;
+//                    closeAnimator(deltaX);
+//                    return true;
+//                } else {
+//                    if (deltaX > 0 && startX < getWindow().getDecorView().getWidth() / 32) {
+//                        isClose = false;
+//                        closeAnimator(deltaX);
+//                        return true;
+//                    } else {
+//                        if (startX < getWindow().getDecorView().getWidth() / 32) {
+//                            decorView.scrollTo(0, 0);
+//                        }
+//                        return super.dispatchTouchEvent(ev);
+//                    }
+//                }
+//            case MotionEvent.ACTION_CANCEL:
+//                mVelocityTracker.clear();
+//                mVelocityTracker.recycle();
+//                return super.dispatchTouchEvent(ev);
+//        }
+//        return super.dispatchTouchEvent(ev);
+//    }
 
 
     /**

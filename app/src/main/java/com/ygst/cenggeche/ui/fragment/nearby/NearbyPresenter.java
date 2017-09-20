@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.ygst.cenggeche.bean.NearByBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
-import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.HashMap;
@@ -15,23 +14,24 @@ import rx.Observer;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
-public class NearbyPresenter extends BasePresenterImpl<NearbyContract.View> implements NearbyContract.Presenter{
-    private String TAG="NearbyPresenter";
+public class NearbyPresenter extends BasePresenterImpl<NearbyContract.View> implements NearbyContract.Presenter {
+    private String TAG = "NearbyPresenter";
 
     @Override
-    public void getnearBy( String lit, String lat, int page) {
+    public void getnearBy(String lit, String lat, final int page) {
         Map<String, String> map = new HashMap<>();
 
-        map.put("lit",lit);
-        map.put("lat",lat);
-        map.put("page",page+"");
+        map.put("lit", lit);
+        map.put("lat", lat);
+        map.put("page", page + "");
         HttpManager.getHttpManager().postMethod(UrlUtils.GETNEARBYPERSON, new Observer<String>() {
 
             @Override
             public void onCompleted() {
+
             }
 
             @Override
@@ -46,7 +46,7 @@ public class NearbyPresenter extends BasePresenterImpl<NearbyContract.View> impl
                 NearByBean nearByBean = gson.fromJson(s, NearByBean.class);
                 if ("0000".equals(nearByBean.getCode())) {
                     if (mView != null) {
-                        mView.getnearbySuccess(nearByBean);
+                        mView.getnearbySuccess(nearByBean, page);
                     }
                 } else {
                     if (mView != null) {

@@ -12,7 +12,7 @@ import com.ygst.cenggeche.mvp.BaseView;
 public class NearbyContract {
     interface View extends BaseView {
 
-        void getnearbySuccess(NearByBean nearbybean);
+        void getnearbySuccess(NearByBean nearbybean,int page);
         void getnearbyFail(String msg);
         
     }

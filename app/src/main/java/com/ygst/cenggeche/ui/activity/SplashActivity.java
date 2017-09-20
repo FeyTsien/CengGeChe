@@ -9,7 +9,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
-import com.ygst.cenggeche.ui.activity.guidepage.GradientBackgroundExampleActivity;
+import com.ygst.cenggeche.ui.activity.guidepage.WelcomeGuideActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity1;
 import com.ygst.cenggeche.utils.CommonUtils;
 
@@ -19,7 +19,7 @@ import butterknife.Unbinder;
 
 
 public class SplashActivity extends BaseActivity {
-    String url =  "http://m.1yongche.com/page/merchant/history.html?uid=0&sid=1";
+
     //ButterKnife是一个专注于Android系统的View注入框架,可以减少大量的findViewById以及setOnClickListener代码，可视化一键生成。
     @BindView(R.id.iv_pic)
     ImageView ivPic;
@@ -60,7 +60,7 @@ public class SplashActivity extends BaseActivity {
     private void start() {
         // 如果是第一次启动，则先进入功能引导页
         if (AppData.getFirstOpen()==1) {
-            CommonUtils.startActivity(this, GradientBackgroundExampleActivity.class);
+            CommonUtils.startActivity(this, WelcomeGuideActivity.class);
             finish();
         }else {
             CommonUtils.startActivity(this, MainActivity1.class);

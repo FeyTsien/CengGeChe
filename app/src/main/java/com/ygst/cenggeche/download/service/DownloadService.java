@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -19,6 +18,7 @@ import com.ygst.cenggeche.ui.activity.setting.SettingActivity;
 
 import java.io.File;
 
+import cn.jmessage.android.uikit.chatting.utils.FileHelper;
 import rx.Subscriber;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -48,8 +48,8 @@ public class DownloadService extends IntentService {
 
         notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.logo)
-                .setContentTitle("Download")
-                .setContentText("Downloading File")
+                .setContentTitle("蹭个车-下载安装包")
+                .setContentText("安装包下载中")
                 .setAutoCancel(true);
 
         notificationManager.notify(0, notificationBuilder.build());
@@ -74,9 +74,13 @@ public class DownloadService extends IntentService {
                 }
             }
         };
-        outputFile = new File(Environment.getExternalStorageDirectory(), "newApp.apk");
+
+        String newAppPath = FileHelper.createNewAppPath("CengGeChe.apk");
+        outputFile = new File(newAppPath);
+//        outputFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "newApp.apk");
 
         if (outputFile.exists()) {
+            //已存在相同文件，删除旧的文件
             outputFile.delete();
         }
 
@@ -110,9 +114,15 @@ public class DownloadService extends IntentService {
 
         notificationManager.cancel(0);
         notificationBuilder.setProgress(0, 0, false);
-        notificationBuilder.setContentText("File Downloaded");
+        notificationBuilder.setContentText("下载完成");
         notificationManager.notify(0, notificationBuilder.build());
+        openApk();
+    }
 
+    /**
+     * 打开APK
+     */
+    private void openApk(){
         //安装apk
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);

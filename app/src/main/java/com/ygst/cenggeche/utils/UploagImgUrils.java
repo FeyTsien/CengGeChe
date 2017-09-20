@@ -155,8 +155,6 @@ public class UploagImgUrils {
         return bm;
     }
 
-
-
     public static Bitmap compressImage(Bitmap image) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

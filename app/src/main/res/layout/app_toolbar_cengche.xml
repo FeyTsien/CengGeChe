@@ -30,16 +30,17 @@
                     android:layout_width="83dp"
                     android:layout_height="29dp"
                     android:background="@drawable/button_cengche1"
-                    android:text="乘客"
+                    android:text="我要蹭车"
+
                     android:textColor="@color/colorTheme"
                     android:textSize="15dp" />
 
                 <Button
+                    android:text="我要捎人"
                     android:id="@+id/btn_shaoren"
                     android:layout_width="83dp"
                     android:layout_height="29dp"
                     android:background="@drawable/button_shaoren2"
-                    android:text="车主"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
             </LinearLayout>

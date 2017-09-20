@@ -6,7 +6,6 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.Gson;
 import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.bean.LoginBean;
-import com.ygst.cenggeche.manager.GsonManger;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.CommonUtils;
@@ -67,8 +66,10 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
     //  获取验证码
     @Override
     public void getSMSCode(String phone) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phone);
+        HttpManager.getHttpManager().postMethod(UrlUtils.GET_SMS_CODE, new Observer<String>() {
 
-        HttpManager.getHttpManager().getMethod(UrlUtils.GET_SMS_CODE + "?phone=" + phone, new Observer<String>() {
             @Override
             public void onCompleted() {
 
@@ -76,26 +77,25 @@ public class LoginPresenter extends BasePresenterImpl<LoginContract.View> implem
 
             @Override
             public void onError(Throwable e) {
-                LogUtils.i(TAG, "onError:++++++++++++ " + e.getMessage());
-
+                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
             }
 
             @Override
             public void onNext(String s) {
-                LogUtils.i(TAG, "onNext:++++++++++++------------------ " + s);
-
-                CodeBean o = (CodeBean) GsonManger.getGsonManger().gsonFromat(s, new CodeBean());
-                if ("0000".equals(o.getCode())) {
+                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
+                Gson gson = new Gson();
+                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+                if ("0000".equals(codeBean.getCode())) {
                     if (mView != null)
-                        mView.getSMSCodeSuccess(o);
+                        mView.getSMSCodeSuccess(codeBean);
+//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 } else {
                     if (mView != null)
                         mView.getSMSCodeError();
-//                    ToastUtil.show(mView.getContext(), o.getMsg());
+//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 }
-
             }
-        });
+        }, map);
 
     }
 

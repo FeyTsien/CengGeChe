@@ -6,6 +6,7 @@
 
     <include layout="@layout/app_toolbar"></include>
     <LinearLayout
+        android:visibility="gone"
         android:layout_margin="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -37,7 +38,7 @@
             android:paddingTop="36px"
             android:text="选择品牌"
             android:textColor="@color/black"
-            android:textSize="26px" />
+             />
 
         <TextView
             android:layout_weight="1"
@@ -49,7 +50,7 @@
             android:paddingTop="36px"
             android:text="选择车系"
             android:textColor="@color/black"
-            android:textSize="26px" />
+            />
         <TextView
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -60,7 +61,7 @@
             android:paddingTop="36px"
             android:text="选择颜色"
             android:textColor="@color/black"
-            android:textSize="26px" />
+             />
     </LinearLayout>
 
     <TextView

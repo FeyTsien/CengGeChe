@@ -62,7 +62,6 @@
                     android:id="@+id/tv_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8月15（今天）09:30"
                     android:textColor="@color/text_cengche"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -82,7 +81,6 @@
                     android:id="@+id/tv_start_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="嘉捷双子座"
                     android:textColor="@color/text_cengche"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -101,7 +99,6 @@
                     android:id="@+id/tv_end_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="宋家庄"
                     android:textSize="12sp"
                     android:textColor="@color/text_cengche"
                     />
@@ -124,7 +121,6 @@
                     android:id="@+id/tv_cartype"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="桑塔纳"
                     android:textColor="@color/text_cengche"
                     />
 
@@ -155,8 +151,9 @@
                 <ImageView
                     android:id="@+id/iv_chooseimg"
                     android:src="@mipmap/icon_my_avatar"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp" />
+                    android:scaleType="centerCrop"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp" />
 
                 <TextView
                     android:textColor="@color/gray"
@@ -215,7 +212,7 @@
                 android:layout_margin="10dp"
                 android:id="@+id/btn_nowrelease"
                 android:text="立即发布"
-                android:background="@color/main_theme_color"
+                android:background="@color/colorTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -248,7 +245,7 @@
                 android:background="@drawable/dialog_quxiao"
                 android:text="我的资料图片"
                 android:textColor="@color/black"
-                android:textSize="32px" />
+                 />
             <Button
                 android:id="@+id/upload_bt_camera"
                 android:layout_width="match_parent"
@@ -259,7 +256,7 @@
                 android:background="@drawable/dialog_top_shape"
                 android:text="拍照"
                 android:textColor="@color/black"
-                android:textSize="32px" />
+                 />
 
             <Button
                 android:id="@+id/upload_bt_galley"
@@ -272,7 +269,7 @@
                 android:background="@drawable/dialog_bottom_shape"
                 android:text="从相册中选择"
                 android:textColor="@color/black"
-                android:textSize="32px" />
+                />
 
             <Button
                 android:id="@+id/upload_cancle"
@@ -286,7 +283,7 @@
                 android:text="取消"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/black"
-                android:textSize="32px" />
+                 />
         </LinearLayout>
     </RelativeLayout>
 

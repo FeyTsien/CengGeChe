@@ -51,5 +51,11 @@
         android:layout_below="@+id/shimmer_tv"
         android:layout_gravity="bottom"
         android:text="闪动" />
+    
+    <ImageView
+        android:id="@+id/iv_test"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/shandong" />
 
 </RelativeLayout>

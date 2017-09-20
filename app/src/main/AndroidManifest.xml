@@ -91,6 +91,8 @@
         <activity android:name=".ui.activity.guidepage.SolidBackgroundExampleActivity" />
         <!--引导页3-->
         <activity android:name=".ui.activity.guidepage.ImageBackgroundExampleActivity" />
+        <!--引导页4-->
+        <activity android:name=".ui.activity.guidepage.WelcomeGuideActivity" />
         <!--WebView页-->
         <activity android:name=".webview.WebViewActivity" />
         <!--登录页-->
@@ -110,9 +112,10 @@
         <!--活动公告-->
         <activity android:name=".ui.activity.notice.NoticeActivity" />
         <!--自定义的聊天页-->
-        <activity android:name=".ui.activity.mychat.MyChatActivity"
-            android:theme="@style/ChatTheme"
-            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.activity.mychat.MyChatActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/ChatTheme" />
         <!--添加好友-->
         <activity android:name=".ui.activity.addfriend.AddFriendActivity" />
         <!--联系人列表-->
@@ -135,7 +138,6 @@
         <activity android:name=".ui.activity.friendoperate.report.ReportActivity" />
         <!--设置-->
         <activity android:name=".ui.activity.setting.SettingActivity" />
-
 
 
         <!-- 发布行程 -->
@@ -164,15 +166,20 @@
         <!-- 获取车辆信息 -->
         <activity android:name=".ui.activity.releaseplan.cartype.CartypeActivity" />
 
-        <!-- 切换城市列表 -->
-        <activity android:name=".ui.activity.changecity.ChangeCityActivity" />
-
         <!-- 详细资料-->
         <activity android:name=".ui.activity.alltravelinfo.AllTravelInfoActivity" />
+
+        <!-- 车主/乘客选择行程请求同行接口 -->
+        <activity android:name=".ui.activity.peerrequest.PeerRequestActivity" />
+
+
+        <!-- 车主/乘客选择行程请求同行 选择图片-->
+        <activity android:name=".ui.activity.peerrequest.chooseimg.ChooseImgActivity" />
 
 
         <!--注册DownloadService-->
         <service android:name=".download.service.DownloadService" />
+
 
         <!-- User defined.  For test only  用户自定义的广播接收器-->
         <receiver
@@ -188,104 +195,15 @@
                 <category android:name="com.ygst.cenggeche" />
             </intent-filter>
         </receiver>
-        <!--==========================下面是极光IM功能展示界面=============================-->
-        <activity
-            android:name="im.sdk.debug.RegisterAndLoginActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name="im.sdk.debug.activity.TypeActivity"
-            android:launchMode="singleTask" />
-        <activity android:name="im.sdk.debug.activity.setting.RegisterActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.SettingMainActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.InfoActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.AssertEqualsActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.GetUserInfoActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.UpdatePassword" />
-        <activity android:name="im.sdk.debug.activity.setting.UpdateUserInfoActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateMessageActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateSigTextMessageActivity" />
-        <activity android:name="im.sdk.debug.activity.groupinfo.GroupInfoActivity" />
-        <activity android:name="im.sdk.debug.activity.groupinfo.CreateGroupActivity" />
-        <activity android:name="im.sdk.debug.activity.groupinfo.GetGroupInfoActivity" />
-        <activity android:name="im.sdk.debug.activity.imagecontent.ImageContentActivity" />
-        <activity android:name="im.sdk.debug.activity.conversation.ConversationActivity" />
-        <activity android:name="im.sdk.debug.activity.groupinfo.AddRemoveGroupMemberActivity" />
-        <activity android:name="im.sdk.debug.activity.groupinfo.UpdateGroupInfoActivity" />
-        <activity android:name="im.sdk.debug.activity.groupinfo.ExitGroupActivity" />
-        <activity android:name="im.sdk.debug.activity.groupinfo.GetLocalGroupMembersActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateGroupTextMsgActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateSigCustomMsgActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateSigImageMessageActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.ShowMessageActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateGroupImageMsgActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateSigVoiceMsgActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.ShowCustomMessageActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateGroupCustomMsgActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateGroupVoiceMsgActivity" />
-        <activity android:name="im.sdk.debug.activity.notify.NotifyTypeActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.GetBlackListActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.AddRemoveBlackListActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.UpdateUserAvatar" />
-        <activity android:name="im.sdk.debug.activity.notify.ShowGroupNotificationActivity" />
-        <activity android:name="im.sdk.debug.activity.imagecontent.CreateImageContentAsyncFile" />
-        <activity android:name="im.sdk.debug.activity.imagecontent.ShowDownloadPathActivity" />
-        <activity android:name="im.sdk.debug.activity.imagecontent.CreateImageContentAsyncBitmap" />
-        <activity android:name="im.sdk.debug.activity.messagecontent.SetGetStringExtraActivity" />
-        <activity android:name="im.sdk.debug.activity.messagecontent.SetGetNumberExtraActivity" />
-        <activity android:name="im.sdk.debug.activity.messagecontent.SetGetBooleanExtraActivity" />
-        <activity android:name="im.sdk.debug.activity.messagecontent.SetGetExtraActivity" />
-        <activity android:name="im.sdk.debug.activity.conversation.GetConversationInfoActivity" />
-        <activity android:name="im.sdk.debug.activity.conversation.OrderMessageActivity" />
-        <activity android:name="im.sdk.debug.activity.conversation.IsShowNotifySigActivity" />
-        <activity android:name="im.sdk.debug.activity.conversation.DeleteConversationActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.NoDisturbListActivity" />
-        <activity android:name="im.sdk.debug.activity.setting.ShowLogoutReasonActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateSendFileActivity" />
-        <activity android:name="im.sdk.debug.activity.friend.FriendContactManager" />
-        <activity android:name="im.sdk.debug.activity.friend.AddFriendActivity" />
-        <activity android:name="im.sdk.debug.activity.friend.ShowFriendReasonActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.CreateLocationMessageActivity" />
-        <activity android:name="im.sdk.debug.activity.groupinfo.BlockedGroupMsgActivity" />
-        <activity android:name="im.sdk.debug.activity.createmessage.ShowDownloadVoiceInfoActivity" />
-        <activity android:name="im.sdk.debug.activity.showinfo.ShowMyInfoUpdateActivity" />
-        <activity android:name="im.sdk.debug.activity.conversation.RetractMessageActivity" />
 
+        <!--============================图片选择器================================-->
+        <activity android:name="com.jarek.imageselect.activity.MainActivity" />
+        <activity android:name="com.jarek.imageselect.activity.FolderListActivity" />
+        <activity android:name="com.jarek.imageselect.activity.ImageSelectActivity" />
         <activity
-            android:name="cn.jmessage.android.uikit.DemoActivity"
-            android:theme="@style/noTitle"></activity>
-        <activity android:name="cn.jmessage.android.uikit.chatting.BaseActivity" />
-        <activity
-            android:name="cn.jmessage.android.uikit.AboutActivity"
-            android:theme="@style/noTitle" />
-        <activity
-            android:name="cn.jmessage.android.uikit.chatting.ChatActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/ChatTheme" />
+            android:name="com.jarek.imageselect.activity.PreviewImageActivity"
+            android:theme="@style/Translucent" />
 
-<!--============================图片选择器================================-->
-        <activity android:name="com.jarek.imageselect.activity.MainActivity"/>
-        <activity android:name="com.jarek.imageselect.activity.FolderListActivity"/>
-        <activity android:name="com.jarek.imageselect.activity.ImageSelectActivity"/>
-        <activity android:name="com.jarek.imageselect.activity.PreviewImageActivity"
-            android:theme="@style/Translucent"/>
-
-        <!--=================数据缓存demo================-->
-        <activity
-            android:name="com.tsien.myapplication.asimplecachedemo.ACacheMainActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity android:name="com.tsien.myapplication.asimplecachedemo.AboutActivity" />
-        <activity android:name="com.tsien.myapplication.asimplecachedemo.SaveBitmapActivity" />
-        <activity android:name="com.tsien.myapplication.asimplecachedemo.SaveJsonObjectActivity" />
-        <activity android:name="com.tsien.myapplication.asimplecachedemo.SaveObjectActivity" />
-        <activity android:name="com.tsien.myapplication.asimplecachedemo.SaveStringActivity" />
-        <activity android:name="com.tsien.myapplication.asimplecachedemo.SaveMediaActivity" />
-        <activity
-            android:name="com.tsien.myapplication.asimplecachedemo.SaveDrawableActivity">
-        </activity>
-        <activity
-            android:name="com.tsien.myapplication.asimplecachedemo.SaveJsonArrayActivity">
-        </activity>
     </application>
 
 </manifest>

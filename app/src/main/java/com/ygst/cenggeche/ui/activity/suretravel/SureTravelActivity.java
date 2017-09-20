@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -26,6 +25,8 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.peerrequest.PeerRequestActivity;
+import com.ygst.cenggeche.ui.activity.releaseplan.cartype.CartypeActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.surerelease.SureReleaseActivity;
 import com.ygst.cenggeche.ui.view.PickValueView;
 
@@ -38,7 +39,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.ygst.cenggeche.R.id.et_start_action;
-import static com.ygst.cenggeche.R.id.pickValue;
 
 
 /**
@@ -58,7 +58,7 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
     private LinearLayout mUserdCarLayout;
     private String mStringEnd,mStringStart,mStringType,mStringTime;
     private boolean isStart,isEnd,isType,isTime,isCengche;
-    private String TAG="ReleaseplanActivity";
+    private String TAG="SureTravelActivity";
     private MapView mMapView;
     private AMap aMap;
     private AMapLocationClient locationClient;
@@ -74,6 +74,12 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
     private String postedTime;
     private String startAddr;
     private String endAddr;
+    private String REQUEST;
+    private String id;
+    private String uid;
+    private String strokeFlag;
+    private String sid;
+    private String cartype;
 
     @OnClick(R.id.iv_back)
     public void goBack(){
@@ -95,7 +101,8 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
         ButterKnife.bind(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         intent = getIntent();
-        String cartype = intent.getStringExtra("CARTYPE");
+        cartype = intent.getStringExtra("CARTYPE");//cartype为1是是蹭车  2位捎人
+        LogUtils.i(TAG,cartype+"---cartype");
         if(cartype.equals("1")){
             mUserdCarLayout.setVisibility(View.GONE);
             mLl_jumpLayout.setVisibility(View.GONE);
@@ -109,6 +116,18 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
         endAddr = intent.getStringExtra("endAddr");
         startAddr = intent.getStringExtra("startAddr");
         postedTime = intent.getStringExtra("postedTime");
+        REQUEST = intent.getStringExtra("REQUEST");
+        comment = intent.getStringExtra("comment");
+        LogUtils.i(TAG,REQUEST+":REQUEST===");
+        if(REQUEST.equals("2")){
+            id = intent.getStringExtra("id");
+            uid = intent.getStringExtra("uid");
+            strokeFlag = intent.getStringExtra("strokeFlag");
+            sid = intent.getStringExtra("sid");
+        }
+
+        LogUtils.i(TAG,strokeFlag+"strokeFlag==="+sid+"startAddr:"+startAddr+"endAddr"+endAddr);
+
         mEtStartAction.setText(startAddr);
         mEtEndAction.setText(endAddr);
         mEtUsercarTime.setText(postedTime);
@@ -136,7 +155,7 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
 
         mLl_jumpLayout = (LinearLayout) findViewById(R.id.ll_jump);
 
-        pickValueView = (PickValueView) findViewById(pickValue);
+        pickValueView = (PickValueView) findViewById(R.id.pickValue);
         pickValueView.setOnSelectedChangeListener(this);
         mEtStartAction.setOnClickListener(this);
         mEtEndAction.setOnClickListener(this);
@@ -146,6 +165,7 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
         mTvCancel.setOnClickListener(this);
         mTvFinish.setOnClickListener(this);
         mTvjump.setOnClickListener(this);
+        mEtUsercarType.setOnClickListener(this);
         pickValueView.setOnSelectedChangeListener(this);
 
         //输入框的监听事件
@@ -189,17 +209,26 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-
+        //获取时间
             case R.id.et_usercar_time:
                 mChooseLayout.setVisibility(View.VISIBLE);
                 String left[]=new String[]{"今天","明天"};
                 String middle[]=new String[24];
                 String right[]=new String[60];
                 for (int i = 0; i <24 ; i++) {
-                    middle[i] = i+"时";
+                    if(i<10){
+                        middle[i] = "0"+i+"时";
+                    }else{
+                        middle[i] = i+"时";
+                    }
                 }
                 for (int i = 0; i <60 ; i++) {
-                    right[i] = i+"分";
+                    if(i<10){
+                        right[i] = "0"+i+"分";
+
+                    }else{
+                        right[i] = i+"分";
+                    }
                 }
 
                 pickValueView.setValueData(left,left[0],middle,middle[0],right,right[0]);
@@ -214,16 +243,51 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
 
             case R.id.but_release_plan:
                 if(judgeIsNull()){
-                    mStringEnd=mEtEndAction.getText().toString().trim();
-                    mStringStart=mEtStartAction.getText().toString().trim();
-                    mStringTime=mEtUsercarTime.getText().toString().trim();
-                    mStringType=mEtUsercarType.getText().toString().trim();
-                    Intent intents = new Intent(SureTravelActivity.this, SureReleaseActivity.class);
-                    intents.putExtra("ENDLOACTION",endAddr);
-                    intents.putExtra("STARTLOACTION",startAddr);
-                    intents.putExtra("TIME",postedTime);
-                    intents.putExtra("comment",comment);
-                    startActivity(intents);
+                    //判断是否位主动发布
+                    if(REQUEST!=null){
+                        int request = Integer.parseInt(REQUEST);
+                        if(request==1){
+                            mStringEnd=mEtEndAction.getText().toString().trim();
+                            mStringStart=mEtStartAction.getText().toString().trim();
+                            mStringTime=mEtUsercarTime.getText().toString().trim();
+                            mStringType=mEtUsercarType.getText().toString().trim();
+                            Intent intents = new Intent(SureTravelActivity.this, SureReleaseActivity.class);
+                            intents.putExtra("ENDLOACTION",endAddr);
+                            intents.putExtra("STARTLOACTION",startAddr);
+                            intents.putExtra("TIME",postedTime);
+                            intents.putExtra("comment",comment);
+                            intents.putExtra("REQUEST",REQUEST);
+                            intents.putExtra("TYPE",cartype);
+                            intents.putExtra("TYPECAR",mStringType);
+                            startActivity(intents);
+                            finish();
+                            //请求为2 就是申请发布行程
+                        }else if(request==2){
+                            mStringEnd=mEtEndAction.getText().toString().trim();
+                            mStringStart=mEtStartAction.getText().toString().trim();
+                            mStringTime=mEtUsercarTime.getText().toString().trim();
+                            mStringType=mEtUsercarType.getText().toString().trim();
+                            Intent intents = new Intent(SureTravelActivity.this, PeerRequestActivity.class);
+                            intents.putExtra("ENDLOACTION",endAddr);
+                            intents.putExtra("STARTLOACTION",startAddr);
+                            intents.putExtra("TIME",postedTime);
+                            intents.putExtra("comment",comment);
+                            intents.putExtra("id",id);
+                            intents.putExtra("uid",uid);
+                            intents.putExtra("strokeFlag",strokeFlag);
+                            intents.putExtra("sid",sid+"");
+                            intents.putExtra("cartype",cartype);
+                            intents.putExtra("TYPECAR",mStringType);
+
+                            intents.putExtra("STATEUSER",cartype);
+
+
+                            LogUtils.i(TAG,strokeFlag+"strokeFlag：==="+sid);
+
+                            startActivity(intents);
+                            finish();
+                        }
+                    }
                 }
                 break;
 
@@ -238,17 +302,50 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
                 break;
 
             case R.id.tv_jump:
+                if(REQUEST!=null){
+                    int i = Integer.parseInt(REQUEST);
+                    if(i==1) {
+                        mStringEnd = mEtEndAction.getText().toString().trim();
+                        mStringStart = mEtStartAction.getText().toString().trim();
+                        mStringTime = mEtUsercarTime.getText().toString().trim();
+                        mStringType = mEtUsercarType.getText().toString().trim();
+                        Intent intents = new Intent(SureTravelActivity.this, SureReleaseActivity.class);
+                        intents.putExtra("ENDLOACTION", endAddr);
+                        intents.putExtra("STARTLOACTION", startAddr);
+                        intents.putExtra("TIME", postedTime);
+                        intents.putExtra("comment", comment);
+                        intents.putExtra("cartype",cartype);
 
-                mStringEnd=mEtEndAction.getText().toString().trim();
-                mStringStart=mEtStartAction.getText().toString().trim();
-                mStringTime=mEtUsercarTime.getText().toString().trim();
-                mStringType=mEtUsercarType.getText().toString().trim();
-                Intent intents = new Intent(SureTravelActivity.this, SureReleaseActivity.class);
-                intents.putExtra("ENDLOACTION",endAddr);
-                intents.putExtra("STARTLOACTION",startAddr);
-                intents.putExtra("TIME",postedTime);
-                intents.putExtra("comment",comment);
-                startActivity(intents);
+                        startActivity(intents);
+                    }else if(i==2) {
+                        mStringEnd = mEtEndAction.getText().toString().trim();
+                        mStringStart = mEtStartAction.getText().toString().trim();
+                        mStringTime = mEtUsercarTime.getText().toString().trim();
+                        mStringType = mEtUsercarType.getText().toString().trim();
+                        Intent intents = new Intent(SureTravelActivity.this, PeerRequestActivity.class);
+                        intents.putExtra("ENDLOACTION", endAddr);
+                        intents.putExtra("STARTLOACTION", startAddr);
+                        intents.putExtra("TIME", postedTime);
+                        intents.putExtra("comment", comment);
+                        intents.putExtra("id",id);
+                        intents.putExtra("uid",uid);
+                        intents.putExtra("strokeFlag",strokeFlag);
+                        LogUtils.i(strokeFlag+"========="+uid);
+                        intents.putExtra("sid",sid+"");
+                        intents.putExtra("STATEUSER",cartype);
+                        intents.putExtra("cartype",cartype);
+                        intents.putExtra("ISJUMP","ISJUMP");
+
+                        startActivity(intents);
+                    }{
+
+                    }
+                }
+                break;
+
+            case R.id.et_usercar_type:
+                startActivityForResult(new Intent(SureTravelActivity.this, CartypeActivity.class),  3);
+
                 break;
 
 
@@ -282,6 +379,10 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
             String result = data.getExtras().getString("result");
 
             mEtEndAction.setText(result);
+        }else if(requestCode==3&&resultCode==5){
+            String result = data.getExtras().getString("result");
+            String[] split = result.split("-");
+            mEtUsercarType.setText(result);
         }
 
     }

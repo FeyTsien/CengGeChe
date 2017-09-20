@@ -2,12 +2,10 @@ package com.ygst.cenggeche.ui.activity.registerinfo;
 
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,8 +20,9 @@ import com.ygst.cenggeche.utils.TextViewUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UsernamePwdUtils;
 
+import org.feezu.liuli.timeselector.TimeSelector;
+
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,19 +94,6 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
 //        int year = t.year;
 //        int month = t.month;
 //        int date = t.monthDay;
-        //获取当前日期
-        Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-
-        dateDialog = new DatePickerDialog(this, mdateListener, mYear, mMonth, mDay);
-        dateDialog.setCancelable(true);
-        dateDialog.setCanceledOnTouchOutside(true);
-        DatePicker picker = dateDialog.getDatePicker();
-        Date date = new Date();//当前时间
-        long time = date.getTime();
-        picker.setMaxDate(time);//设置最大日期
 
         //性别选项默认为女
         onClickGirl();
@@ -115,35 +101,28 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         userName = intent.getStringExtra("username");
     }
 
-    private DatePickerDialog.OnDateSetListener mdateListener = new DatePickerDialog.OnDateSetListener() {
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            mYear = year;
-            mMonth = monthOfYear;
-            mDay = dayOfMonth;
-            display();
-        }
-    };
 
     /**
      * 选择日期
      */
     @OnClick(R.id.tv_birthdate)
     public void setBirthday() {
-        showDialog(DATE_DIALOG);
+        //获取当前日期
+        Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+        String endTime =  mYear + "-" + mMonth + "-" + mDay+" 00:00";
+        TimeSelector timeSelector = new TimeSelector(this, new TimeSelector.ResultHandler() {
+            @Override
+            public void handle(String time) {
+                mTvBirthdate.setText(time.substring(0, time.indexOf(" ")));
+            }
+        }, "1960-01-01 00:00",endTime);
+//        timeSelector.setMode(TimeSelector.MODE.YMDHM);//显示 年月日时分（默认）；
+        timeSelector.setMode(TimeSelector.MODE.YMD);//只显示 年月日
+        timeSelector.show();
     }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DATE_DIALOG:
-                return dateDialog;
-        }
-        return null;
-    }
-
 
     /**
      * 选择性别--女
@@ -154,6 +133,7 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         mIvBoy.setImageResource(R.mipmap.icon_boy_radio_un);
         mIvGirl.setImageResource(R.mipmap.icon_girl_radio);
     }
+
 
     /**
      * 选择性别--男
@@ -199,13 +179,6 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         }
     }
 
-    /**
-     * 设置日期 利用StringBuffer追加
-     */
-    public void display() {
-        mTvBirthdate.setText(new StringBuffer().append(mYear).append("-").append(mMonth + 1).append("-").append(mDay));
-    }
-
 
     @Override
     public void registrationSuccess() {
@@ -216,7 +189,7 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
 //        startActivity(intent);
         finish();
         ToastUtil.show(this, "欢迎您的加入");
-        LoginActivity.instance.setUsernameAndPwd(userName,pwd);
+        LoginActivity.instance.setUsernameAndPwd(userName, pwd);
     }
 
     @Override

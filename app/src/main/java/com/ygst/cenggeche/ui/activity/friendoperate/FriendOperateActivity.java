@@ -104,10 +104,10 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
                     });
                     ///显示性别
                     if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
-                        mCivAvatar.setBorderColor(getResources().getColor(R.color.colorSub2));
+                        mCivAvatar.setBorderColor(getResources().getColor(R.color.colorGirl));
                         mIvGender.setImageResource(R.mipmap.icon_girl);
                     } else if (mUserInfo.getGender().equals(UserInfo.Gender.male)) {
-                        mCivAvatar.setBorderColor(getResources().getColor(R.color.colorSub));
+                        mCivAvatar.setBorderColor(getResources().getColor(R.color.colorBoy));
                         mIvGender.setImageResource(R.mipmap.icon_boy);
                     } else {
                     }

@@ -30,7 +30,7 @@ public interface ProjectAPI {
     @GET
     Observable<String> getMethod(@Url String url);
 
-    @Headers({"os:android"})
+    @Headers({"os:android","version:1"})
     @FormUrlEncoded
     @POST
     Observable<String> postMethod(@Header("deviceId")String deviceId,@Header("uid")String uid,@Header("sign")String sign,@Url String url, @FieldMap Map<String, String> map);

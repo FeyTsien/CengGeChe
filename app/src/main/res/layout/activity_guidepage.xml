@@ -23,4 +23,11 @@
         android:text="第3个"
         android:onClick="guide3"/>
 
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="第4个"
+        android:onClick="guide4"/>
+
 </LinearLayout>

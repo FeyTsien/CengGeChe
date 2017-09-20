@@ -2,6 +2,7 @@ package com.ygst.cenggeche.ui.activity.releaseplan;
 
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -31,25 +32,21 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.geocoder.GeocodeAddress;
-import com.amap.api.services.geocoder.GeocodeQuery;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeResult;
-import com.blankj.utilcode.utils.ToastUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
-import com.ygst.cenggeche.bean.AllStrokeBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.changecity.ChangeCityActivity;
-import com.ygst.cenggeche.ui.activity.friendlist.CommonUtil;
 import com.ygst.cenggeche.ui.activity.releaseplan.cartype.CartypeActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.retrieval.RetrievalActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.surerelease.SureReleaseActivity;
 import com.ygst.cenggeche.ui.view.PickValueView;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
+import com.ygst.cenggeche.utils.UrlUtils;
+import com.ygst.cenggeche.webview.WebViewActivity;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,9 +55,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
-import static com.ygst.cenggeche.R.id.pickValue;
-
 /**
  * MVPPlugin
  *  邮箱 784787081@qq.com
@@ -68,7 +62,6 @@ import static com.ygst.cenggeche.R.id.pickValue;
  */
 
 public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.View, ReleaseplanPresenter> implements ReleaseplanContract.View,OnClickListener,GeocodeSearch.OnGeocodeSearchListener,PickValueView.onSelectedChangeListener {
-
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
@@ -88,13 +81,13 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
     private AMapLocationClientOption locationOption = null;
     private AMap aMap;
     private MapView mMapView;
-    private double LAT,ACC;
     private LinearLayout mChooseLayout;
     private PickValueView pickValueView;
     private TextView mTvCancel;
     private TextView mTvFinish;
     private static  String  CHOOSETIME="今天-0:0";
-
+    //车主认证
+    private final String URL_OWNER_AUTH= UrlUtils.URL_H5+"/cenggeche/pages/carrz/carrz.html";
     /**
      * 返回
      */
@@ -122,7 +115,10 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mTvTitle.setText(AppData.getLocation());
-//        mPresenter.getuserStatus();
+        mPresenter.getuserStatus();
+        judgesex();
+
+
     }
 
     //初始化控件
@@ -131,7 +127,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         mCengLinearLayout = (LinearLayout) findViewById(R.id.linear_cengshao);
         mUserdCarLayout = (LinearLayout) findViewById(R.id.linear_usercar_type);
         mChooseLayout = (LinearLayout) findViewById(R.id.ll_choosetime);
-        pickValueView = (PickValueView) findViewById(pickValue);
+        pickValueView = (PickValueView) findViewById(R.id.pickValue);
 
         mMapView = (MapView)findViewById(R.id.map);
         mTvTitle = (TextView) findViewById(R.id.tv_title);
@@ -175,6 +171,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         if (aMap == null) {
             aMap = mMapView.getMap();
         }
+
         aMap.setTrafficEnabled(true);// 显示实时交通状况
         //地图模式可选类型：MAP_TYPE_NORMAL,MAP_TYPE_SATELLITE,MAP_TYPE_NIGHT
         aMap.setMapType(AMap.MAP_TYPE_BUS);// 卫星地图模式
@@ -234,70 +231,31 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
 
     }
 
+    //判断男女
+    public void judgesex(){
+        String genders = AppData.getGenders();
+        int i1 = Integer.parseInt(genders);
+        if(i1==1){
+            ToastUtil.show(ReleaseplanActivity.this,"男性用户不能蹭车");
+            mTvCengche.setFocusable(false);
+        }
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_cengche:
-                mUserdCarLayout.setVisibility(View.GONE);
-                mTvCengche.setTextColor(Color.parseColor("#8064a1"));
-                mTvShaoren.setTextColor(Color.BLACK);
-                isCengche=true;
-
-                //输入框不为空 显示按妞
-                if(!TextUtils.isEmpty(mEtStartAction.getText().toString())&&!TextUtils.isEmpty(mEtEndAction.getText().toString())&&!TextUtils.isEmpty(mEtUsercarTime.getText().toString())){
-                    mButReleasePlan.setVisibility(View.VISIBLE);
-                }
+               onclickchengche();
                 break;
             case R.id.tv_shaoren:
-                mUserdCarLayout.setVisibility(View.VISIBLE);
-                mTvShaoren.setTextColor(Color.parseColor("#8064a1"));
-                mTvCengche.setTextColor(Color.BLACK);
-                isCengche=false;
-                //输入框不为空 显示按妞
-                if(!TextUtils.isEmpty(mEtStartAction.getText().toString())&&!TextUtils.isEmpty(mEtEndAction.getText().toString())&&!TextUtils.isEmpty(mEtUsercarTime.getText().toString())){
-                    mButReleasePlan.setVisibility(View.VISIBLE);
-                }
-                judgeIsNull();
+                    onclickshaoren();
                 break;
             case R.id.et_usercar_time:
-
-                mChooseLayout.setVisibility(View.VISIBLE);
-                String left[]=new String[]{"今天","明天"};
-                String middle[]=new String[24];
-                String right[]=new String[60];
-                for (int i = 0; i <24 ; i++) {
-                    middle[i] = i+"时";
-                }
-                for (int i = 0; i <60 ; i++) {
-                    right[i] = i+"分";
-                }
-
-                pickValueView.setValueData(left,left[0],middle,middle[0],right,right[0]);
+                chooseTime();
                 break;
             case R.id.but_release_plan:
                 //f发布的次数是否到期
-
-                    if(judgeIsNull()){
-                        mStringEnd=mEtEndAction.getText().toString().trim();
-                        mStringStart=mEtStartAction.getText().toString().trim();
-                        mStringTime=mEtUsercarTime.getText().toString().trim();
-                        mStringType=mEtUsercarType.getText().toString().trim();
-
-                        Log.i(TAG,mStringEnd+""+mStringStart);
-                        Intent intent=new Intent(this,SureReleaseActivity.class);
-                        intent.putExtra("STARTLOACTION",mStringStart);
-                        intent.putExtra("ENDLOACTION",mStringEnd);
-                        intent.putExtra("TIME",mStringTime);
-                        if(isCengche){
-                            intent.putExtra("STATEUSER",1);
-                        }else{
-                            intent.putExtra("STATEUSER",2);
-                            intent.putExtra("TYPE",mStringType);
-                        }
-                        startActivity(intent);
-                        finish();
-                    }
+                clickreleaseplan();
                 break;
             case R.id.et_start_action:
                 startActivityForResult(new Intent(ReleaseplanActivity.this, RetrievalActivity.class),  1);
@@ -313,22 +271,113 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                 break;
             case R.id.tv_finish:
                 mChooseLayout.setVisibility(View.GONE);
-
                 String[] split = CHOOSETIME.split("-");
                 String time = getTime();
                 Log.i(TAG,split[1]);
                 split[1].replaceAll("时","");
                 split[1].replaceAll("分","");
-
                 Log.i(TAG,"=="+split[1]);
                 mEtUsercarTime.setText(time+" "+split[1]);
                 break;
-
-
-
+        }
+    }
+    //点击蹭车 判断是否车主认证
+    private void onclickchengche() {
+        judgesex();
+        mUserdCarLayout.setVisibility(View.GONE);
+        mTvCengche.setTextColor(Color.parseColor("#8064a1"));
+        mTvShaoren.setTextColor(Color.BLACK);
+        isCengche=true;
+        String userStatus1 = AppData.getGenders();
+        if(userStatus1.equals("1")){
+            ToastUtil.show(ReleaseplanActivity.this,"男性乘客不能蹭车");
+            return;
+        }
+        //输入框不为空 显示按妞
+        if(!TextUtils.isEmpty(mEtStartAction.getText().toString())&&!TextUtils.isEmpty(mEtEndAction.getText().toString())&&!TextUtils.isEmpty(mEtUsercarTime.getText().toString())){
+            mButReleasePlan.setVisibility(View.VISIBLE);
         }
     }
 
+    //点击捎人 判断是否车主认证
+    private void onclickshaoren() {
+        int userStatus = AppData.getUserStatus();
+        if(userStatus==0){
+            CommonUtils.showInfoDialog(ReleaseplanActivity.this, "您现在还没有认证车主信息", "提示", "确定", null, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String  url3 = URL_OWNER_AUTH+"?deviceId="+AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
+                    WebViewActivity.loadUrl(ReleaseplanActivity.this,url3,"");
+                }
+            }, null);
+        }
+
+        mUserdCarLayout.setVisibility(View.VISIBLE);
+        mTvShaoren.setTextColor(Color.parseColor("#8064a1"));
+        mTvCengche.setTextColor(Color.BLACK);
+        isCengche=false;
+        //输入框不为空 显示按妞
+        if(!TextUtils.isEmpty(mEtStartAction.getText().toString())&&!TextUtils.isEmpty(mEtEndAction.getText().toString())&&!TextUtils.isEmpty(mEtUsercarTime.getText().toString())){
+            mButReleasePlan.setVisibility(View.VISIBLE);
+        }
+        judgeIsNull();
+    }
+
+    //点击发布按钮 确认当前行程
+    private void clickreleaseplan() {
+
+        if(judgeIsNull()){
+            mStringEnd=mEtEndAction.getText().toString().trim();
+            mStringStart=mEtStartAction.getText().toString().trim();
+            mStringTime=mEtUsercarTime.getText().toString().trim();
+            mStringType=mEtUsercarType.getText().toString().trim();
+
+            Log.i(TAG,"mStringTime"+mStringTime);
+            Intent intent=new Intent(this,SureReleaseActivity.class);
+            intent.putExtra("STARTLOACTION",mStringStart);
+            intent.putExtra("ENDLOACTION",mStringEnd);
+            intent.putExtra("TIME",mStringTime);
+
+            if(isCengche){
+                intent.putExtra("STATEUSER",1);
+                String genders1 = AppData.getGenders();
+                int i = Integer.parseInt(genders1);
+                if(i==1){
+                    ToastUtil.show(ReleaseplanActivity.this,"男性用户不能蹭车");
+                    return ;
+                }
+            }else{
+                intent.putExtra("STATEUSER",2);
+                intent.putExtra("TYPE",mStringType);
+
+            }
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    //时间滚轮选择图片
+    private void chooseTime() {
+        mChooseLayout.setVisibility(View.VISIBLE);
+        String left[]=new String[]{"今天","明天"};
+        String middle[]=new String[24];
+        String right[]=new String[60];
+        for (int i = 0; i <24 ; i++) {
+            if(i<10){
+                middle[i] = "0"+i+"时";
+            }else{
+                middle[i] = i+"时";
+            }
+        }
+        for (int i = 0; i <60 ; i++) {
+            if(i<10){
+                right[i] = "0"+i+"分";
+            }else{
+                right[i] = i+"分";
+            }
+        }
+        pickValueView.setValueData(left,left[0],middle,middle[0],right,right[0]);
+    }
     //得到当前时间
     public String getTime(){
         String[] split = CHOOSETIME.split("-");
@@ -519,8 +568,6 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                     sb.append("纬    度    : " + location.getLatitude() + "\n");
                     sb.append("精    度    : " + location.getAccuracy() + "米" + "\n");
                     sb.append("提供者    : " + location.getProvider() + "\n");
-                    LAT= location.getLatitude();
-                    ACC=location.getAccuracy();
                     sb.append("速    度    : " + location.getSpeed() + "米/秒" + "\n");
                     sb.append("角    度    : " + location.getBearing() + "\n");
                     // 获取当前提供定位服务的卫星个数
@@ -537,7 +584,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                     //绘制marker
 //                    if(location.getCity()!=null) {
 //                        AppData.saveLocation(location.getCity());
-//                        mEtStartAction.setText(location.getAddress());
+                    mEtStartAction.setText(location.getAddress());
 //                    } else {
 //                        AppData.saveLocation("北京");
 //                        mEtStartAction.setText(location.getAddress());
@@ -690,29 +737,14 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
     }
 
     @Override
-    public void releaseSuccess(AllStrokeBean allStrokeBean) {
-//        Intent intent=new Intent(this,SureReleaseActivity.class);
-//        int id = allStrokeBean.getData().get(0).getId();
-//        intent.putExtra("STARTLOACTION",mStringStart);
-//        intent.putExtra("ENDLOACTION",mStringEnd);
-//        intent.putExtra("TIME",mStringTime);
-//        intent.putExtra("ID",id+"");
-//        if(isCengche){
-//        intent.putExtra("STATEUSER",1);
-//        }else{
-//            intent.putExtra("STATEUSER",2);
-//            intent.putExtra("TYPE",mStringType);
-//
-//        }
-//        startActivity(intent);
+    public void checkuserstatusSuccess(String code) {
+
     }
 
     @Override
-    public void releaseFail(String fail) {
-        ToastUtil.show(ReleaseplanActivity.this,fail);
+    public void checkuserFail(String fail) {
+        ToastUtil.show(this,fail);
     }
-
-
 
 
     @Override
@@ -748,46 +780,6 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         Log.i(TAG,leftValue.toString()+"-"+middleValue.toString()+":"+rightValue.toString());
 
     }
-
-
-//    private void getLatlon(String cityName){
-//
-//        GeocodeSearch geocodeSearch=new GeocodeSearch(this);
-//        geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
-//            @Override
-//            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
-//
-//            }
-//
-//            @Override
-//            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
-//
-//                if (i==1000){
-//                    if (geocodeResult!=null && geocodeResult.getGeocodeAddressList()!=null &&
-//                            geocodeResult.getGeocodeAddressList().size()>0){
-//
-//                        GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
-//                        double latitude = geocodeAddress.getLatLonPoint().getLatitude();//纬度
-//                        double longititude = geocodeAddress.getLatLonPoint().getLongitude();//经度
-//                        String adcode= geocodeAddress.getAdcode();//区域编码
-//
-//
-//                        Log.e("地理编码", geocodeAddress.getAdcode()+"");
-//                        Log.e("纬度latitude",latitude+"");
-//                        Log.e("经度longititude",longititude+"");
-//
-//                    }else {
-////                        ToastUtil.show(this,"地址名出错");
-//                    }
-//                }
-//            }
-//        });
-//
-//        GeocodeQuery geocodeQuery=new GeocodeQuery(cityName.trim(),"29");
-//        geocodeSearch.getFromLocationNameAsyn(geocodeQuery);
-//
-//
-//    }
 
 
 

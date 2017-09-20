@@ -1,14 +1,11 @@
 package com.ygst.cenggeche.webview;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +13,13 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-import com.blankj.utilcode.utils.ToastUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.io.File;
 import java.io.IOException;
+
+import cn.jmessage.android.uikit.chatting.utils.FileHelper;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -238,7 +236,11 @@ public class MyWebChromeClient extends WebChromeClient {
         return flag;
     }
 
-    //拍照
+
+    String mCurrentPhotoPath = null;
+    /**
+     *拍照1
+     */
     private void takeCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //这里可能需要检查文件夹是否存在
@@ -246,12 +248,16 @@ public class MyWebChromeClient extends WebChromeClient {
         //if (!file.exists()) {
         //  file.mkdirs();
         //}
-        mCurrentPhotoPath = Environment.getExternalStorageDirectory() + "/avatar.jpg";
+        mCurrentPhotoPath = FileHelper.createAvatarPath(null);
+//        mCurrentPhotoPath = Environment.getExternalStorageDirectory() + "/avatar.jpg";
         File outputImage = new File(mCurrentPhotoPath);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputImage));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mCurrentPhotoPath)));
         mActivity.startActivityForResult(intent, TAKE_PHOTO);
     }
 
+    /**
+     *拍照
+     */
     private void takePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(mActivity.getPackageManager()) != null) {
@@ -266,21 +272,7 @@ public class MyWebChromeClient extends WebChromeClient {
         }
     }
 
-    /**
-     * 209.  * 本地相册选择图片  * 210.
-     */
-    private void chosePic() {
-        Intent innerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        String IMAGE_UNSPECIFIED = "image/*";
-        innerIntent.setType(IMAGE_UNSPECIFIED); // 查看类型
-        Intent wrapperIntent = Intent.createChooser(innerIntent, null);
-        mActivity.startActivityForResult(wrapperIntent, REQ_CHOOSE);
-    }
-
-
-    String mCurrentPhotoPath = null;
     String FileName = "forum";
-
     //创建文件夹包装图片
     private File createImageFile() throws IOException {
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + FileName);
@@ -293,6 +285,19 @@ public class MyWebChromeClient extends WebChromeClient {
         mCurrentPhotoPath = storageDir.getAbsolutePath();
         return storageDir;
     }
+
+    /**
+     * 209.  * 本地相册选择图片  * 210.
+     */
+    private void chosePic() {
+        Intent innerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        String IMAGE_UNSPECIFIED = "image/*";
+        innerIntent.setType(IMAGE_UNSPECIFIED); // 查看类型
+        Intent wrapperIntent = Intent.createChooser(innerIntent, null);
+        mActivity.startActivityForResult(wrapperIntent, REQ_CHOOSE);
+    }
+
+
 
 
     public void mUploadMessage(int requestCode, int resultCode, Intent data) {
@@ -332,29 +337,29 @@ public class MyWebChromeClient extends WebChromeClient {
     }
 
 
-    /**
-     * 5.0以下 上传图片成功后的回调
-     */
-    public void mUploadMessage(Intent intent, int resultCode) {
-        if (null == mUploadMessage)
-            return;
-        Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-        mUploadMessage.onReceiveValue(result);
-        mUploadMessage = null;
-    }
-
-    /**
-     * 5.0以上 上传图片成功后的回调
-     */
-    public void mUploadMessageForAndroid5(Intent intent, int resultCode) {
-        if (null == mUploadMessageForAndroid5)
-            return;
-        Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
-        if (result != null) {
-            mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
-        } else {
-            mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
-        }
-        mUploadMessageForAndroid5 = null;
-    }
+//    /**
+//     * 5.0以下 上传图片成功后的回调
+//     */
+//    public void mUploadMessage(Intent intent, int resultCode) {
+//        if (null == mUploadMessage)
+//            return;
+//        Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+//        mUploadMessage.onReceiveValue(result);
+//        mUploadMessage = null;
+//    }
+//
+//    /**
+//     * 5.0以上 上传图片成功后的回调
+//     */
+//    public void mUploadMessageForAndroid5(Intent intent, int resultCode) {
+//        if (null == mUploadMessageForAndroid5)
+//            return;
+//        Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
+//        if (result != null) {
+//            mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
+//        } else {
+//            mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
+//        }
+//        mUploadMessageForAndroid5 = null;
+//    }
 }

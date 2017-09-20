@@ -3,6 +3,7 @@
     xmlns:srl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPageBG"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -33,7 +34,7 @@
     <com.ygst.cenggeche.ui.view.refresh.PullRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         srl:refreshMode="both">
 
         <android.support.v7.widget.RecyclerView
@@ -41,7 +42,7 @@
             android:divider="#ffff0000"
             android:dividerHeight="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
     </com.ygst.cenggeche.ui.view.refresh.PullRefreshLayout>
 
 </LinearLayout>

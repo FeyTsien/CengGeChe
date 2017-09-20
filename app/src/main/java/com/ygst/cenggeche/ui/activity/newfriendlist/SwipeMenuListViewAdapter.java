@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.ApplyBean;
+import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.ui.widget.MyTextDrawable;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
 
@@ -118,7 +119,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     class ViewHolder {
 
         //头像
-        ImageView mIvAvatar;
+        CircleImageView mIvAvatar;
         //性别
         ImageView mIvGender;
         //目标用户名称
@@ -134,7 +135,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
 
 
         public ViewHolder(View view) {
-            mIvAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
+            mIvAvatar = (CircleImageView) view.findViewById(R.id.iv_avatar);
             mIvGender = (ImageView) view.findViewById(R.id.iv_gender);
             mTvTargetName = (TextView) view.findViewById(R.id.tv_target_name);
             mTvLatestMessage = (TextView) view.findViewById(R.id.tv_reason);

@@ -20,6 +20,8 @@ import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import static cn.jpush.im.android.tasks.GetUserInfoListTask.IDType.uid;
+
 
 /**
  * Created by Administrator on 2017/8/24.
@@ -77,7 +79,7 @@ public class MyViewPagerAdapter extends PagerAdapter {
         holder.tvUserName.setText(list.get(position).getNickname());
         holder.tvStartLocation.setText(list.get(position).getStartAddr());
         holder.tvEndLocation.setText(list.get(position).getEndAddr());
-        holder.tvReleaseDate.setText(list.get(position).getPostedTime());
+        holder.tvReleaseDate.setText(list.get(position).getDeparTime());
         holder.tvName.setText(list.get(position).getComments());
         Glide.with(context).load(list.get(position).getBackgroundPic()).into( holder.ivPic);
 //			/* 动态设置view 横线 让它和上方的文字等宽*/
@@ -129,7 +131,10 @@ public class MyViewPagerAdapter extends PagerAdapter {
             intent.putExtra("SID",list.get(position).getId()+"");
             intent.putExtra("EndAddr",list.get(position).getEndAddr());
             intent.putExtra("StartAddr",list.get(position).getStartAddr());
-            intent.putExtra("PostedTime",list.get(position).getPostedTime());
+            intent.putExtra("PostedTime",list.get(position).getDeparTime());
+            intent.putExtra("REQUEST",2+"");
+            intent.putExtra("uid",list.get(position).getUid()+"");
+
             context.startActivity(intent);
         }else{
             Intent intent=new Intent(context, LoginActivity.class);

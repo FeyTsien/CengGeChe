@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.notice.NoticeListBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +50,6 @@ public class NoticeActivity extends MVPBaseActivity<NoticeContract.View, NoticeP
 
     @Override
     public void getNoticeListSuccess(NoticeListBean noticeListBean) {
-        ToastUtil.show(this,"获取活动公告成功");
     }
 
     @Override

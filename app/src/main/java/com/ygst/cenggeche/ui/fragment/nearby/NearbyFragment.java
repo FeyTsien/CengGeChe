@@ -6,26 +6,25 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.NearByBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
-import com.ygst.cenggeche.ui.view.recyclerview.PullBaseView;
-import com.ygst.cenggeche.ui.view.recyclerview.PullRecyclerView;
-import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.ui.activity.login.LoginActivity;
+import com.ygst.cenggeche.ui.view.refresh.OnRefreshListener;
+import com.ygst.cenggeche.ui.view.refresh.PullRefreshLayout;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
@@ -33,105 +32,138 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-
-import static android.R.id.list;
+import cn.jpush.im.android.api.JMessageClient;
 
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
-public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyPresenter> implements NearbyContract.View,PullBaseView.OnHeaderRefreshListener,
-        PullBaseView.OnFooterRefreshListener {
-
+public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyPresenter> implements NearbyContract.View {
 
     private View mNearByView;
-    private String TAG=this.getClass().getSimpleName();
-    private PullRecyclerView recyclerView;
+    private String TAG = this.getClass().getSimpleName();
+    private RecyclerView mRecyclerView;
+    private PullRefreshLayout mRefreshLayout;
     private MyAdapter mNearAdapter;
-    private int PAGE=1;
+    private int PAGE = 1;
+    private int PAGET = 0;
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
-    private double LAT,ACC;
+    private double Lit, LAT, ACC;
     private List<NearByBean.DataBean> mList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mNearByView = inflater.inflate(R.layout.fragment_nearby, container, false);
-        ButterKnife.bind(this,mNearByView);
         getPermission();
-        LogUtils.i(TAG,"附近人界面");
-        mList = new ArrayList<>();
-
-        recyclerView = (PullRecyclerView) mNearByView.findViewWithTag("carport_recyclerView");
-//        recyclerView = (PullRecyclerView) mNearByView.findViewById(R.id.nearby_recyclerview);
-        recyclerView.setOnHeaderRefreshListener(this);//设置下拉监听
-        recyclerView.setOnFooterRefreshListener(this);//设置上拉监听
-        recyclerView.setCanPullDown(true);//设置是否可下拉
-        recyclerView.setCanPullUp(true);
-        GridLayoutManager mgr = new GridLayoutManager(getActivity(),2);
-        recyclerView.setLayoutManager(mgr);
-
+        if (mNearByView == null) {
+            mNearByView = inflater.inflate(R.layout.fragment_nearby1, container, false);
+            ButterKnife.bind(this, mNearByView);
+            initData();
+            initViews();
+        }
         return mNearByView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void initData() {
+        mList = new ArrayList<>();
         initLocation();
         startLocation();
-        mPresenter.getnearBy(LAT+"",ACC+"",PAGE);
+        mPresenter.getnearBy(AppData.getLit(), AppData.getLat(), PAGE);
     }
 
-    @Override
-    public void getnearbySuccess(NearByBean nearbybean) {
-        mList = nearbybean.getData();
-        mNearAdapter = new MyAdapter(getActivity(),mList);
-        recyclerView.setAdapter(mNearAdapter);
-        mNearAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+    private void initViews() {
+        mRecyclerView = (RecyclerView) mNearByView.findViewById(R.id.id_recyclerview);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+//        //设置Item增加、移除动画
+//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        //添加分割线
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL));
+        mRefreshLayout = (PullRefreshLayout) mNearByView.findViewById(R.id.refresh_layout);
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                Intent intent=new Intent(getActivity(),FriendInfoActivity.class);
-                intent.putExtra(JMessageUtils.TARGET_USERNAME,mList.get(position).getUsername());
-                startActivity(intent);
+            public void onPullDownRefresh() {
+                //下拉刷新
+                PAGE = 1;
+                mPresenter.getnearBy(AppData.getLit(), AppData.getLat(), PAGE);
+                mRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.onRefreshComplete();
+                    }
+                }, 5000);
+            }
+
+            @Override
+            public void onPullUpRefresh() {
+                //上拉加载
+                if (mList.size() % 10 == 0) {
+                    PAGE = (int) (mList.size() / 10) + 1;
+                    mPresenter.getnearBy(AppData.getLit(), AppData.getLat(), PAGE);
+                } else {
+                    PAGE = (int) (mList.size() / 10) + 2;
+                    mPresenter.getnearBy(AppData.getLit(), AppData.getLat(), PAGE);
+                }
+                mRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.onRefreshComplete();
+                    }
+                }, 5000);
             }
         });
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mNearAdapter = new MyAdapter(getActivity(), mList);
+        mRecyclerView.setAdapter(mNearAdapter);
+        mNearAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if (!AppData.isLoginEd() || JMessageClient.getMyInfo() == null) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    //去发消息
+                    Intent intent = new Intent(getActivity(), FriendInfoActivity.class);
+                    intent.putExtra(JMessageUtils.TARGET_USERNAME, mList.get(position).getUsername());
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        destroyLocation();
+    }
+
+    @Override
+    public void getnearbySuccess(NearByBean nearbybean,int page) {
+        mRefreshLayout.onRefreshComplete();
+        if (PAGE > 1) {
+            if(PAGE ==page){
+                PAGE =1;
+                mList.addAll(nearbybean.getData());
+            }
+        } else {
+            mList.clear();
+            ;
+            mList.addAll(nearbybean.getData());
+        }
+        mNearAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void getnearbyFail(String msg) {
-        ToastUtil.show(getActivity(),msg);
-
+        ToastUtil.show(getActivity(), msg);
     }
 
-    @Override
-    public void onFooterRefresh(PullBaseView view) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ++PAGE;
-//                mPresenter.getnearBy("116.230000","39.5668264",PAGE);
-                recyclerView.onFooterRefreshComplete();
-            }
-        }, 1000);
-    }
-
-    @Override
-    public void onHeaderRefresh(PullBaseView view) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                PAGE=1;
-//                mPresenter.getnearBy("116.230000","39.5668264",PAGE);
-                recyclerView.onHeaderRefreshComplete();
-            }
-        }, 1000);
-
-    }
-
-
-    private void initLocation(){
+    private void initLocation() {
         //初始化client
         locationClient = new AMapLocationClient(getActivity());
         locationOption = getDefaultOption();
@@ -143,16 +175,16 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
 
     /**
      * 默认的定位参数
-     * @since 2.8.0
-     * @author hongming.wang
      *
+     * @author hongming.wang
+     * @since 2.8.0
      */
-    private AMapLocationClientOption getDefaultOption(){
+    private AMapLocationClientOption getDefaultOption() {
         AMapLocationClientOption mOption = new AMapLocationClientOption();
         mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
         mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
         mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
-        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setInterval(300000);//可选，设置定位间隔。设为5分钟
         mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
         mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
         mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
@@ -174,16 +206,16 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
 
                 StringBuffer sb = new StringBuffer();
                 //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
-                if(location.getErrorCode() == 0){
+                if (location.getErrorCode() == 0) {
                     sb.append("定位成功" + "\n");
                     sb.append("定位类型: " + location.getLocationType() + "\n");
                     sb.append("经    度    : " + location.getLongitude() + "\n");
                     sb.append("纬    度    : " + location.getLatitude() + "\n");
                     sb.append("精    度    : " + location.getAccuracy() + "米" + "\n");
                     sb.append("提供者    : " + location.getProvider() + "\n");
-                    LAT= location.getLatitude();
-                    ACC=location.getAccuracy();
-                    Log.i(TAG,"==="+ACC+"=="+LAT);
+                    Lit = location.getLongitude();
+                    LAT = location.getLatitude();
+                    ACC = location.getAccuracy();
                     sb.append("速    度    : " + location.getSpeed() + "米/秒" + "\n");
                     sb.append("角    度    : " + location.getBearing() + "\n");
                     // 获取当前提供定位服务的卫星个数
@@ -198,8 +230,6 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
                     sb.append("兴趣点    : " + location.getPoiName() + "\n");
                     //定位完成的时间
                     //绘制marker
-
-
                 } else {
                     //定位失败
                     sb.append("定位失败" + "\n");
@@ -211,14 +241,16 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
 
                 //解析定位结果，
                 String result = sb.toString();
-                Log.i(TAG,result+"===");
-                mPresenter.getnearBy(location.getLongitude()+"",location.getLatitude()+"",PAGE);
+                Log.i(TAG, "result： " + result);
+                AppData.savaLit(Lit + "");
+                AppData.savaLat(LAT + "");
+                mPresenter.getnearBy(Lit + "", LAT + "", PAGE);
+//                mPresenter.getnearBy(location.getLongitude() + "", location.getLatitude() + "", PAGE);
             } else {
 
             }
         }
     };
-
 
 
     // 根据控件的选择，重新设置定位参数
@@ -263,11 +295,10 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
     /**
      * 开始定位
      *
-     * @since 2.8.0
      * @author hongming.wang
-     *
+     * @since 2.8.0
      */
-    private void startLocation(){
+    private void startLocation() {
         //根据控件的选择，重新设置定位参数
         resetOption();
         // 设置定位参数
@@ -280,11 +311,10 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
     /**
      * 停止定位
      *
-     * @since 2.8.0
      * @author hongming.wang
-     *
+     * @since 2.8.0
      */
-    private void stopLocation(){
+    private void stopLocation() {
         // 停止定位
         locationClient.stopLocation();
     }
@@ -292,11 +322,10 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
     /**
      * 销毁定位
      *
-     * @since 2.8.0
      * @author hongming.wang
-     *
+     * @since 2.8.0
      */
-    private void destroyLocation(){
+    private void destroyLocation() {
         if (null != locationClient) {
             /**
              * 如果AMapLocationClient是在当前Activity实例化的，
@@ -307,6 +336,7 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
             locationOption = null;
         }
     }
+
     //
 //    @Override
 //    protected void onDestroy() {
@@ -329,16 +359,16 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
 //    }
 //
 
-    public void getPermission(){
-        PackageManager packageManager =getActivity().getPackageManager();
+    public void getPermission() {
+        PackageManager packageManager = getActivity().getPackageManager();
         boolean permission1 = (PackageManager.PERMISSION_GRANTED ==
                 packageManager.checkPermission("android.permission.ACCESS_FINE_LOCATION", "com.ygst.cenggeche"));
         boolean permission3 = (PackageManager.PERMISSION_GRANTED ==
                 packageManager.checkPermission("android.permission.ACCESS_LOCATION_EXTRA_COMMANDS", "com.ygst.cenggeche"));
-        if(permission1&&permission3){
-        }else{
+        if (permission1 && permission3) {
+        } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS}, 1);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS}, 1);
             }
         }
 

@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 
 import cn.jmessage.android.uikit.chatting.utils.IdHelper;
 
-
+@SuppressWarnings("ResourceType")
 public class DropDownListView extends ListView implements OnScrollListener {
 
     private boolean isDropDownStyle = true;

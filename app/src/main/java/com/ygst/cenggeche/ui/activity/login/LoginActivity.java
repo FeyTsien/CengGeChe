@@ -4,9 +4,9 @@ package com.ygst.cenggeche.ui.activity.login;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -115,8 +115,10 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             //变成了验证码登录
             checkType = LoginBean.CODE_TO_LOGIN;
             mEtPwdCode.setHint("请输入验证码");
+            mEtPwdCode.setText("");
             //输入框变成只能输入手机号的模式
-            mEtPwdCode.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+            mEtPwdCode.setInputType(InputType.TYPE_CLASS_PHONE);
+
             mBtnGetCode.setVisibility(View.VISIBLE);
             mTvForgotPwd.setVisibility(View.GONE);
             mBtnLoginType.setText("切换密码登录");
@@ -124,8 +126,9 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
             //变成了密码登录
             checkType = LoginBean.PWD_TO_LOGIN;
             mEtPwdCode.setHint("请输入密码");
-            mEtPwdCode.setInputType(EditorInfo.IME_ACTION_NONE);
-            mEtPwdCode.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+            mEtPwdCode.setText("");
+            mEtPwdCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
             mBtnGetCode.setVisibility(View.GONE);
             mTvForgotPwd.setVisibility(View.VISIBLE);
             mBtnLoginType.setText("切换验证码登录");

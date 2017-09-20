@@ -77,7 +77,8 @@ public class HttpManager {
         String sign = RSAUtil.encryptByPublic(MyApplication.getContext(),singStr);
         Observable<String> observable = RetrofitUtil.getInstance().get(ProjectAPI.class).postMethod(deviceId, uid, sign, url, map);
         //在子线程中执行请求，在主线程观察，将信息设置给观察者
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).unsubscribeOn(Schedulers.io()).subscribe(observer);
+
     }
 
     /**

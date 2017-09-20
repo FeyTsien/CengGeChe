@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
 /**
  * MVPPlugin
  *  邮箱 784787081@qq.com
@@ -44,7 +46,7 @@ public class SureAddrActivity extends Activity implements PoiSearch.OnPoiSearchL
     @BindView(R.id.tv_title)
     TextView mTvTitle;
     private ListView mPoiSearchList;
-    private Button mSearchbtn;
+    private TextView mSearchbtn;
     private String TAG="RetrievalActivity";
     private String city = "北京";
     private AutoCompleteTextView autoCompleteTextView;
@@ -66,15 +68,15 @@ public class SureAddrActivity extends Activity implements PoiSearch.OnPoiSearchL
     @Override
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_retrieval);
+        setContentView(R.layout.activity_sureaddr);
         ButterKnife.bind(this);
         mTvTitle.setText("出发");
         mPoiSearchList = (ListView) findViewById(R.id.listView);
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.tv_keyword);
+         mSearchbtn = (TextView)findViewById(R.id.bt_address_search);
         mAdapter = new SearchAdapter(this);
         autoCompleteTextView.addTextChangedListener(this);
-        mSearchbtn = (Button)findViewById(R.id.bt_address_search);
-
+        mSearchbtn = (TextView)findViewById(R.id.bt_address_search);
 
         mSearchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +95,6 @@ public class SureAddrActivity extends Activity implements PoiSearch.OnPoiSearchL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String s = listString.get(position);
-                ToastUtil.show(SureAddrActivity.this,"sss=="+s);
                 Intent intent = new Intent(SureAddrActivity.this, SureTravelActivity.class);
                 String passString = s;
                 intent.putExtra("result", passString);

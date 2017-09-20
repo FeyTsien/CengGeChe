@@ -88,7 +88,7 @@ public class CartypeActivity extends MVPBaseActivity<CartypeContract.View, Carty
         mBtnSearch = (Button) findViewById(R.id.btn_searchcartype);
         mLsSidebar = (LetterSideBar)findViewById(R.id.pp_letter);
         mLsSidebar.setOnTouchLetterListener(this);
-
+        mEvSearch.setFocusable(false);
 
         mBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override

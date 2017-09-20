@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--主题颜色8064a1-->
-    <color name="colorTheme">#ff7904</color>
+    <color name="colorTheme">#8064a1</color>
     <!--辅助颜色-->
     <color name="colorSub">#34a6fd</color>
     <!--辅助颜色2-->
@@ -12,6 +12,10 @@
     <color name="colorPrimaryDark">@color/colorTheme</color>
     <!--控件颜色-->
     <color name="colorAccent">@color/colorTheme</color>
+    <!--女色颜色-->
+    <color name="colorGirl">#fc6191</color>
+    <!--男色颜色-->
+    <color name="colorBoy">#00baff</color>
 
     <!--Hint字体颜色-->
     <color name="colorHint">#989898</color>

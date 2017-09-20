@@ -70,8 +70,7 @@ public class ResetPwdActivity extends MVPBaseActivity<ResetPwdContract.View, Res
                 mPresenter.resetPwd(getIntent().getStringExtra("username"),newPwd);
             }
         }else{
-            ToastUtil.show(this,"密码只能为6至18位的字母、数字、下划线等，特殊符号除外");
-            CommonUtils.showInfoDialog(this, "密码只能为6至18位的字母、数字、下划线等，特殊符号除外", "提示", "知道了", "", null, null);
+            CommonUtils.showInfoDialog(this, "密码只能为8至16位的字母和数字的组合", "提示", "知道了", "", null, null);
         }
     }
 

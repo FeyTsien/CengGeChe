@@ -10,11 +10,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.bean.NowTravelInfoBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.jmessage.android.uikit.chatting.CircleImageView;
+
 
 /**
  * Created by Administrator on 2017/8/25.
@@ -22,11 +26,11 @@ import cn.jmessage.android.uikit.chatting.CircleImageView;
 
 public class TravelInfoAdapter extends BaseAdapter {
 
-    private  ArrayList<String> mList;
+    private List<NowTravelInfoBean.InfoBean> mList;
     private  Context context;
     private OnItemClickListener mOnItemClickListener;
 
-    public TravelInfoAdapter(Context context, ArrayList<String> list){
+    public TravelInfoAdapter(Context context,List<NowTravelInfoBean.InfoBean> list){
         this.context=context;
         this.mList=list;
     }
@@ -65,7 +69,6 @@ public class TravelInfoAdapter extends BaseAdapter {
             viewHolder.mTvStartLocation = (TextView) convertView.findViewById(R.id.tv_start_location);
             viewHolder.mTvEndLocation = (TextView) convertView.findViewById(R.id.tv_end_location);
 
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -75,6 +78,7 @@ public class TravelInfoAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onItemDeleteClick(v,position);
+
             }
         });
         //接受点击事件
@@ -86,10 +90,12 @@ public class TravelInfoAdapter extends BaseAdapter {
         });
 
 
-
-//        holder.mLabel1.setTextSize(CommonUtils.px2dip(20));
-//        holder.mLabel2.setTextSize(CommonUtils.px2dip(20));
-//        holder.mLabel3.setTextSize(CommonUtils.px2dip(20));
+        viewHolder.mTvNickname.setText(mList.get(position).getNickname());
+        Glide.with(context).load(mList.get(position).getUserPic()).into(viewHolder.mUserSmallicon);
+        viewHolder.mIvGender.setImageResource(R.mipmap.icon_girl);
+        viewHolder.mTvUserage.setText(mList.get(position).getDeparTime());
+        viewHolder.mTvStartLocation.setText(mList.get(position).getStartAddr());
+        viewHolder.mTvEndLocation.setText(mList.get(position).getEndAddr());
         return convertView;
     }
 

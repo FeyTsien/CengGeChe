@@ -4,7 +4,6 @@ package com.ygst.cenggeche.webview;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -302,13 +301,6 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        if (requestCode == MyWebChromeClient.FILECHOOSER_RESULTCODE) {
-//            mWebChromeClient.mUploadMessage(intent, resultCode);
-//        } else if (requestCode == MyWebChromeClient.FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
-//            mWebChromeClient.mUploadMessageForAndroid5(intent, resultCode);
-//        }
-
-
         if (requestCode == MyWebChromeClient.TAKE_PHOTO || requestCode == MyWebChromeClient.REQ_CHOOSE) {
             mWebChromeClient.mUploadMessage(requestCode, resultCode, intent);
         }

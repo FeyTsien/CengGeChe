@@ -15,12 +15,16 @@ public class AppData {
     private static final String IS_LOCATION = "北京";
 
 
+    /**
+     * 引导页专用
+     * @param firstOpen
+     */
     public static void savaFirstOpen(int firstOpen) {
         SharedPreferencesUtils.saveInt("FirstOpen", firstOpen);
     }
 
     /**
-     * 设置车主认证状态
+     * 查看是否是第一次进入主界面（是否显示引导页）
      */
     public static int getFirstOpen(){
         return SharedPreferencesUtils.getInt("FirstOpen", 1);
@@ -80,6 +84,34 @@ public class AppData {
         return SharedPreferencesUtils.getInt("userStatus", 0);
     }
 
+    /**
+     * 保存纬度
+     * @param lit
+     */
+    public static void savaLit(String lit) {
+        SharedPreferencesUtils.saveString("lit", lit);
+    }
+
+    /**
+     * 获取纬度
+     */
+    public static String getLit(){
+        return SharedPreferencesUtils.getString("lit","");
+    }
+    /**
+     * 保存经度
+     * @param lat
+     */
+    public static void savaLat(String lat) {
+        SharedPreferencesUtils.saveString("lat", lat);
+    }
+
+    /**
+     * 获取经度
+     */
+    public static String getLat(){
+        return SharedPreferencesUtils.getString("lat","");
+    }
 
     /**
      * 查询是否勾选不再提示（开始通知栏权限时）

@@ -6,8 +6,8 @@ package com.ygst.cenggeche.utils;
 
 public class UrlUtils {
     //BaseUrl本地
-    public static String BASEURl_BENDI = "http://192.168.0.133";
-//    public static String BASEURl_BENDI = "http://gqj19940824.vicp.io";
+//    public static String BASEURl_BENDI = "http://192.168.0.133";
+    public static String BASEURl_BENDI = "http://gqj19940824.vicp.io/";
 
     // BaseUrl测试(暂时没有)
 //     public static String BASEURl_TEST = "http://192.168.0.147:8180";
@@ -138,4 +138,13 @@ public class UrlUtils {
 
     //获取他人行程及用户信息系接口
     public static String CHANGEUSERINFO= "stroke/updateStroke.do";
+
+
+    // 车主/乘客选择行程请求同行接口
+    public static String PEERREQUEST= "stroke/peerRequest.do";
+
+
+
+
+
 }

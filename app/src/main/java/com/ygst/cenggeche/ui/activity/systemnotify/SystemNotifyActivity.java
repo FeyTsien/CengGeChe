@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.systemNotify.SystemNotityListBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +50,6 @@ public class SystemNotifyActivity extends MVPBaseActivity<SystemNotifyContract.V
 
     @Override
     public void getSystemNotifyListSuccess(SystemNotityListBean systemNotityListBean) {
-        ToastUtil.show(this,"获取系统通知成功");
     }
 
     @Override

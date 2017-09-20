@@ -1,15 +1,11 @@
 package cn.jmessage.android.uikit.chatting.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import cn.jmessage.android.uikit.DemoActivity;
-
 /**
  * Created by Ken on 2015/3/25.
  */
@@ -51,9 +47,6 @@ public class HandleResponseCode {
                 break;
             case 800013:
                 content.setText(IdHelper.getString(context, "jmui_server_800013"));
-                Intent intent = new Intent();
-                intent.setClass(context, DemoActivity.class);
-                context.startActivity(intent);
                 break;
             case 801001:
             case 802001:
