@@ -83,13 +83,13 @@ public class CengChePresenter extends BasePresenterImpl<CengCheContract.View> im
             @Override
             public void onNext(String s) {
 
-                LogUtils.i("HttpManager", "ssss:" + s);
+                LogUtils.i("HttpManager", "sss========s:" + s);
                 Gson gson = new Gson();
                 CodeBean codeBean = gson.fromJson(s, CodeBean.class);
                 try {
                     JSONObject jsonObject=new JSONObject(s);
                     String cancelNum = jsonObject.getString("cancelNum");
-                    if ("0000".equals(codeBean.getCode())) {
+                    if ("0000".equals(codeBean.getCode())||"0016".equals(codeBean.getCode())) {
                         mView.checkApplySuccess(cancelNum);
                     } else {
                         mView.checkApplyFail(codeBean.getMsg());

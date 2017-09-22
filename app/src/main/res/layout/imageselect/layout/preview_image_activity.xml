@@ -23,8 +23,8 @@
         app:right_text="@string/select_ok"
         app:small_text_size="15sp"
         app:title_text_color="@android:color/white"
-        app:left_image="@drawable/btn_back"
-        android:background="@drawable/toolbar_bg" />
+        app:left_image="@mipmap/icon_back"
+        android:background="@color/colorTheme" />
 
     <RelativeLayout
         android:id="@+id/rl_check"

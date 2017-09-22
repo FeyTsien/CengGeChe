@@ -177,10 +177,10 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
                 .into(mIvAvatar);
         //性别符号
         if (friendInfo.getData().getGender() == 0) {
-            mIvAvatar.setBorderColor(R.color.colorGirl);
+            mIvAvatar.setBorderColor(getResources().getColor(R.color.colorGirl));
             mIvGender.setImageResource(R.mipmap.icon_girl);
         } else if (friendInfo.getData().getGender() == 1) {
-            mIvAvatar.setBorderColor(R.color.colorBoy);
+            mIvAvatar.setBorderColor(getResources().getColor(R.color.colorBoy));
             mIvGender.setImageResource(R.mipmap.icon_boy);
         }
         //年龄

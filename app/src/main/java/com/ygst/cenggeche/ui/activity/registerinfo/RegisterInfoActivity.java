@@ -87,7 +87,7 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
 
     private void init() {
         mTvTitle.setText("注册信息");
-        mTvBirthdate.setText("选择出生日期");
+//        CommonUtils.showInfoDialog(this, "生日和性别注册完成后即不可修改", "注意", "知道了", "", null, null);
         //也可获取当前日期
 //        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。
 //        t.setToNow(); // 取得系统时间。
@@ -110,15 +110,16 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         //获取当前日期
         Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
+        mMonth = c.get(Calendar.MONTH)+1;
         mDay = c.get(Calendar.DAY_OF_MONTH);
+        String startTime =  (mYear-100) + "-" + mMonth + "-" + mDay+" 00:00";
         String endTime =  mYear + "-" + mMonth + "-" + mDay+" 00:00";
         TimeSelector timeSelector = new TimeSelector(this, new TimeSelector.ResultHandler() {
             @Override
             public void handle(String time) {
                 mTvBirthdate.setText(time.substring(0, time.indexOf(" ")));
             }
-        }, "1960-01-01 00:00",endTime);
+        }, startTime,endTime);
 //        timeSelector.setMode(TimeSelector.MODE.YMDHM);//显示 年月日时分（默认）；
         timeSelector.setMode(TimeSelector.MODE.YMD);//只显示 年月日
         timeSelector.show();
@@ -158,7 +159,7 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
 
         if (TextUtils.isEmpty(nickname)) {
             CommonUtils.showInfoDialog(this, "给自己取个狂拽酷帅的昵称吧", "提示", "知道了", "", null, null);
-        } else if (birthday.equals("选择出生日期")) {
+        } else if (TextUtils.isEmpty(birthday)) {
             CommonUtils.showInfoDialog(this, "请选择出生日期", "提示", "知道了", "", null, null);
         } else if (UsernamePwdUtils.isPasswordStandard(pwd)) {
             if (!pwd.equals(confirmPWD)) {

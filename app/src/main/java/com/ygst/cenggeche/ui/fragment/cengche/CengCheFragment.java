@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.utils.LogUtils;
+import com.blankj.utilcode.utils.ToastUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.AllStrokeBean;
@@ -48,7 +49,6 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     Button btnCengche;
     @BindView(R.id.btn_shaoren)
     Button btnShaoren;
-
     private View mCengCheView;
     private ViewPager mViewPager;
     @BindView(R.id.iv_trip_info)
@@ -64,7 +64,6 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     @BindView(R.id.ll_cenglayout)
     RelativeLayout ll_cenglayout;
 
-    private String TAG = "CengCheFragment";
     private ArrayList<AllStrokeBean.DataBean> list;
     private MyViewPagerAdapter mAdapter;
     private int PAGE = 1;
@@ -72,13 +71,14 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     private int currentPage;
     private AllStrokeBean allStrokeBean;
     private int sid;
-    private String endAddr;
+    private String endAddr;//100 140 140 140 140 180
     private String comment;
     private String postedTime;
     private String startAddr;
     public static int PERSONSTATUS = 0;//判断是蹭车 1还是捎人2的状态
     private int ChangeStatus=1;//头部切换 蹭车1 捎人2 的状态判断
     private int uid;
+    private String TAG=this.getClass().getSimpleName();
 
     //点击事件的处理
     @OnClick({R.id.iv_take_her, R.id.iv_release_plan, R.id.iv_trip_info, R.id.iv_cengtache})
@@ -191,8 +191,7 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
 
                                 }else if(ChangeStatus==1){
                                     mPresenter.getAllinfo(2 + "", PAGE);
-
-                                    ToastUtil.show(getActivity(), "捎人滑动");
+                                    ToastUtil.show(getActivity(),"捎人滑动");
                                 }
                             }
                         }
@@ -353,8 +352,8 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
         switch (view.getId()) {
             case R.id.btn_cengche:
                 ChangeStatus=1;
-                ivCengTaChe.setVisibility(View.VISIBLE);
-                ivTakeHer.setVisibility(View.GONE);
+                ivCengTaChe.setVisibility(View.GONE);
+                ivTakeHer.setVisibility(View.VISIBLE);
                 btnCengche.setTextColor(getResources().getColor(R.color.colorTheme));
                 btnCengche.setBackgroundResource(R.drawable.button_cengche1);
                 btnShaoren.setTextColor(getResources().getColor(R.color.white));
@@ -365,8 +364,10 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                 break;
             case R.id.btn_shaoren:
                 ChangeStatus=2;
-                ivCengTaChe.setVisibility(View.GONE);
-                ivTakeHer.setVisibility(View.VISIBLE);
+
+                ivCengTaChe.setVisibility(View.VISIBLE);
+                ivTakeHer.setVisibility(View.GONE);
+
                 btnShaoren.setTextColor(getResources().getColor(R.color.colorTheme));
                 btnShaoren.setBackgroundResource(R.drawable.button_shaoren1);
                 btnCengche.setTextColor(getResources().getColor(R.color.white));

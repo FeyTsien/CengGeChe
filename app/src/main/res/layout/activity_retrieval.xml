@@ -16,8 +16,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_gravity="center_vertical"
             android:background="@color/deep_violet"
             android:gravity="center_vertical"
@@ -48,17 +49,42 @@
                 android:paddingLeft="10dp"
 
                 android:singleLine="true"
-                 />
+                />
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
 
-
-    <ListView
-        android:id="@+id/listView"
+    <LinearLayout
+        android:id="@+id/history_ll"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"></ListView>
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="历史记录"
+                android:textColor="@color/gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_alignParentRight="true"
+                android:id="@+id/tv_clear_history"
+                android:text="清空"
+                android:textColor="@color/gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"></ListView>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/hislistView"

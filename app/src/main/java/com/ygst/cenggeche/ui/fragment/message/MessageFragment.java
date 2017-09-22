@@ -283,9 +283,9 @@ public class MessageFragment extends MVPBaseFragment<MessageContract.View, Messa
         mListConversation.remove(position);
         mSwipeMenuListViewAdapter.notifyDataSetChanged();
         if (type.equals(ConversationType.single)) {
-            ToastUtil.show(getActivity(), "删除单聊会话成功");
+//            ToastUtil.show(getActivity(), "删除单聊会话成功");
         } else {
-            ToastUtil.show(getActivity(), "删除群聊会话成功");
+//            ToastUtil.show(getActivity(), "删除群聊会话成功");
         }
     }
 

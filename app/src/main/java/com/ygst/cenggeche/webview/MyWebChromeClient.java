@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
@@ -13,11 +14,14 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
+import com.jarek.imageselect.activity.FolderListActivity;
+import com.jarek.imageselect.bean.ImageFolderBean;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import cn.jmessage.android.uikit.chatting.utils.FileHelper;
 
@@ -34,6 +38,7 @@ public class MyWebChromeClient extends WebChromeClient {
 
     private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mUploadMessageForAndroid5;
+    private ValueCallback<String[]> mUploadMessageForAndroid51;
     public static int FILECHOOSER_RESULTCODE = 1;
     public static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
 
@@ -155,25 +160,11 @@ public class MyWebChromeClient extends WebChromeClient {
     private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
         mUploadMessage = uploadMsg;
         dispatchTakePictureIntent();
-//        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-//        i.addCategory(Intent.CATEGORY_OPENABLE);
-//        i.setType("image/*");
-//        mActivity.startActivityForResult(Intent.createChooser(i, "图片选择"), FILECHOOSER_RESULTCODE);
     }
 
     private void openFileChooserImplForAndroid5(ValueCallback<Uri[]> uploadMsg) {
         mUploadMessageForAndroid5 = uploadMsg;
         dispatchTakePictureIntent();
-
-//        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-//        contentSelectionIntent.setType("image/*");
-//
-//        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-//        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-//        chooserIntent.putExtra(Intent.EXTRA_TITLE, "图片选择");
-//
-//        mActivity.startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
     }
 
     //拍照
@@ -231,32 +222,27 @@ public class MyWebChromeClient extends WebChromeClient {
         boolean flag = Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED);
         if (!flag) {
-            ToastUtil.show(mActivity,"请插入手机存储卡再使用本功能");
+            ToastUtil.show(mActivity, "请插入手机存储卡再使用本功能");
         }
         return flag;
     }
 
 
     String mCurrentPhotoPath = null;
+
     /**
-     *拍照1
+     * 拍照1
      */
     private void takeCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //这里可能需要检查文件夹是否存在
-        //File file = new File(Environment.getExternalStorageDirectory() + "/APPNAME/");
-        //if (!file.exists()) {
-        //  file.mkdirs();
-        //}
         mCurrentPhotoPath = FileHelper.createAvatarPath(null);
-//        mCurrentPhotoPath = Environment.getExternalStorageDirectory() + "/avatar.jpg";
         File outputImage = new File(mCurrentPhotoPath);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mCurrentPhotoPath)));
         mActivity.startActivityForResult(intent, TAKE_PHOTO);
     }
 
     /**
-     *拍照
+     * 拍照
      */
     private void takePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -273,6 +259,7 @@ public class MyWebChromeClient extends WebChromeClient {
     }
 
     String FileName = "forum";
+
     //创建文件夹包装图片
     private File createImageFile() throws IOException {
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + FileName);
@@ -290,23 +277,55 @@ public class MyWebChromeClient extends WebChromeClient {
      * 209.  * 本地相册选择图片  * 210.
      */
     private void chosePic() {
-        Intent innerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        String IMAGE_UNSPECIFIED = "image/*";
-        innerIntent.setType(IMAGE_UNSPECIFIED); // 查看类型
-        Intent wrapperIntent = Intent.createChooser(innerIntent, null);
-        mActivity.startActivityForResult(wrapperIntent, REQ_CHOOSE);
+        // 当SDK版本号为2.3以下版本时
+        if (Build.VERSION.SDK_INT < 21) {
+//            Intent innerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//            String IMAGE_UNSPECIFIED = "image/*";
+//            innerIntent.setType(IMAGE_UNSPECIFIED); // 查看类型
+//            Intent wrapperIntent = Intent.createChooser(innerIntent, null);
+//            mActivity.startActivityForResult(wrapperIntent, REQ_CHOOSE);
+            FolderListActivity.startFolderListActivity(mActivity, REQ_CHOOSE, null, 1);
+        } else {
+            FolderListActivity.startFolderListActivity(mActivity, REQ_CHOOSE, null, 6);
+        }
     }
 
-
-
-
     public void mUploadMessage(int requestCode, int resultCode, Intent data) {
+        if(resultCode!=RESULT_OK){
+            if (mUploadMessageForAndroid5 != null) {
+                Uri[] uris = new Uri[1];
+                uris[0] = Uri.parse("");
+                mUploadMessageForAndroid5.onReceiveValue(uris);
+                mUploadMessageForAndroid5 = null;
+            } else {
+                mUploadMessage.onReceiveValue(Uri.parse(""));
+                mUploadMessage = null;
+            }
+            return;
+        }
         if (null == mUploadMessage && null == mUploadMessageForAndroid5) return;
-        Uri result = data == null || resultCode != RESULT_OK ? null : data.getData();
+        Uri result1 = data == null || resultCode != RESULT_OK ? null : data.getData();
         if (mUploadMessageForAndroid5 != null) {
             onActivityResultAboveL(requestCode, data);
         } else if (mUploadMessage != null) {
-            mUploadMessage.onReceiveValue(result);
+            if (requestCode == TAKE_PHOTO) {
+                mUploadMessage.onReceiveValue(result1);
+            } else if (requestCode == REQ_CHOOSE) {
+                List<ImageFolderBean> list = (List<ImageFolderBean>) data.getSerializableExtra("list");
+                if (list == null) {
+                    return;
+                }
+                for (int i = 0; i < list.size(); i++) {
+                    String[] dataStr = list.get(i).path.split("/");
+                    String fileTruePath = "/sdcard";
+                    for (int j = 4; j < dataStr.length; j++) {
+                        fileTruePath = fileTruePath + "/" + dataStr[j];
+                    }
+                    File file = new File(fileTruePath);
+                    Uri result = Uri.fromFile(file);
+                    mUploadMessage.onReceiveValue(result);
+                }
+            }
             mUploadMessage = null;
         }
     }
@@ -318,48 +337,36 @@ public class MyWebChromeClient extends WebChromeClient {
             return;
         }
         Uri result = null;
+        Uri results[] = null;
         if (requestCode == TAKE_PHOTO) {
             File file = new File(mCurrentPhotoPath);
             Uri localUri = Uri.fromFile(file);
             Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
             mActivity.sendBroadcast(localIntent);
             result = Uri.fromFile(file);
+            if (result != null) {
+                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
+            }
         } else if (requestCode == REQ_CHOOSE) {
             if (data != null) {
-                result = data.getData();
+                List<ImageFolderBean> list = (List<ImageFolderBean>) data.getSerializableExtra("list");
+                if (list == null) {
+                    return;
+                }
+                results = new Uri[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    String[] dataStr = list.get(i).path.split("/");
+                    String fileTruePath = "/sdcard";
+                    for (int j = 4; j < dataStr.length; j++) {
+                        fileTruePath = fileTruePath + "/" + dataStr[j];
+                    }
+                    File file = new File(fileTruePath);
+                    results[i] = Uri.fromFile(file);
+                }
+                mUploadMessageForAndroid5.onReceiveValue(results);
             }
-        }
-        if (result != null) {
-            mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
         }
         mUploadMessageForAndroid5 = null;
         return;
     }
-
-
-//    /**
-//     * 5.0以下 上传图片成功后的回调
-//     */
-//    public void mUploadMessage(Intent intent, int resultCode) {
-//        if (null == mUploadMessage)
-//            return;
-//        Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-//        mUploadMessage.onReceiveValue(result);
-//        mUploadMessage = null;
-//    }
-//
-//    /**
-//     * 5.0以上 上传图片成功后的回调
-//     */
-//    public void mUploadMessageForAndroid5(Intent intent, int resultCode) {
-//        if (null == mUploadMessageForAndroid5)
-//            return;
-//        Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
-//        if (result != null) {
-//            mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
-//        } else {
-//            mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
-//        }
-//        mUploadMessageForAndroid5 = null;
-//    }
 }

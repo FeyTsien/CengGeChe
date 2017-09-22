@@ -68,17 +68,16 @@ public class AppData {
     }
 
     /**
-     * 查询是否车主认证通过
+     * 设置车主认证状态
      *
      * @param userStatus
      */
-    // 保存验证信息未读取条数
     public static void savaUserStatus(int userStatus) {
         SharedPreferencesUtils.saveInt("userStatus", userStatus);
     }
 
     /**
-     * 设置车主认证状态
+     * 查询是否车主认证通过
      */
     public static int getUserStatus(){
         return SharedPreferencesUtils.getInt("userStatus", 0);
@@ -170,24 +169,11 @@ public class AppData {
         return SharedPreferencesUtils.getString("NICKNAME", null);
     }
 
-//    /**
-//     * 保存token
-//     */
-//    public static void saveToken(String token) {
-//        SharedPreferencesUtils.saveString("TOKEN", token);
-//    }
-//    /**
-//     * 获取token
-//     */
-//    public static String getToken() {
-//        return SharedPreferencesUtils.getString("TOKEN", null);
-//    }
-
     /**
      * 保存头像
      */
-    public static void saveIcon(String token) {
-        SharedPreferencesUtils.saveString("ICON", token);
+    public static void saveIcon(String iconPath) {
+        SharedPreferencesUtils.saveString("ICON", iconPath);
     }
     /**
      * 获取头像
@@ -222,15 +208,6 @@ public class AppData {
      */
     public static String getRegistrationId() {
         return SharedPreferencesUtils.getString("REGISTRATION_ID", "");
-    }
-
-    // 保存验证状态
-    public static void savaStatus(String time) {
-        SharedPreferencesUtils.saveString("STATTUS", time);
-    }
-
-    public static String getStatus() {
-        return SharedPreferencesUtils.getString("STATTUS", "0");
     }
 
     // 保存验证信息未读取条数

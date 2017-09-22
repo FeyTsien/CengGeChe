@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.NearByBean;
+import com.ygst.cenggeche.ui.widget.CircleImageView;
 
 import java.util.List;
 
@@ -78,17 +79,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         //设置标签
         List<String> tags = mList.get(position).getTags();
         int size = tags.size();
-        if (size == 0) {
-            holder.mLllayout.setVisibility(View.GONE);
-        } else if (size == 1) {
+        if (size == 1) {
+            holder.mLabel1.setVisibility(View.VISIBLE);
             holder.mLabel1.setText(mList.get(position).getTags().get(0));
-            holder.mLabel2.setVisibility(View.GONE);
-            holder.mLabel3.setVisibility(View.GONE);
         } else if (size == 2) {
+            holder.mLabel1.setVisibility(View.VISIBLE);
+            holder.mLabel2.setVisibility(View.VISIBLE);
             holder.mLabel1.setText(mList.get(position).getTags().get(0));
             holder.mLabel2.setText(mList.get(position).getTags().get(1));
-            holder.mLabel3.setVisibility(View.GONE);
-        } else if (size == 3) {
+        } else if (size >= 3) {
+            holder.mLabel1.setVisibility(View.VISIBLE);
+            holder.mLabel2.setVisibility(View.VISIBLE);
+            holder.mLabel3.setVisibility(View.VISIBLE);
             holder.mLabel1.setText(mList.get(position).getTags().get(0));
             holder.mLabel2.setText(mList.get(position).getTags().get(1));
             holder.mLabel3.setText(mList.get(position).getTags().get(2));
@@ -118,7 +120,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView mTvDistance;
         TextView mLabel1, mLabel2, mLabel3;
-        ImageView mUserSmallicon, mIvGender, mIvBigpic;
+        CircleImageView mUserSmallicon;
+        ImageView mIvGender, mIvBigpic;
         TextView mTvNickname;
         TextView mTvUserage;
         LinearLayout mLllayout;
@@ -129,7 +132,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             mLabel1 = (TextView) view.findViewById(R.id.label1);
             mLabel2 = (TextView) view.findViewById(R.id.label2);
             mLabel3 = (TextView) view.findViewById(R.id.label3);
-            mUserSmallicon = (ImageView) view.findViewById(R.id.user_smallicon);
+            mUserSmallicon = (CircleImageView) view.findViewById(R.id.user_smallicon);
             mTvNickname = (TextView) view.findViewById(R.id.tv_nickname);
             mTvUserage = (TextView) view.findViewById(R.id.tv_userage);
             mIvGender = (ImageView) view.findViewById(R.id.iv_gender);

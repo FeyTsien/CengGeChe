@@ -34,7 +34,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
             @Override
             public void onError(Throwable e) {
-                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
+                LogUtils.e(TAG, "onError:+ ++++++++++++++" + e.toString());
             }
 
             @Override

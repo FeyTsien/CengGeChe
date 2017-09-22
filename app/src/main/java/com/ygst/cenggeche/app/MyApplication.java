@@ -88,6 +88,9 @@ public class MyApplication extends Application {
     public static void clearLogin() {
         Log.i("clearLogin", "isTokenExpired: +++++++++++++++++++++++++++++++0005");
         AppData.saveUid("");
+        AppData.saveUserName("");
+        AppData.saveNickname("");
+        AppData.savaUserStatus(0);
         AppData.saveGenders("");
         AppData.setIsLoginEd(false);
     }

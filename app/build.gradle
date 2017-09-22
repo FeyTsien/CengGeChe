@@ -14,8 +14,6 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "android.support.TestBean.runner.AndroidJUnitRunner"
         multiDexEnabled = true
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
 
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -67,14 +65,14 @@ android {
         }
     }
 
-    productFlavors {
-        tencent {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent"]
-        }
-
-        baidu {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
-        }
+//    productFlavors {
+//        tencent {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent"]
+//        }
+//
+//        baidu {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
+//        }
 //
 //        qh360 {
 //            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qh360"]
@@ -92,7 +90,7 @@ android {
 //        xiaomi {
 //            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
 //        }
-    }
+//    }
 }
 
 dependencies {
@@ -123,12 +121,12 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
 //    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
-    compile 'com.squareup.retrofit2:converter-scalars:2.3.0'
-    compile 'com.squareup.okhttp3:okhttp:3.9.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.squareup.retrofit2:converter-scalars:2.0.2'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
 //      一个强大并且灵活的RecyclerViewAdapter。（https://github.com/CymChad/BaseRecyclerViewAdapterHelper）
 //    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.0'

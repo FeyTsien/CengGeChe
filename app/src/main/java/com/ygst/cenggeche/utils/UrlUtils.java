@@ -6,8 +6,8 @@ package com.ygst.cenggeche.utils;
 
 public class UrlUtils {
     //BaseUrl本地
-//    public static String BASEURl_BENDI = "http://192.168.0.133";
-    public static String BASEURl_BENDI = "http://gqj19940824.vicp.io/";
+    public static String BASEURl_BENDI = "http://192.168.0.133";
+//    public static String BASEURl_BENDI = "http://gqj19940824.vicp.io/";
 
     // BaseUrl测试(暂时没有)
 //     public static String BASEURl_TEST = "http://192.168.0.147:8180";

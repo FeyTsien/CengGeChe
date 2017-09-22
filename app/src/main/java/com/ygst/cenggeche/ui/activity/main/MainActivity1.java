@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.LogUtils;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
+import com.ygst.cenggeche.app.MyApplication;
 import com.ygst.cenggeche.bean.NewAppVersionBean;
 import com.ygst.cenggeche.download.service.DownloadService;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
@@ -275,12 +276,14 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
     public void onEvent(NotificationClickEvent event) {
         LogUtils.i(TAG, "onEvent-----通知栏点击事件实体类NotificationClickEvent");
         Message msg = event.getMessage();
+        UserInfo fromUser = msg.getFromUser();
 
-        Intent notificationIntent = new Intent(getApplicationContext(), MyChatActivity.class);
-        Bundle mBundle = new Bundle();
-        mBundle.putSerializable(JMessageUtils.MESSAGE, msg);
-        notificationIntent.putExtras(mBundle);
-        startActivity(notificationIntent);
+        Intent notificationIntent = new Intent(this.getContext(), MyChatActivity.class);
+        notificationIntent.putExtra(JMessageUtils.TARGET_USERNAME, fromUser.getUserName());
+        notificationIntent.putExtra(JMessageUtils.TARGET_APP_KEY, fromUser.getAppKey());
+        notificationIntent.putExtra(JMessageUtils.IS_FRIEND,fromUser.isFriend());
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        getContext().startActivity(notificationIntent);
     }
 
     /**
@@ -300,14 +303,15 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
      */
     public void onEvent(LoginStateChangeEvent event) {
         LogUtils.i(TAG, "onEvent-----用户下线事件UserLogoutEvent (已过时，请使用LoginStateChangeEvent代替)");
-        LoginStateChangeEvent.Reason reason = event.getReason();
-        UserInfo myInfo = event.getMyInfo();
+//        UserInfo myInfo = event.getMyInfo();
+//        LoginStateChangeEvent.Reason reason = event.getReason();
+        //被挤下线，清除登录信息，跳转到登录页
+        JMessageClient.logout();
+        MyApplication.clearLogin();
+        this.setPagerOne();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.putExtra(LOGOUT_REASON, "LogOut");
         startActivity(intent);
-//        Intent intent = new Intent(getApplicationContext(), ShowLogoutReasonActivity.class);
-//        intent.putExtra(LOGOUT_REASON, "reason = " + reason + "\n" + "logout user name = " + myInfo.getUserName());
-//        startActivity(intent);
     }
 
     /**

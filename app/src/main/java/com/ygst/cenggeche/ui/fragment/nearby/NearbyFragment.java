@@ -113,11 +113,7 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
                 }, 5000);
             }
         });
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
         mNearAdapter = new MyAdapter(getActivity(), mList);
         mRecyclerView.setAdapter(mNearAdapter);
         mNearAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
@@ -134,6 +130,11 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

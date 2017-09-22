@@ -96,7 +96,7 @@ public class PreviewImageActivity extends Activity implements OnClickListener {
 		activity.startActivityForResult(intent, requestCode);
 		activity.overridePendingTransition(R.anim.common_scale_small_to_large, 0);
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

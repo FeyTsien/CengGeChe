@@ -103,7 +103,7 @@ public class RetrofitUtil {
                                 })
                                 .readTimeout(100, TimeUnit.SECONDS)//设置读取超时时间
                                 .writeTimeout(100,TimeUnit.SECONDS)//设置写的超时时间
-                                .connectTimeout(1, TimeUnit.HOURS)//设置连接超时时间
+                                .connectTimeout(100,TimeUnit.SECONDS)//设置连接超时时间
                                 .build();
 
                         sRetrofit = new Retrofit.Builder().client(sOkHttpClient)

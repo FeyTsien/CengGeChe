@@ -2,19 +2,19 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <solid android:color="@android:color/transparent" />
+    <solid android:color="@color/translucent_me_bg" />
       <!-- 边框 -->
       <stroke
             android:width="0.5dp"
           android:color="@android:color/darker_gray" />
       <!-- 圆角 -->
-        <corners android:radius="300dp" />
+        <corners android:radius="20dp" />
 
       <!-- 边距 -->
       <padding
-           android:bottom="2dp"
-            android:left="3dp"
-            android:right="3dp"
-            android:top="2dp" />
+           android:bottom="4dp"
+            android:left="5dp"
+            android:right="5dp"
+            android:top="4dp" />
 
 </shape>

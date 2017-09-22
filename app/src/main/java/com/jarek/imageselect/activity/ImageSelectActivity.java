@@ -14,7 +14,6 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jarek.imageselect.library.TitleView;
 import com.jarek.imageselect.adapter.ImageGridApter;
 import com.jarek.imageselect.bean.ImageFolderBean;
 import com.jarek.imageselect.core.ImageSelectObservable;
@@ -22,10 +21,15 @@ import com.jarek.imageselect.listener.OnRecyclerViewClickListener;
 import com.jarek.imageselect.utils.ImageUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.ui.activity.base.BaseActivity;
 
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -54,7 +58,7 @@ import java.util.Observer;
  * 系统相册选择
  * Created by 王健(Jarek) on 2016/9/12.
  */
-public class ImageSelectActivity extends Activity implements Callback, OnClickListener, OnRecyclerViewClickListener, Observer {
+public class ImageSelectActivity extends BaseActivity implements Callback, OnClickListener, OnRecyclerViewClickListener, Observer {
 
     public static void startPhotoSelectGridActivity(Activity activity, String folder, boolean singleSelect, int maxCount, int requestCode) {
         Intent intent = new Intent(activity, ImageSelectActivity.class);
@@ -85,10 +89,26 @@ public class ImageSelectActivity extends Activity implements Callback, OnClickLi
 
     private boolean mIsSelectSingleImge;
 
+
+
+    @BindView(R.id.tv_title)
+    TextView mTvTitle;
+    /**
+     * 返回
+     */
+    @OnClick(R.id.iv_back)
+    public void goBack() {
+        finish();
+    }
+    @Override
+    protected int getLayoutId() {
+        return R.layout.photo_gridview_main;
+    }
+
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
-        setContentView(R.layout.photo_gridview_main);
+        ButterKnife.bind(this);
         ImageSelectObservable.getInstance().addObserver(this);
         mHandler = new Handler(this);
         mIsSelectSingleImge = getIntent().getBooleanExtra("single", false);
@@ -118,9 +138,7 @@ public class ImageSelectActivity extends Activity implements Callback, OnClickLi
      * <li>初始化view</li>
      */
     private void initView() {
-        TitleView titleView = (TitleView) findViewById(R.id.tv_photo_title);
-        titleView.getLeftBackImageTv().setOnClickListener(this);
-
+        mTvTitle.setText("选择");
         /*这里直接设置表格布局，三列*/
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.lv_photo_folder);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
