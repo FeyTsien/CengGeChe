@@ -8,6 +8,7 @@ import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
 import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.HashMap;
@@ -87,7 +88,7 @@ public class RegisterPresenter extends BasePresenterImpl<RegisterContract.View> 
                 } else {
                     if (mView != null)
                         mView.getSMSCodeError();
-//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
+                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 }
             }
         }, map);

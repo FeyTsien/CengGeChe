@@ -156,7 +156,7 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
 
     @Override
     public void getSMSCodeError() {
-        ToastUtil.show(this, "验证码发送失败");
+//        ToastUtil.show(this, "验证码发送失败");
         timeCount.cancel();
         timeCount.onFinish();
     }

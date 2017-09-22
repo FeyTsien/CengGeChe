@@ -33,7 +33,7 @@
         <item name="android:layout_height">@dimen/item_head_icon_size</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:src">@drawable/jmui_head_icon</item>
+        <item name="android:src">@mipmap/icon_my_avatar</item>
         <item name="android:scaleType">fitXY</item>
     </style>
 

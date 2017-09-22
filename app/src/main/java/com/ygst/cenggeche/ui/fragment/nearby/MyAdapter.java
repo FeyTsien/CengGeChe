@@ -2,6 +2,7 @@ package com.ygst.cenggeche.ui.fragment.nearby;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,19 +51,30 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         } else if (gender == 0) {
             holder.mIvGender.setImageResource(R.mipmap.icon_girl);
         }
+
+        //大背景图
+        if (!TextUtils.isEmpty(mList.get(position).getPic())) {
+            Glide.with(context)
+                    .load(mList.get(position).getPic())
+                    .centerCrop()
+                    .placeholder(R.mipmap.icon_my_avatar)
+                    .into(holder.mIvBigpic);
+        } else {
+            Glide.with(context)
+                    .load(mList.get(position).getUserPic())
+                    .centerCrop()
+                    .placeholder(R.mipmap.icon_my_avatar)
+                    .into(holder.mIvBigpic);
+        }
+        //头像
         Glide.with(context)
                 .load(mList.get(position).getUserPic())
                 .centerCrop()
                 .placeholder(R.mipmap.icon_my_avatar)
                 .into(holder.mUserSmallicon);
-        Glide.with(context)
-                .load(mList.get(position).getUserPic())
-                .centerCrop()
-                .placeholder(R.mipmap.icon_my_avatar)
-                .into(holder.mIvBigpic);
 
         //  设置千米数
-        String distance = mList.get(position).getDistance();
+        String distance = mList.get(position).getDistance() + "";
 
         if (distance != null && !distance.equals("0.00")) {
             double pass = Double.parseDouble(distance);

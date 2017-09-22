@@ -8,18 +8,25 @@ import java.util.List;
 
 public class NearByBean {
 
-
     /**
+     * total : 3
+     * data : [{"id":935,"lit":116.540857,"tags":[],"distance":8596973,"username":"15116920121","userPic":"http://192.168.0.133/image/user_pic/","nickname":"mg","age":0,"gender":0,"pic":"http://192.168.0.133/image/user_photo/935_62381506067998803.jpg","lat":39.76665},{"id":919,"lit":116.540637,"tags":[],"distance":8596992,"username":"18500632163","userPic":"http://192.168.0.133/image/user_pic/888.jpg","nickname":"耿庆佳","age":0,"gender":0,"pic":"http://192.168.0.133/image/user_photo/919_85631506058473705.jpg","lat":39.766549},{"id":888,"lit":116.5406532,"tags":["萌汉子","老司机","暖男","吃货","小仙女","街拍达人","2B青年","寂寞的人","影视达人"],"distance":8596998,"username":"17301025530","userPic":"http://192.168.0.133/image/user_pic/888_86191506050647650.jpg","nickname":"D83DDE19 D83DDE19 D83DDE19","age":26,"gender":1,"pic":"http://192.168.0.133/image/user_photo/888_50711505900192555.jpg","lat":39.765616}]
      * code : 0000
-     * data : [{"age":0,"distance":"0.00","gender":0,"id":1,"nickname":"Test1","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"17232424342"},{"age":0,"distance":"0.00","gender":0,"id":921,"nickname":"Test","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"17000000000"},{"age":0,"distance":"0.22","gender":0,"id":2,"nickname":"Test2","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"15116132145"},{"age":0,"distance":"0.22","gender":0,"id":922,"nickname":"钱小飞","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"15116920121"},{"age":0,"distance":"0.44","gender":1,"id":923,"nickname":"东东","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"13293158848"},{"age":26,"distance":"0.44","gender":2,"id":66,"nickname":"12345","tags":["2","1","1"],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"15810420717"},{"age":0,"distance":"0.44","gender":1,"id":6,"nickname":"Test6","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"13191977464"},{"age":26,"distance":"0.44","gender":1,"id":5,"nickname":"Test5","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"18733548657"},{"age":26,"distance":"0.44","gender":2,"id":4,"nickname":"Test4","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"15810421464"},{"age":0,"distance":"0.44","gender":1,"id":3,"nickname":"Test3","tags":[],"userPic":"http://192.168.0.133/image/user_pic/888.jpg","username":"13293153221"}]
      * msg : 执行成功
-     * total : 11
      */
 
+    private int total;
     private String code;
     private String msg;
-    private int total;
     private List<DataBean> data;
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
     public String getCode() {
         return code;
@@ -37,14 +44,6 @@ public class NearByBean {
         this.msg = msg;
     }
 
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
     public List<DataBean> getData() {
         return data;
     }
@@ -55,48 +54,30 @@ public class NearByBean {
 
     public static class DataBean {
         /**
-         * age : 0
-         * distance : 0.00
-         * gender : 0
-         * id : 1
-         * nickname : Test1
+         * id : 935
+         * lit : 116.540857
          * tags : []
-         * userPic : http://192.168.0.133/image/user_pic/888.jpg
-         * username : 17232424342
+         * distance : 8596973
+         * username : 15116920121
+         * userPic : http://192.168.0.133/image/user_pic/
+         * nickname : mg
+         * age : 0
+         * gender : 0
+         * pic : http://192.168.0.133/image/user_photo/935_62381506067998803.jpg
+         * lat : 39.76665
          */
 
-        private String age;
-        private String distance;
-        private int gender;
         private int id;
-        private String nickname;
-        private String userPic;
+        private double lit;
+        private int distance;
         private String username;
+        private String userPic;
+        private String nickname;
+        private int age;
+        private int gender;
+        private String pic;
+        private double lat;
         private List<String> tags;
-
-        public String getAge() {
-            return age;
-        }
-
-        public void setAge(String age) {
-            this.age = age;
-        }
-
-        public String getDistance() {
-            return distance;
-        }
-
-        public void setDistance(String distance) {
-            this.distance = distance;
-        }
-
-        public int getGender() {
-            return gender;
-        }
-
-        public void setGender(int gender) {
-            this.gender = gender;
-        }
 
         public int getId() {
             return id;
@@ -106,12 +87,28 @@ public class NearByBean {
             this.id = id;
         }
 
-        public String getNickname() {
-            return nickname;
+        public double getLit() {
+            return lit;
         }
 
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
+        public void setLit(double lit) {
+            this.lit = lit;
+        }
+
+        public int getDistance() {
+            return distance;
+        }
+
+        public void setDistance(int distance) {
+            this.distance = distance;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
         }
 
         public String getUserPic() {
@@ -122,12 +119,44 @@ public class NearByBean {
             this.userPic = userPic;
         }
 
-        public String getUsername() {
-            return username;
+        public String getNickname() {
+            return nickname;
         }
 
-        public void setUsername(String username) {
-            this.username = username;
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public void setAge(int age) {
+            this.age = age;
+        }
+
+        public int getGender() {
+            return gender;
+        }
+
+        public void setGender(int gender) {
+            this.gender = gender;
+        }
+
+        public String getPic() {
+            return pic;
+        }
+
+        public void setPic(String pic) {
+            this.pic = pic;
+        }
+
+        public double getLat() {
+            return lat;
+        }
+
+        public void setLat(double lat) {
+            this.lat = lat;
         }
 
         public List<String> getTags() {
