@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.utils.LogUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jarek.imageselect.core.SDCardStoragePath;
@@ -86,7 +87,7 @@ public class MyApplication extends Application {
 
     //清除登陆
     public static void clearLogin() {
-        Log.i("clearLogin", "isTokenExpired: +++++++++++++++++++++++++++++++0005");
+        LogUtils.i("clearLogin", "isTokenExpired: +++++++++++++++++++++++++++++++0005");
         AppData.saveUid("");
         AppData.saveUserName("");
         AppData.saveNickname("");
