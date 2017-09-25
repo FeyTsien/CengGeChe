@@ -23,11 +23,12 @@ import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.MyInfoBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
 import com.ygst.cenggeche.ui.activity.setting.SettingActivity;
-import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 import com.ygst.cenggeche.webview.WebViewActivity;
+
+import cn.jmessage.android.uikit.chatting.CircleImageView;
 
 /**
  * MVPPlugin

@@ -139,6 +139,8 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
         mEtStartAction.setFocusable(false);
         mEtEndAction.setFocusable(false);
 
+        LogUtils.i(TAG,"====="+postedTime);
+
     }
 
     //初始化控件
@@ -245,9 +247,7 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
 
 
             case R.id.but_release_plan:
-                if(!judgeTime()){
-                    return;
-                }
+
                 if(judgeIsNull()){
                     //判断是否位主动发布
                     if(REQUEST!=null){
@@ -305,14 +305,11 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
                 String[] split = CHOOSETIME.split("-");
                 String time = getTime();
                 mEtUsercarTime.setText(time+" "+split[1]);
-                judgeTime();
                 break;
 
             case R.id.tv_jump:
 
-                if(!judgeTime()){
-                    return;
-                }
+
                 if(REQUEST!=null){
                     int i = Integer.parseInt(REQUEST);
                     if(i==1) {
@@ -380,39 +377,6 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
 
     }
 
-    public boolean judgeTime() {
-        String[] split = CHOOSETIME.split("-");
-        if(split[0].equals("今天")){
-            String s = split[1];
-            split[1].replaceAll("时","");
-            split[1].replaceAll("分","");
-            Date now = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");//可以方便地修改日期格式
-
-            String hehe = dateFormat.format(now);
-            LogUtils.i(TAG,now+"=hehe="+split[1]);
-            String[] split1 = split[1].split(":");
-            int shi = Integer.parseInt(split1[0]);
-            int fen = Integer.parseInt(split1[1]);
-            Calendar calendar= Calendar.getInstance();
-            //获得当前时间的月份，月份从0开始所以结果要加1
-            int month=calendar.get(Calendar.HOUR);
-            int minute=calendar.get(Calendar.MINUTE);
-            LogUtils.i(TAG,shi+"=hehe="+fen+"==="+minute+"==="+month);
-            if(shi<month){
-                ToastUtil.show(SureTravelActivity.this,"行程发布必须比当前时间快二十分钟哟");
-                return false;
-            }else if(shi==month){
-                if(fen<minute+20){
-                    ToastUtil.show(SureTravelActivity.this,"行程发布必须比当前时间快二十分钟哟");
-                    return  false;
-                }
-            }
-
-
-        }
-        return true;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

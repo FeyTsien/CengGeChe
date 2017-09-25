@@ -121,7 +121,7 @@ public class RegisterActivity extends MVPBaseActivity<RegisterContract.View, Reg
         if(type.equals("register")){
             mTvTitle.setText("注册账号");
         }else if(type.equals("resetPwd")){
-            mTvTitle.setText("忘记密码");
+            mTvTitle.setText("修改密码");
             mTvTiShi.setVisibility(View.INVISIBLE);
         }
         timeCount = new TimeCount(60000, 1000);

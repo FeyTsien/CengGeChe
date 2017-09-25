@@ -12,11 +12,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.ApplyBean;
-import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.ui.widget.MyTextDrawable;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
 
 import java.util.List;
+
+import cn.jmessage.android.uikit.chatting.CircleImageView;
 
 /**
  * Created by Administrator on 2017/8/17.

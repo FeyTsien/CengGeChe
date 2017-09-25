@@ -24,7 +24,6 @@ import com.ygst.cenggeche.ui.activity.friendoperate.FriendOperateActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.FlowLayout;
-import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
@@ -33,6 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jmessage.android.uikit.chatting.CircleImageView;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
@@ -177,10 +177,8 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
                 .into(mIvAvatar);
         //性别符号
         if (friendInfo.getData().getGender() == 0) {
-            mIvAvatar.setBorderColor(getResources().getColor(R.color.colorGirl));
             mIvGender.setImageResource(R.mipmap.icon_girl);
         } else if (friendInfo.getData().getGender() == 1) {
-            mIvAvatar.setBorderColor(getResources().getColor(R.color.colorBoy));
             mIvGender.setImageResource(R.mipmap.icon_boy);
         }
         //年龄

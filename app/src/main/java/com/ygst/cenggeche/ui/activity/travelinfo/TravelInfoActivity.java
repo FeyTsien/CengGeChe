@@ -22,6 +22,7 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.NowTravelInfoBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
+import com.ygst.cenggeche.ui.activity.friendlist.CommonUtil;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
@@ -57,8 +58,8 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
     ImageView ivBack;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.tv_cengorshao)
-    TextView tvCengorshao;
+//    @BindView(R.id.tv_cengorshao)
+//    TextView tvCengorshao;
     @BindView(R.id.iv_delete)
     ImageView ivDelete;
     @BindView(R.id.tv_note_date)
@@ -125,6 +126,9 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
     LinearLayout llShaorenaccept;
     @BindView(R.id.ll_empty)
     LinearLayout ll_empty;
+    @BindView(R.id.rl_noconnect)
+    RelativeLayout rl_noconnect;
+
     private NowTravelInfoBean.DataBean data;
 
     private String TAG = this.getClass().getSimpleName();
@@ -167,10 +171,10 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
 
         //有行程信息的时候
         ll_canceltravel.setVisibility(View.VISIBLE);
-        tvNoteDate.setText(data.getDeparTime());
+        tvNoteDate.setText(data.getPostedTime());
         tvStartLocation.setText(data.getStartAddr());
         tvEndLocation.setText(data.getEndAddr());
-        tvReleaseDate.setText(data.getPostedTime());
+        tvReleaseDate.setText(data.getDeparTime());
         tvRemarks.setText(data.getComments());
         //有车主或者乘客接受的时候
         if (nowTravelInfoBean.getInfo().size() != 0) {
@@ -185,7 +189,7 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
             Glide.with(this).load(infoList.get(0).getBackgroundPic()).into(userSmallicon);
             tvNickname.setText(infoList.get(0).getNickname());
             tvUserage.setText(infoList.get(0).getDeparTime());
-            tvUsercartype.setText(infoList.get(0).getBrand() + " " + infoList.get(0).getColor());
+            tvUsercartype.setText(infoList.get(0).getBrand() + "-" + infoList.get(0).getColor());
         }else{
 //            llCcpeople.setVisibility(View.GONE);
 //            ll_ischezhu.setVisibility(View.GONE);
@@ -198,31 +202,7 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
         switch (view.getId()) {
             //乘客删除行程
             case R.id.iv_delete:
-                CommonUtils.showInfoDialog(TravelInfoActivity.this, "一天只能取消三次行程,确定要取消行程吗？", "提示", "确定", "取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ll_canceltravel.setVisibility(View.GONE);
-                        ll_empty.setVisibility(View.VISIBLE);
-                        //当前为乘客的状态
-                        LogUtils.i(TAG,nowTravelInfoBean.getData().getUserFlag()+"===="+nowTravelInfoBean.getInfo().size());
-                        if(nowTravelInfoBean.getData().getUserFlag()==1){
-                            if(nowTravelInfoBean.getInfo().size()==0){
-                                mPresenter.changeInfo("1",  "", data.getId() + "", "55");
-                            }else{
-                                mPresenter.changeInfo("1",nowTravelInfoBean.getInfo().get(0).getId() +"", data.getId() + "", "55");
-                            }
-                            //当前为车主的状态
-                        }else if(nowTravelInfoBean.getData().getUserFlag()==2){
-                            if(nowTravelInfoBean.getInfo().size()==0) {
-                                mPresenter.changeInfoCarerCancel("2",  data.getId() + "","", "50");
-                            }else{
-                                mPresenter.changeInfoCarerCancel("2", nowTravelInfoBean.getInfo().get(0).getId() + "", data.getId() + "", "50");
-                            }
-                        }
-
-                    }
-                }, null);
-
+                cancelTravelInfo();
                 break;
             //
 
@@ -257,6 +237,33 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
                 break;
 
         }
+    }
+    //车主取消行程
+    private void cancelTravelInfo() {
+        CommonUtils.showInfoDialog(TravelInfoActivity.this, "一天只能取消三次行程,确定要取消行程吗？", "提示", "确定", "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ll_canceltravel.setVisibility(View.GONE);
+                ll_empty.setVisibility(View.VISIBLE);
+                //当前为乘客的状态
+                LogUtils.i(TAG,nowTravelInfoBean.getData().getUserFlag()+"===="+nowTravelInfoBean.getInfo().size());
+                if(nowTravelInfoBean.getData().getUserFlag()==1){
+                    if(nowTravelInfoBean.getInfo().size()==0){
+                        mPresenter.changeInfo("1",  "", data.getId() + "", "55");
+                    }else{
+                        mPresenter.changeInfo("1",nowTravelInfoBean.getInfo().get(0).getId() +"", data.getId() + "", "55");
+                    }
+                    //当前为车主的状态
+                }else if(nowTravelInfoBean.getData().getUserFlag()==2){
+                    if(nowTravelInfoBean.getInfo().size()==0) {
+                        mPresenter.changeInfoCarerCancel("2",  data.getId() + "","", "50");
+                    }else{
+                        mPresenter.changeInfoCarerCancel("2", data.getId() + "",nowTravelInfoBean.getInfo().get(0).getId() + "", "50");
+                    }
+                }
+
+            }
+        }, null);
     }
 
 
@@ -387,13 +394,14 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
     //确认上车
     @Override
     public void changeInfoSuccess() {
+        tvSureGoal.setClickable(true);
         tvSureGoal.setVisibility(View.VISIBLE);
         tvWaitCengche.setVisibility(View.GONE);
     }
 
     @Override
     public void changeInfoFail() {
-
+        tvSureGoal.setClickable(false);
     }
 
     //乘客确认到达

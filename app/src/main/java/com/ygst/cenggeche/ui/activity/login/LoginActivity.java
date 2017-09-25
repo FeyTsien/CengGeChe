@@ -92,15 +92,26 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         mTvTitle.setText("登录");
         Intent intent = getIntent();
         String logOut = intent.getStringExtra(MainActivity1.LOGOUT_REASON);
-        if(logOut!=null&&logOut.equals("LogOut")){
+        if (logOut != null && logOut.equals("LogOut")) {
             mEtUserName.setText(AppData.getUserName());
-            CommonUtils.showInfoDialog(this, "您的账号已在其他地点登录", "提示", "知道了", "",null,null);
+            CommonUtils.showInfoDialog(this, "您的账号已在其他地点登录", "提示", "知道了", "", null, null);
         }
         timeCount = new TimeCount(60000, 1000);
         timeCount.setButton(mBtnGetCode);
     }
 
-    public void setUsernameAndPwd(String username,String pwd){
+    public void setUsernameAndPwd(String username, String pwd) {
+        if (checkType.equals(LoginBean.CODE_TO_LOGIN)) {
+            //变成了密码登录
+            checkType = LoginBean.PWD_TO_LOGIN;
+            mEtPwdCode.setHint("请输入密码");
+            mEtPwdCode.setText("");
+            mEtPwdCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+            mBtnGetCode.setVisibility(View.GONE);
+            mTvForgotPwd.setVisibility(View.VISIBLE);
+            mBtnLoginType.setText("切换验证码登录");
+        }
         mEtUserName.setText(username);
         mEtPwdCode.setText(pwd);
     }
@@ -281,7 +292,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                     // 保存昵称 nickname
                     AppData.saveNickname(loginBean.getData().getNickname());
                     // 保存昵称 gender
-                    AppData.saveGenders(loginBean.getData().getGender()+"");
+                    AppData.saveGenders(loginBean.getData().getGender() + "");
 
                     //开启友盟账号统计
                     //（如果是使用第三方账号登录时，如新浪微博：MobclickAgent.onProfileSignIn("WB"，"userID")）;

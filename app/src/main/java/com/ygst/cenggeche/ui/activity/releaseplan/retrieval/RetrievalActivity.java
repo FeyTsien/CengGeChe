@@ -246,8 +246,6 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
             for (int i = 0; i < tipList.size(); i++) {
                 listString.add(tipList.get(i).getName());
             }
-
-
             myadapter = new Myadapter(this,listString);
             mHisTtoryList.setAdapter(myadapter);
             mHisTtoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -257,6 +255,7 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
 
                     //将搜索记录保存到集合中
                     saveSearchHistory(listString.get(position));
+                    LogUtils.i(TAG,"点击该保存的数据"+listString.get(position));
                     intent.putExtra("result", listString.get(position));
                     setResult(3, intent);
                     finish();

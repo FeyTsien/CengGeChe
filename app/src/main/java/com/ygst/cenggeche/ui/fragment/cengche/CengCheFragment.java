@@ -2,6 +2,7 @@ package com.ygst.cenggeche.ui.fragment.cengche;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -22,6 +23,7 @@ import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.AllStrokeBean;
 import com.ygst.cenggeche.bean.CheckPeerBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
+import com.ygst.cenggeche.ui.activity.alltravelinfo.AllTravelInfoActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.ReleaseplanActivity;
 import com.ygst.cenggeche.ui.activity.suretravel.SureTravelActivity;
@@ -29,6 +31,8 @@ import com.ygst.cenggeche.ui.activity.travelinfo.TravelInfoActivity;
 import com.ygst.cenggeche.ui.view.ZoomOutPageTransformer;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
+import com.ygst.cenggeche.utils.UrlUtils;
+import com.ygst.cenggeche.webview.WebViewActivity;
 
 import java.util.ArrayList;
 
@@ -71,7 +75,7 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     private int currentPage;
     private AllStrokeBean allStrokeBean;
     private int sid;
-    private String endAddr;//100 140 140 140 140 180
+    private String endAddr;
     private String comment;
     private String postedTime;
     private String startAddr;
@@ -79,6 +83,7 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     private int ChangeStatus=1;//头部切换 蹭车1 捎人2 的状态判断
     private int uid;
     private String TAG=this.getClass().getSimpleName();
+    private final String URL_OWNER_AUTH= UrlUtils.URL_H5+"/cenggeche/pages/carrz/carrz.html";
 
     //点击事件的处理
     @OnClick({R.id.iv_take_her, R.id.iv_release_plan, R.id.iv_trip_info, R.id.iv_cengtache})
@@ -88,22 +93,37 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
             switch (v.getId()) {
                 case R.id.iv_release_plan:
                     mPresenter.checkApplyinfo();
-
-//                    Intent intent = new Intent(getActivity(), ReleaseplanActivity.class);
-//                            intent.putExtra("REQUEST", 1 + "");
-//                            startActivity(intent);
-
-
                     break;
                 case R.id.iv_take_her://蹭他车的点击事件
                     PERSONSTATUS = 1;
+                    if(AppData.getGenders().equals("1")){
+                        ToastUtil.show(getActivity(),"男性用户不能蹭车");
+                        return;
+                    }
                     mPresenter.checkApplyPeerInfo(1 + "", sid + "");
-
                     break;
                 case R.id.iv_trip_info:
                     CommonUtils.startActivity(getActivity(), TravelInfoActivity.class);
                     break;
                 case R.id.iv_cengtache://带上她的点击事件
+                    int userStatus = AppData.getUserStatus();
+                    if(userStatus!=1){
+                        CommonUtils.showInfoDialog(getActivity(), "您还没有车主认证？", "提示", "确定", "取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String  url3 = URL_OWNER_AUTH+"?deviceId="+AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
+
+                                WebViewActivity.loadUrl(getActivity(),url3,"");
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        return;
+                    }
+
                     PERSONSTATUS = 2;
                     mPresenter.checkApplyPeerInfo(2 + "", sid + "");
                     break;
@@ -177,21 +197,13 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                         if (list.size() == allStrokeBean.getTotal()) {
 
                         } else {
-//                            if (list.size() == allStrokeBean.getTotal()) {
-//                                ToastUtil.show(getActivity(), "没有数据了哟");
-//                            }
-
-
 
                             if (currentPage == list.size() - 1) {
                                 ++PAGE;
                                 if(ChangeStatus==2){
                                     mPresenter.getAllinfo(1 + "", PAGE);
-                                    ToastUtil.show(getActivity(), "蹭车滑动");
-
                                 }else if(ChangeStatus==1){
                                     mPresenter.getAllinfo(2 + "", PAGE);
-                                    ToastUtil.show(getActivity(),"捎人滑动");
                                 }
                             }
                         }
@@ -273,23 +285,14 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
         Intent intent = new Intent(getActivity(), SureTravelActivity.class);
         //蹭车行程
         if (PERSONSTATUS == 1) {
-            //判断男女
-            String genders = AppData.getGenders();
-            if (genders != null) {
-                int i = Integer.parseInt(genders);
-                if (i == 1) {
-                    ToastUtil.show(getActivity(), "男性乘客不能蹭车");
-                    return;
-                }
-            }
             intent.putExtra("CARTYPE", 1 + "");//CARTYPE==1 是蹭车
-
             //捎人行程
         } else if (PERSONSTATUS == 2) {
             intent.putExtra("CARTYPE", 2 + "");//CARTYPE==2 是捎人
             int userStatus = AppData.getUserStatus();
             if (userStatus != 1) {
                 ToastUtil.show(getActivity(),"你还没有车主认证");
+                return ;
             }
         }
 

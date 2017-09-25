@@ -36,15 +36,15 @@
             <EditText
                 android:id="@+id/search_edit"
                 android:layout_width="match_parent"
-                android:layout_height="60px"
+                android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:textSize="18sp"
                 android:background="@drawable/edit_background_chooseaddr"
                 android:drawableLeft="@mipmap/search"
                 android:drawablePadding="10dp"
                 android:hint="请输入地址"
+                android:textSize="12dp"
                 android:imeOptions="actionSearch"
                 android:paddingLeft="10dp"
 

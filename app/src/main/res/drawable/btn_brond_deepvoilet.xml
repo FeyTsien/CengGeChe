@@ -8,5 +8,9 @@
         android:width="1dp"
         android:color="@color/deep_violet"/>
     <solid android:color="@color/deep_violet"></solid>
-
+    <padding
+        android:bottom="5dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="5dp" />
 </shape>

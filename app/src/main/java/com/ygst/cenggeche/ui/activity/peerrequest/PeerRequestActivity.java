@@ -159,7 +159,6 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
     @OnClick(R.id.btn_nowrelease)
     public void nowrelease(){
         String comments = mEt_descriable.getText().toString().trim();
-
         //从资料中获取图片
         if(IsPicForData){
             if(filepath==null){
@@ -169,7 +168,6 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
             Log.i(TAG,filepath+"===="+id);
             if(UserStatus.equals("1")){
                 LogUtils.i(TAG,stateuser+"--IsPicForDatastateuser");
-
                 mPresenter.getSureRelease(1+"",sid,userid,id,mStartlocation,meEndlocation,mTime,"","",mStrokeFlag,comments,filepath);
             }else if(UserStatus.equals("2")){
                 //资料中选取，跳过车辆信息
@@ -192,7 +190,6 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
                         mPresenter.getSureRelease(2+"",sid,userid,id,mStartlocation,meEndlocation,mTime,"","",mStrokeFlag,comments,uppath);
                     }else{
                         mPresenter.getSureRelease(2+"",sid,userid,id,mStartlocation,meEndlocation,mTime,mCarType,mCarColor,mStrokeFlag,comments,uppath);
-
                     }
                 }
             }else{

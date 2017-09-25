@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="10dp"
     android:paddingLeft="10dp"
     android:paddingTop="10dp">
@@ -12,18 +13,18 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp">
 
-        <com.ygst.cenggeche.ui.widget.CircleImageView
+        <cn.jmessage.android.uikit.chatting.CircleImageView
             android:id="@+id/iv_avatar"
-            android:layout_centerVertical="true"
             android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"/>
 
         <ImageView
             android:id="@+id/iv_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/iv_avatar"
-            android:layout_alignBottom="@+id/iv_avatar"/>
+            android:layout_alignBottom="@+id/iv_avatar"
+            android:layout_alignRight="@+id/iv_avatar" />
     </RelativeLayout>
 
     <LinearLayout
@@ -66,32 +67,32 @@
             android:id="@+id/tv_isagree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:layout_gravity="center_vertical"/>
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/btn_yes"
             android:layout_width="40dp"
             android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
             android:background="@drawable/button_bg_yes"
-            android:text="同意"
             android:gravity="center"
-            android:layout_gravity="center_vertical"
+            android:text="同意"
             android:textColor="@color/white"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/btn_no"
             android:layout_width="40dp"
             android:layout_height="25dp"
-            android:background="@drawable/button_bg_no"
             android:layout_gravity="center_vertical"
+            android:background="@drawable/button_bg_no"
             android:text="拒绝"
-            android:visibility="gone"
             android:textColor="@color/white"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

@@ -43,21 +43,11 @@
             />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_alignParentBottom="true"
-        android:layout_alignTop="@+id/strut"
-        android:background="#fff"
-        android:orientation="vertical"
-        >
-
 
 
 
         <LinearLayout
+            android:id="@+id/ll_linear"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -142,9 +132,6 @@
 
 
         </LinearLayout>
-
-    </RelativeLayout>
-
 
 
 

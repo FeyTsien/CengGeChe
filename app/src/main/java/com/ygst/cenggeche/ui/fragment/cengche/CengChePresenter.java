@@ -109,6 +109,7 @@ public class CengChePresenter extends BasePresenterImpl<CengCheContract.View> im
         Map<String, String> map = new HashMap<>();
         map.put("userFlag", userFlag);
         map.put("sid", id);
+
         HttpManager.getHttpManager().postMethod(UrlUtils.CHECKUSERAPPLYSTATUS, new Observer<String>() {
 
             @Override

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.ygst.cenggeche.bean.UserBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
+import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.HashMap;
@@ -14,12 +15,13 @@ import rx.Observer;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
-public class FriendInfoPresenter extends BasePresenterImpl<FriendInfoContract.View> implements FriendInfoContract.Presenter{
+public class FriendInfoPresenter extends BasePresenterImpl<FriendInfoContract.View> implements FriendInfoContract.Presenter {
 
     private String TAG = "FriendInfoPresenter";
+
     @Override
     public void getFriendInfo(String friendsUsername) {
         Map<String, String> map = new HashMap<>();
@@ -48,7 +50,7 @@ public class FriendInfoPresenter extends BasePresenterImpl<FriendInfoContract.Vi
                 } else {
                     if (mView != null)
                         mView.getFriendInfoError();
-//                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
+                    ToastUtil.show(mView.getContext(), userBean.getMsg());
                 }
             }
         }, map);

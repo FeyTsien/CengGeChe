@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Process;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -94,6 +93,7 @@ public class MyApplication extends Application {
         AppData.savaUserStatus(0);
         AppData.saveGenders("");
         AppData.setIsLoginEd(false);
+        AppData.savaUnReadApplyCount(0);
     }
 
 

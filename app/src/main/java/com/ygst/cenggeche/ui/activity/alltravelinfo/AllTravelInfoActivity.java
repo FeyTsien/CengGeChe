@@ -104,24 +104,48 @@ public class AllTravelInfoActivity extends MVPBaseActivity<AllTravelInfoContract
 
     @OnClick(R.id.btn_together_go)
     public void sendmessage() {
-        int userStatus = AppData.getUserStatus();
-        if(userStatus!=1){
+        if(userDetailsInfoBean.getData().getUid()+""!=null) {
+            int userStatus = AppData.getUserStatus();
+            String genders = AppData.getGenders();
 
-            CommonUtils.showInfoDialog(this, "您还没有车主认证？", "提示", "确定", "取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String  url3 = URL_OWNER_AUTH+"?deviceId="+AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
+            if (userStatus != 1) {
+                int userFlag = userDetailsInfoBean.getData().getUserFlag();
+                if (userFlag == 1) {
+                    CommonUtils.showInfoDialog(this, "您还没有车主认证？", "提示", "确定", "取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String url3 = URL_OWNER_AUTH + "?deviceId=" + AppData.getAndroidId() + "&os=" + "android" + "&uid=" + AppData.getUid();
 
-                    WebViewActivity.loadUrl(AllTravelInfoActivity.this,url3,"");
+                            WebViewActivity.loadUrl(AllTravelInfoActivity.this, url3, "");
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+                } else {
+
+                    //当前乘客的userflag的状态 userflag==1则为对方为乘客
+                    int userFlag1 = userDetailsInfoBean.getData().getUserFlag();
+                    if (userFlag1 == 1) {
+                        userFlag1 = 2;
+                    } else if (userFlag == 2) {
+                        userFlag1 = 1;
+                    }
+                    mPresenter.checkApplyPeerInfo(userFlag1 + "", userDetailsInfoBean.getData().getId() + "");
                 }
-            }, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                   finish();
+
+            } else {
+                //当前乘客的userflag的状态 userflag==1则为对方为乘客
+                int userFlag = userDetailsInfoBean.getData().getUserFlag();
+                if (userFlag == 1) {
+                    userFlag = 2;
+                } else if (userFlag == 2) {
+                    userFlag = 1;
                 }
-            });
-        }else{
-            mPresenter.checkApplyPeerInfo(userDetailsInfoBean.getData().getUserFlag()+"",userDetailsInfoBean.getData().getId()+"");
+                mPresenter.checkApplyPeerInfo(userFlag + "", userDetailsInfoBean.getData().getId() + "");
+            }
         }
     }
 

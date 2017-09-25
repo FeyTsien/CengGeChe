@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,7 +63,8 @@ public class MyViewPagerAdapter extends PagerAdapter {
             holder = new ViewHolder();
             holder.ivPic = (ImageView) convertView.findViewById(R.id.iv_title_pic);
             holder.tvName = (TextView) convertView.findViewById(R.id.tv_exper_name);
-            holder.relativeLayout = (RelativeLayout) convertView.findViewById(R.id.rl_bottom);
+            holder.relativeLayout = (LinearLayout) convertView.findViewById(R.id.ll_linear);
+
 
             holder.tvEndLocation = (TextView) convertView.findViewById(R.id.tv_end_location);
             holder.tvStartLocation = (TextView) convertView.findViewById(R.id.tv_start_location);
@@ -121,7 +123,7 @@ public class MyViewPagerAdapter extends PagerAdapter {
         public TextView tvEndLocation,tvStartLocation,tvUserName,tvReleaseDate;
         public ImageView ivPic;
         public View vLine;
-        public RelativeLayout relativeLayout;
+        public LinearLayout relativeLayout;
     }
 
     public void jumpuserInfo(ArrayList<AllStrokeBean.DataBean> list,int position){

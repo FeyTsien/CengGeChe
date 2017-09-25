@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="60dp"
+    android:paddingBottom="10dp"
     android:paddingLeft="10dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="10dp">
 
     <RelativeLayout
         android:id="@+id/rl_avatar"
@@ -13,20 +13,18 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp">
 
-        <com.ygst.cenggeche.ui.widget.CircleImageView
+        <cn.jmessage.android.uikit.chatting.CircleImageView
             android:id="@+id/iv_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/icon_my_avatar"
-            app:civ_border_width="1dp"
-            app:civ_border_color="@color/colorTheme"  />
+            android:src="@mipmap/icon_my_avatar" />
 
         <ImageView
             android:id="@+id/iv_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iv_avatar"
-            android:layout_alignRight="@+id/iv_avatar"/>
+            android:layout_alignRight="@+id/iv_avatar" />
     </RelativeLayout>
 
     <LinearLayout
@@ -48,8 +46,8 @@
                 android:id="@+id/tv_target_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
                 android:layout_toLeftOf="@+id/tv_last_time"
+                android:singleLine="true"
                 android:textColor="@color/butaihei"
                 android:textSize="15sp" />
 
@@ -82,10 +80,10 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_alignParentRight="true"
+                android:background="@mipmap/icon_circle_red"
                 android:gravity="center"
                 android:text="99"
                 android:textColor="@color/white"
-                android:background="@mipmap/icon_circle_red"
                 android:textSize="10sp" />
         </RelativeLayout>
     </LinearLayout>

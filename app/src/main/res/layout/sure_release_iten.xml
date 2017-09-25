@@ -185,7 +185,7 @@
                     <EditText
                         android:id="@+id/et_remark"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/linear_whitebg_border"
+                        android:background="@color/white"
                         android:layout_marginRight="10dp"
                         android:paddingTop="1dp"
                         android:hint="说些什么吧"
@@ -209,10 +209,11 @@
 
 
             <Button
-                android:layout_margin="10dp"
+                android:textColor="@color/white"
+                android:layout_margin="20dp"
                 android:id="@+id/btn_nowrelease"
                 android:text="立即发布"
-                android:background="@color/colorTheme"
+                android:background="@drawable/linear_votletbg_border"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

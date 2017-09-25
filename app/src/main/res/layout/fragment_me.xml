@@ -18,13 +18,11 @@
             android:layout_above="@+id/ll_jilu">
 
 
-            <com.ygst.cenggeche.ui.widget.CircleImageView
+            <cn.jmessage.android.uikit.chatting.CircleImageView
                 android:id="@+id/civ_avatar"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="2dp" />
+                android:layout_centerInParent="true"/>
 
             <ImageView
                 android:id="@+id/iv_gender"
@@ -179,11 +177,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="45dp"
+            android:layout_alignParentLeft="true"
             android:background="@color/white"
             android:drawableLeft="@mipmap/icon_owner_auth"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:layout_alignParentLeft="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="车主认证"

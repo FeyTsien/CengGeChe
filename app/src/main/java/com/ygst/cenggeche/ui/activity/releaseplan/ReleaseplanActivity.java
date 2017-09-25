@@ -89,6 +89,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
     private TextView mTvCancel;
     private TextView mTvFinish;
     private static  String  CHOOSETIME="今天-0:0";
+    private boolean isShao=false;
     //车主认证
     private final String URL_OWNER_AUTH= UrlUtils.URL_H5+"/cenggeche/pages/carrz/carrz.html";
     /**
@@ -116,7 +117,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         initView();
         ButterKnife.bind(this);
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mTvTitle.setText(AppData.getLocation());
         mPresenter.getuserStatus();
         judgesex();
@@ -248,9 +249,11 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_cengche:
+                isShao=false;
                 onclickchengche();
                 break;
             case R.id.tv_shaoren:
+                isShao=true;
                 onclickshaoren();
                 break;
             case R.id.et_usercar_time:
@@ -330,6 +333,21 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
 
     //点击发布按钮 确认当前行程
     private void clickreleaseplan() {
+
+        int userStatus = AppData.getUserStatus();
+        String genders = AppData.getGenders();
+        if(userStatus==0&&isShao){
+            CommonUtils.showInfoDialog(ReleaseplanActivity.this, "您现在还没有认证车主信息", "提示", "确定", null, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String  url3 = URL_OWNER_AUTH+"?deviceId="+AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
+                    WebViewActivity.loadUrl(ReleaseplanActivity.this,url3,"");
+                }
+            }, null);
+
+            return;
+        }
+
 
         boolean b = judgeTime();
         if(!b){
@@ -806,7 +824,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
             int fen = Integer.parseInt(split1[1]);
             Calendar calendar= Calendar.getInstance();
             //获得当前时间的月份，月份从0开始所以结果要加1
-            int month=calendar.get(Calendar.HOUR);
+            int month=calendar.get(Calendar.HOUR_OF_DAY);
             int minute=calendar.get(Calendar.MINUTE);
             LogUtils.i(TAG,shi+"=hehe="+fen+"==="+minute+"==="+month);
             if(shi<month){

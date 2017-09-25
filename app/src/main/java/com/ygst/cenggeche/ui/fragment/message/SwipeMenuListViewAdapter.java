@@ -10,12 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
-import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.ui.widget.ColorGenerator;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
 
 import java.util.List;
 
+import cn.jmessage.android.uikit.chatting.CircleImageView;
 import cn.jmessage.android.uikit.chatting.utils.TimeFormat;
 import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
 import cn.jpush.im.android.api.content.CustomContent;
@@ -136,10 +136,8 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                 if (mUserInfo.getGender() != null) {
                     //显示性别
                     if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
-                        holder.mIVavatar.setBorderColor(mContext.getResources().getColor(R.color.colorGirl));
                         holder.mIVgender.setImageResource(R.mipmap.icon_girl);
                     } else if (mUserInfo.getGender().equals(UserInfo.Gender.male)) {
-                        holder.mIVavatar.setBorderColor(mContext.getResources().getColor(R.color.colorBoy));
                         holder.mIVgender.setImageResource(R.mipmap.icon_boy);
                     } else {
                     }

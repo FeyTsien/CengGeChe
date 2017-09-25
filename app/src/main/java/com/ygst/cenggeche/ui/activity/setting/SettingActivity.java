@@ -23,6 +23,7 @@ import com.ygst.cenggeche.download.service.DownloadService;
 import com.ygst.cenggeche.download.utils.StringUtils;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.main.MainActivity1;
+import com.ygst.cenggeche.ui.activity.register.RegisterActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.DataCleanManager;
 import com.ygst.cenggeche.utils.ToastUtil;
@@ -40,18 +41,18 @@ import cn.jpush.im.android.api.model.Conversation;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
 public class SettingActivity extends MVPBaseActivity<SettingContract.View, SettingPresenter> implements SettingContract.View {
 
     public static final String MESSAGE_PROGRESS = "message_progress";
     //使用指南
-    private final String URL_USER_GUIDE= UrlUtils.URL_H5+"/cenggeche/pages/help/help.html";
+    private final String URL_USER_GUIDE = UrlUtils.URL_H5 + "/cenggeche/pages/help/help.html";
     //关于我们
-    private final String URL_ABOUT_US= UrlUtils.URL_H5+"/cenggeche/pages/about/about.html";
+    private final String URL_ABOUT_US = UrlUtils.URL_H5 + "/cenggeche/pages/about/about.html";
     //意见反馈
-    private final String URL_FEEDBACK= UrlUtils.URL_H5+"/cenggeche/pages/feedback/feedback.html";
+    private final String URL_FEEDBACK = UrlUtils.URL_H5 + "/cenggeche/pages/feedback/feedback.html";
 
     private String appUrl;
 
@@ -93,6 +94,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
             }
         }
     };
+
     /**
      * 返回
      */
@@ -100,6 +102,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
     public void goBack() {
         finish();
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_setting;
@@ -119,14 +122,14 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
         registerReceiver();
 
         mTvTitle.setText("设置");
-        try{
+        try {
             mTvClearCache.setText(DataCleanManager.getTotalCacheSize(this));
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(AppData.isNewApp()){
+        if (AppData.isNewApp()) {
             mTvNewApp.setText("点击更新最新版本");
-        }else{
+        } else {
             mTvNewApp.setText("当前已是最新版本");
         }
     }
@@ -142,14 +145,14 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
      * 清除缓存
      */
     @OnClick(R.id.rl_clear_cache)
-    public void clearCache(){
+    public void clearCache() {
         mListConversation = JMessageClient.getConversationList();
         CommonUtils.showInfoDialog(this, "确定要清空缓存吗？", "提示", "清空", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DataCleanManager.clearAllCache(SettingActivity.this);
                 mTvClearCache.setText("0K");
-                ToastUtil.show(SettingActivity.this,"清空成功");
+                ToastUtil.show(SettingActivity.this, "清空成功");
             }
         }, null);
     }
@@ -157,7 +160,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
     /**
      * 是否接收消息推送
      */
-    public void push(){
+    public void push() {
 
     }
 
@@ -165,16 +168,16 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
      * 清除聊天记录
      */
     @OnClick(R.id.tv_clear_chat)
-    public void clearChat(){
+    public void clearChat() {
 
         mListConversation = JMessageClient.getConversationList();
         CommonUtils.showInfoDialog(this, "确定要清空聊天记录吗？", "提示", "清空", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for(Conversation conversation:mListConversation){
+                for (Conversation conversation : mListConversation) {
                     conversation.deleteAllMessage();
                 }
-                ToastUtil.show(SettingActivity.this,"清空成功");
+                ToastUtil.show(SettingActivity.this, "清空成功");
             }
         }, null);
     }
@@ -183,7 +186,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
      * 版本更新
      */
     @OnClick(R.id.rl_update_app)
-    public void updateApp(){
+    public void updateApp() {
         mPresenter.getNewAppVersion();
     }
 
@@ -191,34 +194,44 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
      * 使用指南
      */
     @OnClick(R.id.tv_user_guide)
-    public void userGuide(){
-        String url = URL_USER_GUIDE+"?deviceId="+ AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
-        WebViewActivity.loadUrl(this,url,"");
+    public void userGuide() {
+        String url = URL_USER_GUIDE + "?deviceId=" + AppData.getAndroidId() + "&os=" + "android" + "&uid=" + AppData.getUid();
+        WebViewActivity.loadUrl(this, url, "");
     }
 
     /**
      * 关于我们
      */
     @OnClick(R.id.tv_about_us)
-    public void aboutUs(){
-        String url = URL_ABOUT_US+"?deviceId="+ AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
-        WebViewActivity.loadUrl(this,url,"");
+    public void aboutUs() {
+        String url = URL_ABOUT_US + "?deviceId=" + AppData.getAndroidId() + "&os=" + "android" + "&uid=" + AppData.getUid();
+        WebViewActivity.loadUrl(this, url, "");
     }
 
     /**
      * 意见反馈
      */
     @OnClick(R.id.tv_feedback)
-    public void feedback(){
-        String url = URL_FEEDBACK+"?deviceId="+ AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
-        WebViewActivity.loadUrl(this,url,"");
+    public void feedback() {
+        String url = URL_FEEDBACK + "?deviceId=" + AppData.getAndroidId() + "&os=" + "android" + "&uid=" + AppData.getUid();
+        WebViewActivity.loadUrl(this, url, "");
+    }
+
+    /**
+     * 修改密码
+     */
+    @OnClick(R.id.tv_reset_pwd)
+    public void resetPwd() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra(RegisterActivity.TYPE, "resetPwd");
+        startActivity(intent);
     }
 
     /**
      * 退出登录
      */
     @OnClick(R.id.tv_login_out)
-    public void Loginout(){
+    public void loginOut() {
         CommonUtils.showInfoDialog(this, "确定要退出登录吗？", "提示", "退出", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -226,6 +239,7 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
             }
         }, null);
     }
+
     @Override
     public void getNewAppVersionSuccess(NewAppVersionBean newAppVersionBean) {
         //获取当前应用版本信息
@@ -237,17 +251,17 @@ public class SettingActivity extends MVPBaseActivity<SettingContract.View, Setti
         if (Double.parseDouble(code) > versioncode) {
             AppData.setIsNewApp(true);
             mTvNewApp.setText("点击更新最新版本");
-            CommonUtils.showInfoDialog(this, "新版本号： "+name+"\n新版日期： "+updateDate, "发现新版本", "更新", "取消", new DialogInterface.OnClickListener() {
+            CommonUtils.showInfoDialog(this, "新版本号： " + name + "\n新版日期： " + updateDate, "发现新版本", "更新", "取消", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mLlUpdateApp.setVisibility(View.VISIBLE);
                     //执行下载
                     Intent intent = new Intent(SettingActivity.this, DownloadService.class);
-                    intent.putExtra("url",appUrl);
+                    intent.putExtra("url", appUrl);
                     startService(intent);
                 }
             }, null);
-        }else{
+        } else {
             AppData.setIsNewApp(false);
             mTvNewApp.setText("当前已是最新版本");
             CommonUtils.showInfoDialog(SettingActivity.this, "当前已经是最新版本", "提示", "知道了", "", null, null);

@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -126,7 +128,6 @@ public class SureReleaseActivity extends MVPBaseActivity<SureReleaseContract.Vie
     public void btnCamera() {
         cameraTask(0);
         ll_takepic.setVisibility(View.GONE);
-
     }
 
     //选择相册
@@ -190,6 +191,7 @@ public class SureReleaseActivity extends MVPBaseActivity<SureReleaseContract.Vie
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         mTvTitle.setText("发布行程");
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         Intent intent = getIntent();
         stateuser = intent.getIntExtra("STATEUSER", 1);
@@ -246,19 +248,15 @@ public class SureReleaseActivity extends MVPBaseActivity<SureReleaseContract.Vie
         switch (requestCode) {
             case OPEN_CANMERA:
                 mPresenter.uploadImg(fileName, SureReleaseActivity.this);
+                Log.i(TAG, fileName + "-=OPEN_GALLEY-filepath");
+
                 break;
             case OPEN_GALLEY:
                 try {
                     Uri uri = data.getData();
                     String file2 = UploagImgUrils.getRealFilePath(SureReleaseActivity.this, uri);
                     picpath = file2;
-
-
                     Log.i(TAG, picpath + "-=OPEN_GALLEY-filepath");
-
-
-                    Log.i(TAG, filepath + "-=OPEN_GALLEY-filepath");
-
                     mPresenter.uploadImg(picpath, SureReleaseActivity.this);
                 } catch (Exception e) {
                 }
@@ -278,7 +276,8 @@ public class SureReleaseActivity extends MVPBaseActivity<SureReleaseContract.Vie
 
     @Override
     public void sureReleaseSuccess() {
-        CommonUtils.startActivity(SureReleaseActivity.this, TravelInfoActivity.class);
+        Intent intent = new Intent(SureReleaseActivity.this,TravelInfoActivity.class);
+        startActivity(intent);
         finish();
     }
 

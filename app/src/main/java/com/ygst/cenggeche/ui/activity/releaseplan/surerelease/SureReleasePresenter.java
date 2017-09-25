@@ -89,7 +89,8 @@ public class SureReleasePresenter extends BasePresenterImpl<SureReleaseContract.
     public void uploadImg(String pic,Context context) {
         Bitmap bitmap = UploagImgUrils.getBitmap(pic);
         Bitmap bitmap1 = UploagImgUrils.imageZoom(bitmap, 300);
-        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap1, null, null));
+        Bitmap bitmap2 = UploagImgUrils.compressImage(bitmap1);
+        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap2, null, null));
         final String file = UploagImgUrils.getRealFilePath(context, uri);
         // 上传身份证
         Map<String, String> map = new HashMap<>();
@@ -99,7 +100,6 @@ public class SureReleasePresenter extends BasePresenterImpl<SureReleaseContract.
         HttpManager.getHttpManager().upLoadIcon(UrlUtils.UPLOADBG, file, map, new Observer<ResponseBody>() {
             @Override
             public void onCompleted() {
-
 
             }
 

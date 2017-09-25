@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.NearByBean;
-import com.ygst.cenggeche.ui.widget.CircleImageView;
 
 import java.util.List;
 
@@ -132,7 +131,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView mTvDistance;
         TextView mLabel1, mLabel2, mLabel3;
-        CircleImageView mUserSmallicon;
+        ImageView mUserSmallicon;
         ImageView mIvGender, mIvBigpic;
         TextView mTvNickname;
         TextView mTvUserage;
@@ -144,7 +143,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             mLabel1 = (TextView) view.findViewById(R.id.label1);
             mLabel2 = (TextView) view.findViewById(R.id.label2);
             mLabel3 = (TextView) view.findViewById(R.id.label3);
-            mUserSmallicon = (CircleImageView) view.findViewById(R.id.user_smallicon);
+            mUserSmallicon = (ImageView) view.findViewById(R.id.user_smallicon);
             mTvNickname = (TextView) view.findViewById(R.id.tv_nickname);
             mTvUserage = (TextView) view.findViewById(R.id.tv_userage);
             mIvGender = (ImageView) view.findViewById(R.id.iv_gender);

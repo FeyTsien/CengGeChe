@@ -14,13 +14,11 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp">
 
-        <com.ygst.cenggeche.ui.widget.CircleImageView
+        <cn.jmessage.android.uikit.chatting.CircleImageView
             android:id="@+id/iv_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/logo"
-            app:civ_border_width="1dp"
-            app:civ_border_color="@color/colorTheme"  />
+            android:src="@mipmap/logo" />
 
         <ImageView
             android:id="@+id/iv_gender"

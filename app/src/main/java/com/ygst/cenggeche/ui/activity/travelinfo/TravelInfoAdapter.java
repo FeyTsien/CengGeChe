@@ -64,8 +64,8 @@ public class TravelInfoAdapter extends BaseAdapter {
             viewHolder.mIvGender = (ImageView) convertView.findViewById(R.id.iv_gender);
             viewHolder.mTvNickname = (TextView) convertView.findViewById(R.id.tv_nickname);
             viewHolder.mTvUserage = (TextView) convertView.findViewById(R.id.tv_userage);
-            viewHolder.mBtnIgnore = (Button) convertView.findViewById(R.id.btn_ignore);
-            viewHolder.mBtnAccept = (Button) convertView.findViewById(R.id.btn_accept);
+            viewHolder.mBtnIgnore = (TextView) convertView.findViewById(R.id.btn_ignore);
+            viewHolder.mBtnAccept = (TextView) convertView.findViewById(R.id.btn_accept);
             viewHolder.mTvStartLocation = (TextView) convertView.findViewById(R.id.tv_start_location);
             viewHolder.mTvEndLocation = (TextView) convertView.findViewById(R.id.tv_end_location);
 
@@ -111,8 +111,8 @@ public class TravelInfoAdapter extends BaseAdapter {
         ImageView mUserSmallicon;
         TextView mTvNickname;
         TextView mTvUserage;
-        Button mBtnIgnore;
-        Button mBtnAccept;
+        TextView mBtnIgnore;
+        TextView mBtnAccept;
         TextView mTvStartLocation;
         TextView mTvEndLocation;
 

@@ -63,7 +63,9 @@ public class PeerRequestPresenter extends BasePresenterImpl<PeerRequestContract.
             @Override
             public void onError(Throwable e) {
                 progressDialog.dismiss();
-                ToastUtil.show(mView.getContext(), "请求失败，请重试");
+                if(mView!=null){
+                    ToastUtil.show(mView.getContext(), "请求失败，请重试");
+                }
                 LogUtils.e(TAG, "返回的onError", e);
             }
 

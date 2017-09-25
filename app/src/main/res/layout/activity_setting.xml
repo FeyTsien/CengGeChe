@@ -102,7 +102,6 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
-                    android:text="有新的"
                     android:textColor="@color/colorTheme" />
             </RelativeLayout>
 
@@ -164,7 +163,7 @@
                 android:id="@+id/tv_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="15dp"
                 android:background="@color/white"
                 android:drawablePadding="10dp"
                 android:drawableRight="@drawable/set_right_arrows"
@@ -174,6 +173,20 @@
                 android:text="意见反馈"
                 android:textColor="@color/black" />
 
+
+            <TextView
+                android:id="@+id/tv_reset_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/white"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/set_right_arrows"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="修改密码"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_login_out"

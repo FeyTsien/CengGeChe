@@ -27,8 +27,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
             </android.support.design.widget.CollapsingToolbarLayout>
 
             <RelativeLayout
@@ -44,20 +43,18 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true">
 
-                    <com.ygst.cenggeche.ui.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <cn.jmessage.android.uikit.chatting.CircleImageView
                         android:id="@+id/iv_avatar"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:src="@mipmap/icon_my_avatar"
-                        app:civ_border_color="@color/colorTheme"
-                        app:civ_border_width="1dp"/>
+                        android:src="@mipmap/icon_my_avatar" />
 
                     <ImageView
                         android:id="@+id/iv_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/iv_avatar"
-                        android:layout_alignRight="@+id/iv_avatar"/>
+                        android:layout_alignRight="@+id/iv_avatar" />
                 </RelativeLayout>
 
                 <LinearLayout

@@ -44,8 +44,12 @@ public class MyReceiver extends BroadcastReceiver {
                 //send the Registration Id to your server...
             } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
                 LogUtils.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
-                AppData.savaUnReadApplyCount(AppData.getUnReadApplyCount()+1);
-                MessageFragment.instance.showUnReadApplyCount();
+                String pushType = getJSON(bundle,"pushType");
+                if(pushType.equals("1")){
+                    //为1是接收到好友申请
+                    AppData.savaUnReadApplyCount(AppData.getUnReadApplyCount()+1);
+                    MessageFragment.instance.showUnReadApplyCount();
+                }
 //				processCustomMessage(context, bundle);
             } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
                 receivingNotification(context, bundle);
@@ -79,6 +83,24 @@ public class MyReceiver extends BroadcastReceiver {
 
     }
 
+    //json解析
+    private String getJSON(Bundle bundle,String key){
+        String value = "";
+        try {
+            JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+            Iterator<String> it = json.keys();
+
+            while (it.hasNext()) {
+                String myKey = it.next().toString();
+                if (key.equals(myKey)) {
+                    value = json.optString(myKey);
+                }
+            }
+        } catch (JSONException e) {
+            LogUtils.e(TAG, "Get message extra JSON error!");
+        }
+        return value;
+    }
     //接受到推送下来的通知
     private void receivingNotification(Context context, Bundle bundle) {
         String title = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);

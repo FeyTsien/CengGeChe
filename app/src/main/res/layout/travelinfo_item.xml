@@ -83,7 +83,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <Button
+                <TextView
                     android:background="@drawable/btn_brond_white"
                     android:text="忽略"
                     android:textColor="@color/deep_violet"
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-                <Button
+                <TextView
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/btn_brond_deepvoilet"

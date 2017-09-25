@@ -1,9 +1,5 @@
 package com.ygst.cenggeche.utils;
 
-/**
- * Created by Administrator on 2017/4/10.
- */
-
 public class UrlUtils {
     //BaseUrl本地
 //    public static String BASEURl_BENDI = "http://192.168.0.133";
@@ -17,7 +13,7 @@ public class UrlUtils {
 //    public static String BASEURL_XIANSHANG = "http://47.93.6.225:8180/";
 
     //服务端地址
-    public static String BASEURl = BASEURl_BENDI;
+    public static String BASEURl = BASEURL_XIANSHANG;
 
     //H5链接（本地）
 //    public static String URL_H5="http://r16878y847.iok.la/car_mm";
@@ -142,9 +138,5 @@ public class UrlUtils {
 
     // 车主/乘客选择行程请求同行接口
     public static String PEERREQUEST= "stroke/peerRequest.do";
-
-
-
-
 
 }
