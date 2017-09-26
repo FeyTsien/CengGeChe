@@ -47,8 +47,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         int gender = mList.get(position).getGender();
         if (gender == 1) {
             holder.mIvGender.setImageResource(R.mipmap.icon_boy);
+            //男头像
+            Glide.with(context)
+                    .load(mList.get(position).getUserPic())
+                    .centerCrop()
+                    .placeholder(R.mipmap.icon_avatar_boy)
+                    .into(holder.mUserSmallicon);
         } else if (gender == 0) {
             holder.mIvGender.setImageResource(R.mipmap.icon_girl);
+            //女头像
+            Glide.with(context)
+                    .load(mList.get(position).getUserPic())
+                    .centerCrop()
+                    .placeholder(R.mipmap.icon_avatar_girl)
+                    .into(holder.mUserSmallicon);
+        } else {
+            holder.mIvGender.setVisibility(View.GONE);
+            //头像
+            Glide.with(context)
+                    .load(mList.get(position).getUserPic())
+                    .centerCrop()
+                    .placeholder(R.mipmap.icon_my_avatar)
+                    .into(holder.mUserSmallicon);
         }
 
         //大背景图
@@ -56,21 +76,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             Glide.with(context)
                     .load(mList.get(position).getPic())
                     .centerCrop()
-                    .placeholder(R.mipmap.icon_my_avatar)
+                    .placeholder(R.mipmap.icon_nearby_item_bg)
                     .into(holder.mIvBigpic);
         } else {
             Glide.with(context)
                     .load(mList.get(position).getUserPic())
                     .centerCrop()
-                    .placeholder(R.mipmap.icon_my_avatar)
+                    .placeholder(R.mipmap.icon_nearby_item_bg)
                     .into(holder.mIvBigpic);
         }
-        //头像
-        Glide.with(context)
-                .load(mList.get(position).getUserPic())
-                .centerCrop()
-                .placeholder(R.mipmap.icon_my_avatar)
-                .into(holder.mUserSmallicon);
 
         //  设置千米数
         String distance = mList.get(position).getDistance() + "";

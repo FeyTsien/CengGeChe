@@ -22,7 +22,6 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.view.FlowLayout;
 import com.ygst.cenggeche.ui.view.explosion.ExplosionField;
 import com.ygst.cenggeche.ui.widget.CheckableButton;
-import com.ygst.cenggeche.ui.widget.CircularImageView;
 import com.ygst.cenggeche.ui.widget.shimmer.Shimmer;
 import com.ygst.cenggeche.ui.widget.shimmer.ShimmerTextView;
 import com.ygst.cenggeche.utils.UploagImgUrils;
@@ -34,7 +33,7 @@ import cn.jmessage.android.uikit.chatting.utils.FileHelper;
 public class TestActivity2 extends AppCompatActivity {
     ShimmerTextView tv;
     Shimmer shimmer;
-    CircularImageView cv1;
+    ImageView cv1;
     ImageView mIvTest;
     FlowLayout flowLayout;
     String[] s = {"sssss", "sdsdsds", "ssdsdss", "fcvxcd", "dfdffffffffdgfgd", "dfgfgdfgdf", "gdfgdfgfg", "hjjks", "skjjjjjjjggggggggg", "ss", "sss", "sssss", "sssss"};
@@ -47,8 +46,7 @@ public class TestActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_test2);
         flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
         mIvTest = (ImageView) findViewById(R.id.iv_test);
-        cv1 = (CircularImageView) findViewById(R.id.civ_1);
-        cv1.setBorderColor(getResources().getColor(R.color.colorTheme));
+        cv1 = (ImageView) findViewById(R.id.civ_1);
         tv = (ShimmerTextView) findViewById(R.id.shimmer_tv);
         Button btn = (Button) findViewById(R.id.shandong);
 

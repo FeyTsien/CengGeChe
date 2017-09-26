@@ -80,11 +80,25 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
             holder.tv_name.setText(friendName);
             //头像
             TextDrawable drawable = MyTextDrawable.getTextDrawable(friendName);
-            Glide.with(mContext)
-                    .load(bean.getUserPic())
-                    .centerCrop()
-                    .placeholder(drawable)
-                    .into(holder.iv_img);
+            if (bean.getGender() == 0) {
+                Glide.with(mContext)
+                        .load(bean.getUserPic())
+                        .centerCrop()
+                        .placeholder(R.mipmap.icon_avatar_girl)
+                        .into(holder.iv_img);
+            } else if (bean.getGender() == 1) {
+                Glide.with(mContext)
+                        .load(bean.getUserPic())
+                        .centerCrop()
+                        .placeholder(R.mipmap.icon_avatar_boy)
+                        .into(holder.iv_img);
+            } else {
+                Glide.with(mContext)
+                        .load(bean.getUserPic())
+                        .centerCrop()
+                        .placeholder(drawable)
+                        .into(holder.iv_img);
+            }
 //            if(!TextUtils.isEmpty(bean.getUserPic())){
 //                Uri uri = Uri.parse(bean.getUserPic());
 //                holder.iv_img.setImageURI(uri);

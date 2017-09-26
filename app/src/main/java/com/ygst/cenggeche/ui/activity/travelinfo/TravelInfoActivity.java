@@ -22,7 +22,6 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.NowTravelInfoBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
-import com.ygst.cenggeche.ui.activity.friendlist.CommonUtil;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
@@ -34,11 +33,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.jmessage.android.uikit.chatting.CircleImageView;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
-
 
 import static com.ygst.cenggeche.R.id.iv_sendmessagecc;
 
@@ -73,7 +70,7 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
     @BindView(R.id.tv_remarks)
     TextView tvRemarks;
     @BindView(R.id.user_smallicon)
-    CircleImageView userSmallicon;
+    ImageView userSmallicon;
     @BindView(R.id.iv_gender)
     ImageView ivGender;
     @BindView(R.id.iv_sendmessage)
@@ -111,7 +108,7 @@ public class TravelInfoActivity extends MVPBaseActivity<TravelInfoContract.View,
     ListView lvShaoren;
     //车主接受同行
     @BindView(R.id.user_smalliconcc)
-    CircleImageView userSmalliconcc;
+    ImageView userSmalliconcc;
     @BindView(R.id.iv_gendercc)
     ImageView ivGendercc;
     @BindView(R.id.tv_nicknamecc)

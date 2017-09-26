@@ -82,7 +82,11 @@ public class MyViewPagerAdapter extends PagerAdapter {
         holder.tvStartLocation.setText(list.get(position).getStartAddr());
         holder.tvEndLocation.setText(list.get(position).getEndAddr());
         holder.tvReleaseDate.setText(list.get(position).getDeparTime());
-        holder.tvName.setText(list.get(position).getComments());
+        if(list.get(position).getComments().length()>0){
+            holder.tvName.setText(list.get(position).getComments());
+        }else{
+            holder.tvName.setVisibility(View.GONE);
+        }
         Glide.with(context).load(list.get(position).getBackgroundPic()).into( holder.ivPic);
 //			/* 动态设置view 横线 让它和上方的文字等宽*/
         holder.tvName.measure(0, 0);

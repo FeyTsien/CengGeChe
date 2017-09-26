@@ -18,7 +18,9 @@ import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.MD5Util;
 import com.ygst.cenggeche.utils.TextViewUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
+import com.ygst.cenggeche.utils.UrlUtils;
 import com.ygst.cenggeche.utils.UsernamePwdUtils;
+import com.ygst.cenggeche.webview.WebViewActivity;
 
 import org.feezu.liuli.timeselector.TimeSelector;
 
@@ -39,6 +41,8 @@ import butterknife.OnClick;
 public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.View, RegisterInfoPresenter> implements RegisterInfoContract.View {
 
     private String TAG = "RegisterInfoActivity";
+    //服务协议
+    private final String URL_SERVICE_AGREEMENT = UrlUtils.URL_H5 + "/cenggeche/pages/treaty/treaty.html";
     int mYear, mMonth, mDay;
     final int DATE_DIALOG = 1;
 
@@ -110,16 +114,16 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         //获取当前日期
         Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH)+1;
+        mMonth = c.get(Calendar.MONTH) + 1;
         mDay = c.get(Calendar.DAY_OF_MONTH);
-        String startTime =  (mYear-100) + "-" + mMonth + "-" + mDay+" 00:00";
-        String endTime =  mYear + "-" + mMonth + "-" + mDay+" 00:00";
+        String startTime = (mYear - 100) + "-" + mMonth + "-" + mDay + " 00:00";
+        String endTime = mYear + "-" + mMonth + "-" + mDay + " 00:00";
         TimeSelector timeSelector = new TimeSelector(this, new TimeSelector.ResultHandler() {
             @Override
             public void handle(String time) {
                 mTvBirthdate.setText(time.substring(0, time.indexOf(" ")));
             }
-        }, startTime,endTime);
+        }, startTime, endTime);
 //        timeSelector.setMode(TimeSelector.MODE.YMDHM);//显示 年月日时分（默认）；
         timeSelector.setMode(TimeSelector.MODE.YMD);//只显示 年月日
         timeSelector.show();
@@ -146,6 +150,13 @@ public class RegisterInfoActivity extends MVPBaseActivity<RegisterInfoContract.V
         mIvGirl.setImageResource(R.mipmap.icon_girl_radio_un);
     }
 
+    /**
+     * 服务协议
+     */
+    @OnClick(R.id.tv_service_agreement)
+    public void goServiceAgreement() {
+        WebViewActivity.loadUrl(this, URL_SERVICE_AGREEMENT, "服务协议");
+    }
 
     /**
      * 提交注册信息

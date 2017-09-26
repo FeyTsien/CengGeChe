@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.Utils;
+import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
@@ -146,10 +147,14 @@ public class BaseTools {
      *
      * @param content 复制的文本
      */
-    public static void copy(String content) {
+    public static void copy(Context context, String content) {
         // 得到剪贴板管理器
-        ClipboardManager cmb = (ClipboardManager) Utils.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        cmb.setText(content.trim());
+//        ClipboardManager cmb = (ClipboardManager) Utils.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+//        cmb.setText(content.trim());
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        // 将文本内容放到系统剪贴板里。
+        cm.setText(content);
+        ToastUtil.show(context, "复制成功");
     }
 
     /**

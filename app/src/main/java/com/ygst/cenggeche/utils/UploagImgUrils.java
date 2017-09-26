@@ -1,6 +1,7 @@
 package com.ygst.cenggeche.utils;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +13,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.blankj.utilcode.utils.LogUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static android.R.attr.path;
 
 /**
  * Created by Administrator on 2017/4/25.
@@ -152,6 +157,9 @@ public class UploagImgUrils {
                 e.printStackTrace();
             }
         }
+        int allocationByteCount = bm.getAllocationByteCount();
+        LogUtils.i("allocationByteCount",allocationByteCount+"--allocationByteCount");
+
         return bm;
     }
 
@@ -159,7 +167,7 @@ public class UploagImgUrils {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-        int options = 60;
+        int options = 90;
 
         while (baos.toByteArray().length / 1024 > 100) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
             baos.reset(); // 重置baos即清空baos

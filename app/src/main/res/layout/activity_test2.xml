@@ -14,24 +14,20 @@
         flowlayout:vertical_spacing="10dp" />
 
 
-    <com.ygst.cenggeche.ui.widget.CircleImageView
+    <com.ygst.cenggeche.ui.view.RoundImageView
         android:id="@+id/civ_1"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:layout_below="@+id/flow_layout"
-        android:src="@drawable/loli"
-        app:civ_border_color="@color/colorSub2"
-        app:civ_border_width="2dp" />
+        android:src="@drawable/loli"/>
 
-    <com.ygst.cenggeche.ui.widget.CircleImageView
+    <com.ygst.cenggeche.ui.view.RoundImageView
         android:id="@+id/civ_2"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/flow_layout"
-        android:src="@drawable/loli"
-        app:civ_border_color="@color/colorSub"
-        app:civ_border_width="2dp" />
+        android:src="@drawable/loli"/>
 
     <com.ygst.cenggeche.ui.widget.shimmer.ShimmerTextView
         android:id="@+id/shimmer_tv"

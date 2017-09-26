@@ -44,16 +44,6 @@
         <attr name="vertical_spacing" format="dimension" />
     </declare-styleable>
 
-    <!--环形imageview-->
-    <declare-styleable name="CircularImageView">
-        <attr name="civ_border" format="boolean"/>
-        <attr name="civ_border_width" format="dimension"/>
-        <attr name="civ_border_color" format="color"/>
-        <attr name="civ_shadow" format="boolean"/>
-        <attr name="civ_shadow_color" format="color"/>
-        <attr name="civ_shadow_radius" format="float"/>
-    </declare-styleable>
-
      <!--闪动的文字-->
     <declare-styleable name="ShimmerView">
         <attr name="reflectionColor" format="color"/>

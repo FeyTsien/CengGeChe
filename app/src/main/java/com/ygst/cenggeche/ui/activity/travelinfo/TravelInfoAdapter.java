@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,10 +13,7 @@ import com.bumptech.glide.Glide;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.NowTravelInfoBean;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import cn.jmessage.android.uikit.chatting.CircleImageView;
 
 
 /**
@@ -60,7 +56,7 @@ public class TravelInfoAdapter extends BaseAdapter {
             viewHolder.mTvReadyAccept = (TextView) convertView.findViewById(R.id.tv_ready_accept);
             viewHolder.mLlT = (LinearLayout) convertView.findViewById(R.id.ll_t);
             viewHolder.mRlAvatar = (RelativeLayout) convertView.findViewById(R.id.rl_avatar);
-            viewHolder.mUserSmallicon = (CircleImageView) convertView.findViewById(R.id.user_smallicon);
+            viewHolder.mUserSmallicon = (ImageView) convertView.findViewById(R.id.user_smallicon);
             viewHolder.mIvGender = (ImageView) convertView.findViewById(R.id.iv_gender);
             viewHolder.mTvNickname = (TextView) convertView.findViewById(R.id.tv_nickname);
             viewHolder.mTvUserage = (TextView) convertView.findViewById(R.id.tv_userage);

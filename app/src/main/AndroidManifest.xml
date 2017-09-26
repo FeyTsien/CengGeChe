@@ -83,6 +83,11 @@
         <activity android:name=".ui.test.TestActivity2" />
         <!--测试页3-->
         <activity android:name=".ui.test.TestActivity3" />
+
+        <!--WebView页-->
+        <activity android:name=".webview.WebViewActivity" />
+        <!--WebView页2-->
+        <activity android:name=".webview.WebViewActivity2" />
         <!--引导页-->
         <activity android:name=".ui.activity.guidepage.GuidePageActivity" />
         <!--引导页1-->
@@ -93,8 +98,6 @@
         <activity android:name=".ui.activity.guidepage.ImageBackgroundExampleActivity" />
         <!--引导页4-->
         <activity android:name=".ui.activity.guidepage.WelcomeGuideActivity" />
-        <!--WebView页-->
-        <activity android:name=".webview.WebViewActivity" />
         <!--登录页-->
         <activity android:name=".ui.activity.login.LoginActivity" />
         <!--注册页-->

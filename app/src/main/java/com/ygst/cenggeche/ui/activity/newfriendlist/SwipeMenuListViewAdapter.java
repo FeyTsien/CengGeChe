@@ -17,8 +17,6 @@ import com.ygst.cenggeche.ui.widget.TextDrawable;
 
 import java.util.List;
 
-import cn.jmessage.android.uikit.chatting.CircleImageView;
-
 /**
  * Created by Administrator on 2017/8/17.
  */
@@ -120,7 +118,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     class ViewHolder {
 
         //头像
-        CircleImageView mIvAvatar;
+        ImageView mIvAvatar;
         //性别
         ImageView mIvGender;
         //目标用户名称
@@ -136,7 +134,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
 
 
         public ViewHolder(View view) {
-            mIvAvatar = (CircleImageView) view.findViewById(R.id.iv_avatar);
+            mIvAvatar = (ImageView) view.findViewById(R.id.iv_avatar);
             mIvGender = (ImageView) view.findViewById(R.id.iv_gender);
             mTvTargetName = (TextView) view.findViewById(R.id.tv_target_name);
             mTvLatestMessage = (TextView) view.findViewById(R.id.tv_reason);

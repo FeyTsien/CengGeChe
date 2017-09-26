@@ -18,7 +18,6 @@ import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.activity.friendoperate.report.ReportTypeActivity;
 import com.ygst.cenggeche.ui.activity.setnotename.SetNoteNameActivity;
-import com.ygst.cenggeche.ui.widget.CircularImageView;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
 
@@ -53,8 +52,8 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
     TextView mTvNotename;
     @BindView(R.id.tv_nickname)
     TextView mTvNickname;
-    @BindView(R.id.civ_avatar)
-    CircularImageView mCivAvatar;
+    @BindView(R.id.iv_avatar)
+    ImageView mIvAvatar;
     @BindView(R.id.iv_gender)
     ImageView mIvGender;
 
@@ -96,22 +95,27 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
                         @Override
                         public void gotResult(int status, String desc, Bitmap bitmap) {
                             if (status == 0) {
-                                mCivAvatar.setImageBitmap(bitmap);
+                                mIvAvatar.setImageBitmap(bitmap);
                             } else {
-                                mCivAvatar.setImageResource(R.mipmap.icon_my_avatar);
+                                ///显示性别
+                                if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
+                                    mIvAvatar.setImageResource(R.mipmap.icon_avatar_girl);
+                                } else if (mUserInfo.getGender().equals(UserInfo.Gender.male)) {
+                                    mIvAvatar.setImageResource(R.mipmap.icon_avatar_boy);
+                                } else {
+                                    mIvAvatar.setImageResource(R.mipmap.icon_my_avatar);
+                                }
                             }
                         }
                     });
                     ///显示性别
                     if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
-                        mCivAvatar.setBorderColor(R.color.colorGirl);
                         mIvGender.setImageResource(R.mipmap.icon_girl);
                     } else if (mUserInfo.getGender().equals(UserInfo.Gender.male)) {
-                        mCivAvatar.setBorderColor(R.color.colorBoy);
                         mIvGender.setImageResource(R.mipmap.icon_boy);
                     } else {
                     }
-                    if (!TextUtils.isEmpty(mUserInfo.getNotename())){
+                    if (!TextUtils.isEmpty(mUserInfo.getNotename())) {
                         noteName = mUserInfo.getNotename();
                         mTvNickname.setText("昵称: " + mUserInfo.getNickname());
                     } else if (!TextUtils.isEmpty(mUserInfo.getNickname())) {
@@ -176,7 +180,7 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
      * 举报
      */
     @OnClick(R.id.tv_report)
-    public void report(){
+    public void report() {
         Intent intent = new Intent(this, ReportTypeActivity.class);
         intent.putExtra(JMessageUtils.TARGET_USERNAME, targetUsername);
         startActivity(intent);

@@ -43,7 +43,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true">
 
-                    <cn.jmessage.android.uikit.chatting.CircleImageView
+                    <com.ygst.cenggeche.ui.view.RoundImageView
                         android:id="@+id/iv_avatar"
                         android:layout_width="70dp"
                         android:layout_height="70dp"

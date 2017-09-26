@@ -28,8 +28,6 @@ import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 import com.ygst.cenggeche.webview.WebViewActivity;
 
-import cn.jmessage.android.uikit.chatting.CircleImageView;
-
 /**
  * MVPPlugin
  * 邮箱 784787081@qq.com
@@ -41,6 +39,8 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
     private final String URL_MY_INFO = UrlUtils.URL_H5 + "/cenggeche/pages/info/info.html";
     //行程记录
     private final String URL_TRIP_RECORDER = UrlUtils.URL_H5 + "/cenggeche/pages/record/record.html";
+    //投诉建议
+    private final String URL_FEEDBACK = UrlUtils.URL_H5 + "/cenggeche/pages/feedback/feedback.html";
     //车主认证
     private final String URL_OWNER_AUTH = UrlUtils.URL_H5 + "/cenggeche/pages/carrz/carrz.html";
     //车主认证状态
@@ -52,7 +52,7 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
     private String TAG = "MeFragment";
     public ACache mCache;
     private View mRootView;
-    private CircleImageView mCivAvatar;
+    private ImageView mIvAvatar;
     private ImageView mIvGender;
     private TextView mTvMyName;
     private TextView mTvTotalNum;
@@ -62,6 +62,7 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
     private RelativeLayout mRlOwnerAuth;
     private TextView mTvIsOwner;
     private TextView mTvTripRecorder;
+    private TextView mTvComplaint;
     private TextView mTvSetting;
 
     @Override
@@ -89,7 +90,7 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
 //        if(myInfoBean!=null){
 //            getMyInfoSuccess(myInfoBean);
 //        }
-        mCivAvatar = (CircleImageView) mRootView.findViewById(R.id.civ_avatar);
+        mIvAvatar = (ImageView) mRootView.findViewById(R.id.iv_avatar);
         mIvGender = (ImageView) mRootView.findViewById(R.id.iv_gender);
         mTvMyName = (TextView) mRootView.findViewById(R.id.tv_myname);
         mTvTotalNum = (TextView) mRootView.findViewById(R.id.tv_total_num);
@@ -97,6 +98,7 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
         mTvPassiveRubNum = (TextView) mRootView.findViewById(R.id.tv_passive_rub_num);
         mTvMyInfo = (TextView) mRootView.findViewById(R.id.tv_my_info);
         mTvTripRecorder = (TextView) mRootView.findViewById(R.id.tv_trip_recorder);
+        mTvComplaint = (TextView) mRootView.findViewById(R.id.tv_complaint);
         mRlOwnerAuth = (RelativeLayout) mRootView.findViewById(R.id.rl_owner_auth);
         mTvIsOwner = (TextView) mRootView.findViewById(R.id.tv_isowner);
         mTvSetting = (TextView) mRootView.findViewById(R.id.tv_setting);
@@ -104,6 +106,7 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
         mTvMyInfo.setOnClickListener(this);
         mTvTripRecorder.setOnClickListener(this);
         mRlOwnerAuth.setOnClickListener(this);
+        mTvComplaint.setOnClickListener(this);
         mTvSetting.setOnClickListener(this);
     }
 
@@ -129,17 +132,24 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
         userStatus = dataBean.getUserStatus();
         if (userStatus == 1) {
             mTvIsOwner.setText("已认证");
-        }else {
+        } else {
             mTvIsOwner.setText("未认证");
         }
         AppData.savaUserStatus(dataBean.getUserStatus());
-        //头像
-        Glide.with(this).load(dataBean.getUserPic()).placeholder(R.mipmap.icon_my_avatar).into(mCivAvatar);
+
+
         //性别
         if (dataBean.getGender() == 0) {
             mIvGender.setImageResource(R.mipmap.icon_girl);
+            //女头像
+            Glide.with(this).load(dataBean.getUserPic()).centerCrop().placeholder(R.mipmap.icon_avatar_girl).into(mIvAvatar);
         } else if (dataBean.getGender() == 1) {
             mIvGender.setImageResource(R.mipmap.icon_boy);
+            //男头像
+            Glide.with(this).load(dataBean.getUserPic()).centerCrop().placeholder(R.mipmap.icon_avatar_boy).into(mIvAvatar);
+        } else {
+            //头像
+            Glide.with(this).load(dataBean.getUserPic()).centerCrop().placeholder(R.mipmap.icon_my_avatar).into(mIvAvatar);
         }
         //名字
         if (!TextUtils.isEmpty(dataBean.getNickname())) {
@@ -171,6 +181,10 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
             case R.id.tv_trip_recorder:
                 String url2 = URL_TRIP_RECORDER + "?deviceId=" + AppData.getAndroidId() + "&os=" + "android" + "&uid=" + AppData.getUid();
                 WebViewActivity.loadUrl(getActivity(), url2, "");
+                break;
+            case R.id.tv_complaint:
+                String url4 = URL_FEEDBACK + "?deviceId=" + AppData.getAndroidId() + "&os=" + "android" + "&uid=" + AppData.getUid();
+                WebViewActivity.loadUrl(getActivity(), url4, "");
                 break;
             case R.id.rl_owner_auth:
                 String url3 = "";

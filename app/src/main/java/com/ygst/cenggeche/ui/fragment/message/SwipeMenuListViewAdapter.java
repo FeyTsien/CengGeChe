@@ -15,7 +15,6 @@ import com.ygst.cenggeche.ui.widget.TextDrawable;
 
 import java.util.List;
 
-import cn.jmessage.android.uikit.chatting.CircleImageView;
 import cn.jmessage.android.uikit.chatting.utils.TimeFormat;
 import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
 import cn.jpush.im.android.api.content.CustomContent;
@@ -142,6 +141,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                     } else {
                     }
                 }
+
                 //显示头像
                 mUserInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
                     @Override
@@ -160,7 +160,14 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                         if (status == 0) {
                             holder.mIVavatar.setImageBitmap(bitmap);
                         } else {
-                            holder.mIVavatar.setImageResource(R.mipmap.icon_my_avatar);
+                            //显示性别
+                            if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
+                                holder.mIVavatar.setImageResource(R.mipmap.icon_avatar_girl);
+                            } else if (mUserInfo.getGender().equals(UserInfo.Gender.male)) {
+                                holder.mIVavatar.setImageResource(R.mipmap.icon_avatar_boy);
+                            } else {
+                                holder.mIVavatar.setImageResource(R.mipmap.icon_my_avatar);
+                            }
                         }
                     }
                 });
@@ -188,7 +195,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     class ViewHolder {
 
         //头像
-        CircleImageView mIVavatar;
+        ImageView mIVavatar;
         //性别
         ImageView mIVgender;
         //目标用户名称
@@ -202,7 +209,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
         TextView mTVunreadCount;
 
         public ViewHolder(View view) {
-            mIVavatar = (CircleImageView) view.findViewById(R.id.iv_avatar);
+            mIVavatar = (ImageView) view.findViewById(R.id.iv_avatar);
             mIVgender = (ImageView) view.findViewById(R.id.iv_gender);
             mTVtargetName = (TextView) view.findViewById(R.id.tv_target_name);
             mTVlatestMessage = (TextView) view.findViewById(R.id.tv_latest_message);

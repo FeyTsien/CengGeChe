@@ -10,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -20,6 +22,7 @@ import android.widget.ProgressBar;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.activity.base.BaseActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.utils.ToastUtil;
 
 
 /**
@@ -29,7 +32,7 @@ import com.ygst.cenggeche.utils.CommonUtils;
  * Thanks to: https://github.com/youlookwhat/WebViewStudy
  * contact me: http://www.jianshu.com/users/e43c6e979831/latest_articles
  */
-public class WebViewActivity extends BaseActivity implements IWebPageView {
+public class WebViewActivity2 extends BaseActivity implements IWebPageView {
 
     // 进度条
     ProgressBar mProgressBar;
@@ -63,39 +66,13 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
     }
 
     private void initTitle() {
+//        StatusBarUtil.setColor(this, R.color.colorTheme, 0);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_progress);
         webView = (WebView) findViewById(R.id.webview_detail);
         videoFullView = (FrameLayout) findViewById(R.id.video_fullView);
-
         mTitleToolBar = (Toolbar) findViewById(R.id.title_tool_bar);
-        if(mTitle.equals("服务协议")){
-            mTitleToolBar.setVisibility(View.VISIBLE);
-        }else {
-            mTitleToolBar.setVisibility(View.GONE);
-        }
         setToolBar(mTitleToolBar, mTitle, true);
         setSupportActionBar(mTitleToolBar);
-        setTitle(mTitle);
-        mTitleToolBar.setOverflowIcon(ContextCompat.getDrawable(this, R.mipmap.actionbar_more));
-        mTitleToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-    }
-
-
-    private void getIntentData() {
-        if (getIntent() != null) {
-            mTitle = getIntent().getStringExtra("mTitle");
-            mUrl = getIntent().getStringExtra("mUrl");
-            System.out.println("mUrl: " + mUrl);
-        }
-    }
-
-    public void setTitle(String mTitle) {
-        mTitleToolBar.setTitle(mTitle);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             //去除默认Title显示
@@ -104,6 +81,52 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.mipmap.icon_back);
         }
+        setTitle(mTitle);
+        mTitleToolBar.setOverflowIcon(ContextCompat.getDrawable(this, R.mipmap.actionbar_more));
+        mTitleToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        mTitleToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.actionbar_share:// 分享到
+                        String shareText = mWebChromeClient.getTitle() + mUrl + "（分享自" + R.string.app_name + "）";
+                        ShareUtils.share(WebViewActivity2.this, shareText);
+                        break;
+                    case R.id.actionbar_cope:// 复制链接
+                        BaseTools.copy(WebViewActivity2.this,mUrl);
+                        ToastUtil.show(WebViewActivity2.this, "复制成功");
+                        break;
+                    case R.id.actionbar_open:// 打开链接
+                        BaseTools.openLink(WebViewActivity2.this, mUrl);
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.webview_menu, menu);
+        return true;
+    }
+
+    private void getIntentData() {
+        if (getIntent() != null) {
+            mTitle = getIntent().getStringExtra("mTitle");
+            mUrl = getIntent().getStringExtra("mUrl");
+
+            System.out.println("mUrl: " + mUrl);
+        }
+    }
+
+    public void setTitle(String mTitle) {
+        mTitleToolBar.setTitle(mTitle);
     }
 
     private void initWebView() {
@@ -174,7 +197,7 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
     @Override
     public void fullViewAddView(View view) {
         FrameLayout decor = (FrameLayout) getWindow().getDecorView();
-        videoFullView = new FullscreenHolder(WebViewActivity.this);
+        videoFullView = new FullscreenHolder(WebViewActivity2.this);
         videoFullView.addView(view);
         decor.addView(videoFullView);
     }
@@ -357,7 +380,7 @@ public class WebViewActivity extends BaseActivity implements IWebPageView {
      * @param mTitle   title
      */
     public static void loadUrl(Context mContext, String mUrl, String mTitle) {
-        Intent intent = new Intent(mContext, WebViewActivity.class);
+        Intent intent = new Intent(mContext, WebViewActivity2.class);
         intent.putExtra("mUrl", mUrl);
         intent.putExtra("mTitle", mTitle);
         mContext.startActivity(intent);

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
+import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 
 import java.util.HashMap;
@@ -14,12 +15,13 @@ import rx.Observer;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
-public class FriendBlackListPresenter extends BasePresenterImpl<FriendBlackListContract.View> implements FriendBlackListContract.Presenter{
+public class FriendBlackListPresenter extends BasePresenterImpl<FriendBlackListContract.View> implements FriendBlackListContract.Presenter {
 
     private String TAG = "FriendBlackListPresenter";
+
     @Override
     public void getBlackList(String myusername) {
         Map<String, String> map = new HashMap<>();
@@ -46,9 +48,11 @@ public class FriendBlackListPresenter extends BasePresenterImpl<FriendBlackListC
                     if (mView != null)
                         mView.getBlackListSuccess(friendListBean);
                 } else {
-                    if (mView != null)
+                    if (mView != null) {
                         mView.getBlackListError();
-                    LogUtils.i(TAG,"code:"+ friendListBean.getCode());
+                        ToastUtil.show(mView.getContext(), friendListBean.getMsg());
+                    }
+                    LogUtils.i(TAG, "code:" + friendListBean.getCode());
                 }
             }
         }, map);

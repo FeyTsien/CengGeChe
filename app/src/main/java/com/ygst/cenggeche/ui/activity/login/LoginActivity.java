@@ -27,6 +27,8 @@ import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.MD5Util;
 import com.ygst.cenggeche.utils.TextViewUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
+import com.ygst.cenggeche.utils.UrlUtils;
+import com.ygst.cenggeche.webview.WebViewActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +46,9 @@ import cn.jpush.im.api.BasicCallback;
  */
 
 public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPresenter> implements LoginContract.View {
+
+    //服务协议
+    private final String URL_SERVICE_AGREEMENT = UrlUtils.URL_H5 + "/cenggeche/pages/treaty/treaty.html";
 
     public static LoginActivity instance;
     private final static int GO_REGISTER = 1101;
@@ -215,7 +220,13 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
         intent.putExtra(RegisterActivity.TYPE, "resetPwd");
         startActivity(intent);
     }
-
+    /**
+     * 服务协议
+     */
+    @OnClick(R.id.tv_service_agreement)
+    public void goServiceAgreement() {
+        WebViewActivity.loadUrl(this, URL_SERVICE_AGREEMENT, "服务协议");
+    }
 
     /**
      * 未注册，需先注册，才可登录
@@ -299,7 +310,7 @@ public class LoginActivity extends MVPBaseActivity<LoginContract.View, LoginPres
                     MobclickAgent.onProfileSignIn(loginBean.getData().getId() + "");
                     CommonUtils.finishActivity(LoginActivity.this);
                 } else {
-                    ToastUtil.show(LoginActivity.this, "登录失败");
+                    ToastUtil.show(LoginActivity.this, "登录失败,"+LoginDesc);
                 }
             }
         });

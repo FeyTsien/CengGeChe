@@ -49,7 +49,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import cn.jmessage.android.uikit.chatting.CircleImageView;
 import cn.jmessage.android.uikit.chatting.utils.DialogCreator;
 import cn.jmessage.android.uikit.chatting.utils.FileHelper;
 import cn.jmessage.android.uikit.chatting.utils.HandleResponseCode;
@@ -446,7 +445,7 @@ public class MsgListAdapter extends BaseAdapter {
             convertView = createViewByType(msg, position);
             switch (msg.getContentType()) {
                 case text:
-                    holder.headIcon = (CircleImageView) convertView
+                    holder.headIcon = (ImageView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_avatar_iv"));
                     holder.displayName = (TextView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_display_name_tv"));
@@ -458,7 +457,7 @@ public class MsgListAdapter extends BaseAdapter {
                             .findViewById(IdHelper.getViewID(mContext, "jmui_fail_resend_ib"));
                     break;
                 case image:
-                    holder.headIcon = (CircleImageView) convertView
+                    holder.headIcon = (ImageView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_avatar_iv"));
                     holder.displayName = (TextView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_display_name_tv"));
@@ -472,7 +471,7 @@ public class MsgListAdapter extends BaseAdapter {
                             .findViewById(IdHelper.getViewID(mContext, "jmui_fail_resend_ib"));
                     break;
                 case voice:
-                    holder.headIcon = (CircleImageView) convertView
+                    holder.headIcon = (ImageView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_avatar_iv"));
                     holder.displayName = (TextView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_display_name_tv"));
@@ -490,7 +489,7 @@ public class MsgListAdapter extends BaseAdapter {
                             .findViewById(IdHelper.getViewID(mContext, "jmui_fail_resend_ib"));
                     break;
                 case location:
-                    holder.headIcon = (CircleImageView) convertView
+                    holder.headIcon = (ImageView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_avatar_iv"));
                     holder.displayName = (TextView) convertView
                             .findViewById(IdHelper.getViewID(mContext, "jmui_display_name_tv"));
@@ -1338,7 +1337,7 @@ public class MsgListAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        CircleImageView headIcon;
+        ImageView headIcon;
         TextView displayName;
         TextView txtContent;
         ImageView picture;

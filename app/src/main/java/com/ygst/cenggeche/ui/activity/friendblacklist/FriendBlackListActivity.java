@@ -17,7 +17,6 @@ import com.ygst.cenggeche.recycle.contacts_recycle.itemAnimator.SlideInOutLeftIt
 import com.ygst.cenggeche.ui.activity.friendlist.CommonUtil;
 import com.ygst.cenggeche.ui.activity.friendlist.ContactAdapter;
 import com.ygst.cenggeche.ui.activity.friendlist.CustomItemDecoration;
-import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,14 +126,11 @@ public class FriendBlackListActivity extends MVPBaseActivity<FriendBlackListCont
 
     @Override
     public void getBlackListSuccess(FriendListBean friendListBean) {
-
-        ToastUtil.show(this, "获取好友成功");
         mListData = friendListBean.getData();
         setListView(mListData);
     }
 
     @Override
     public void getBlackListError() {
-        ToastUtil.show(this, "获取好友失败");
     }
 }

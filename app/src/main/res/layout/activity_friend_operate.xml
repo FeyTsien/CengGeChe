@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPageBG"
@@ -21,20 +22,18 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true">
 
-            <com.ygst.cenggeche.ui.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/civ_avatar"
+            <com.ygst.cenggeche.ui.view.RoundImageView
+                android:id="@+id/iv_avatar"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@mipmap/icon_my_avatar"
-                app:civ_border_color="@color/colorTheme"
-                app:civ_border_width="1dp" />
+                android:src="@mipmap/icon_my_avatar" />
 
             <ImageView
                 android:id="@+id/iv_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/civ_avatar"
-                android:layout_alignRight="@+id/civ_avatar" />
+                android:layout_alignBottom="@+id/iv_avatar"
+                android:layout_alignRight="@+id/iv_avatar" />
         </RelativeLayout>
 
         <LinearLayout
