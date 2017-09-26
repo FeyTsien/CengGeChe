@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.ygst.cenggeche.bean.FriendListBean;
-import com.ygst.cenggeche.utils.ColorUtil;
 import com.ygst.cenggeche.utils.DpUtil;
 
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.List;
 public class CustomItemDecoration extends RecyclerView.ItemDecoration {
     private Paint mPaint;
     private List<FriendListBean.DataBean> mBeans;
-    private static final int dividerHeight = 80;
+    private static final int dividerHeight = 40;
     private Context mContext;
     private final Rect mBounds = new Rect();
     private String tagsStr;
@@ -90,10 +89,10 @@ public class CustomItemDecoration extends RecyclerView.ItemDecoration {
         canvas.drawRect(left, top, right, bottom, mPaint);
         //根据位置不断变换Paint的颜色
         ColorUtil.setPaintColor(mPaint, position);
-        mPaint.setTextSize(40);
-        canvas.drawCircle(DpUtil.dp2px(mContext, 42.5f), bottom - dividerHeight / 2, 35, mPaint);
+        mPaint.setTextSize(20);
+        canvas.drawCircle(DpUtil.dp2px(mContext, 21f), bottom - dividerHeight / 2, 17, mPaint);
         mPaint.setColor(Color.WHITE);
-        canvas.drawText(bean.getIndexTag(), DpUtil.dp2px(mContext, 42.5f), bottom - dividerHeight / 3, mPaint);
+        canvas.drawText(bean.getIndexTag(), DpUtil.dp2px(mContext, 21f), bottom - dividerHeight / 3, mPaint);
     }
 
     @Override
@@ -107,10 +106,10 @@ public class CustomItemDecoration extends RecyclerView.ItemDecoration {
         mPaint.setColor(Color.WHITE);
         canvas.drawRect(parent.getLeft(), parent.getPaddingTop(), parent.getRight() - parent.getPaddingRight(), parent.getPaddingTop() + dividerHeight, mPaint);
         ColorUtil.setPaintColor(mPaint, tagsStr.indexOf(mBeans.get(position).getIndexTag()));
-        mPaint.setTextSize(40);
-        canvas.drawCircle(DpUtil.dp2px(mContext, 42.5f), bottom - dividerHeight / 2, 35, mPaint);
+        mPaint.setTextSize(20);
+        canvas.drawCircle(DpUtil.dp2px(mContext, 21f), bottom - dividerHeight / 2, 17, mPaint);
         mPaint.setColor(Color.WHITE);
-        canvas.drawText(mBeans.get(position).getIndexTag(), DpUtil.dp2px(mContext, 42.5f), bottom - dividerHeight / 3, mPaint);
+        canvas.drawText(mBeans.get(position).getIndexTag(), DpUtil.dp2px(mContext, 21f), bottom - dividerHeight / 3, mPaint);
     }
 
 

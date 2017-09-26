@@ -11,15 +11,15 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray" />
+        android:layout_height="1px"
+        android:background="@color/gray3" />
 
     <include layout="@layout/item_notice" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray" />
+        android:layout_height="1px"
+        android:background="@color/gray3" />
 
     <com.ygst.cenggeche.ui.view.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView"

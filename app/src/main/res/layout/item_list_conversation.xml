@@ -13,11 +13,13 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp">
 
-        <com.ygst.cenggeche.ui.view.RoundImageView
+        <com.ygst.cenggeche.ui.widget.CircleImageView
             android:id="@+id/iv_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/icon_my_avatar" />
+            android:src="@mipmap/icon_my_avatar"
+            app:civ_border_color="@color/colorTheme"
+            app:civ_border_width="1dp"/>
 
         <ImageView
             android:id="@+id/iv_gender"

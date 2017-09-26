@@ -15,7 +15,6 @@ import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.widget.ColorGenerator;
-import com.ygst.cenggeche.ui.widget.MyTextDrawable;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
 import com.ygst.cenggeche.utils.JMessageUtils;
 
@@ -79,26 +78,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
             }
             holder.tv_name.setText(friendName);
             //头像
-            TextDrawable drawable = MyTextDrawable.getTextDrawable(friendName);
+            int resourceId = R.mipmap.icon_my_avatar;
             if (bean.getGender() == 0) {
-                Glide.with(mContext)
-                        .load(bean.getUserPic())
-                        .centerCrop()
-                        .placeholder(R.mipmap.icon_avatar_girl)
-                        .into(holder.iv_img);
+                resourceId = R.mipmap.icon_avatar_girl;
             } else if (bean.getGender() == 1) {
-                Glide.with(mContext)
-                        .load(bean.getUserPic())
-                        .centerCrop()
-                        .placeholder(R.mipmap.icon_avatar_boy)
-                        .into(holder.iv_img);
-            } else {
-                Glide.with(mContext)
-                        .load(bean.getUserPic())
-                        .centerCrop()
-                        .placeholder(drawable)
-                        .into(holder.iv_img);
+                resourceId = R.mipmap.icon_avatar_boy;
             }
+            Glide.with(mContext)
+                    .load(bean.getUserPic())
+                    .dontAnimate()      //不使用glide默认动画(解决圆形图片二次加载问题)
+                    .centerCrop()
+                    .placeholder(resourceId)
+                    .into(holder.iv_img);
+
 //            if(!TextUtils.isEmpty(bean.getUserPic())){
 //                Uri uri = Uri.parse(bean.getUserPic());
 //                holder.iv_img.setImageURI(uri);

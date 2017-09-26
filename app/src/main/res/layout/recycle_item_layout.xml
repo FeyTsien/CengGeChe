@@ -2,16 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="horizontal">
 
-    <com.ygst.cenggeche.ui.view.RoundImageView
+    <com.ygst.cenggeche.ui.widget.CircleImageView
         android:id="@+id/iv_img"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="20dp"
-        android:contentDescription="@string/app_name"/>
+        app:civ_border_color="@color/colorTheme"
+        app:civ_border_width="1dp"/>
 
     <io.github.rockerhieu.emojicon.EmojiconTextView
         android:id="@+id/tv_name"

@@ -2,6 +2,7 @@ package com.ygst.cenggeche.ui.activity.friendlist;
 
 
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -103,6 +104,8 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
         rl_recycle_view.setLayoutManager(layoutManager);
         rl_recycle_view.addItemDecoration(decoration = new CustomItemDecoration(this));
         rl_recycle_view.setItemAnimator(new SlideInOutLeftItemAnimator(rl_recycle_view));
+//        //添加分割线
+        rl_recycle_view.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
     public void initEvents() {

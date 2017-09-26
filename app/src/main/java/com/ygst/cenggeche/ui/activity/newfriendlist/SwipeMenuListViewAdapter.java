@@ -58,10 +58,10 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
         final ApplyBean.DataBean newFriend = mListDataBean.get(position);
         String applyName = "";
         if (newFriend != null) {
-            if(!TextUtils.isEmpty(newFriend.getNickname())){
-                applyName =newFriend.getNickname();
-            }else{
-                applyName =newFriend.getFusername();
+            if (!TextUtils.isEmpty(newFriend.getNickname())) {
+                applyName = newFriend.getNickname();
+            } else {
+                applyName = newFriend.getFusername();
             }
             holder.mTvTargetName.setText(applyName);
 
@@ -70,6 +70,8 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
             TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
             Glide.with(mContext)
                     .load(newFriend.getUserPic())
+                    .dontAnimate()      //不使用glide默认动画(解决圆形图片二次加载问题)
+                    .centerCrop()
                     .placeholder(drawable)
                     .into(holder.mIvAvatar);
 //

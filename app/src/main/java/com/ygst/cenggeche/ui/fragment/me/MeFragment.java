@@ -138,19 +138,23 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
         AppData.savaUserStatus(dataBean.getUserStatus());
 
 
+        int resourceId = R.mipmap.icon_my_avatar;
         //性别
         if (dataBean.getGender() == 0) {
             mIvGender.setImageResource(R.mipmap.icon_girl);
-            //女头像
-            Glide.with(this).load(dataBean.getUserPic()).centerCrop().placeholder(R.mipmap.icon_avatar_girl).into(mIvAvatar);
+            resourceId = R.mipmap.icon_avatar_girl;
         } else if (dataBean.getGender() == 1) {
             mIvGender.setImageResource(R.mipmap.icon_boy);
-            //男头像
-            Glide.with(this).load(dataBean.getUserPic()).centerCrop().placeholder(R.mipmap.icon_avatar_boy).into(mIvAvatar);
+            resourceId = R.mipmap.icon_avatar_boy;
         } else {
-            //头像
-            Glide.with(this).load(dataBean.getUserPic()).centerCrop().placeholder(R.mipmap.icon_my_avatar).into(mIvAvatar);
         }
+        //头像
+        Glide.with(this)
+                .load(dataBean.getUserPic())
+                .dontAnimate()  //不使用glide默认动画(解决圆形图片二次加载问题)
+                .centerCrop()
+                .placeholder(resourceId)
+                .into(mIvAvatar);
         //名字
         if (!TextUtils.isEmpty(dataBean.getNickname())) {
             mTvMyName.setText(myInfoBean.getData().getNickname());

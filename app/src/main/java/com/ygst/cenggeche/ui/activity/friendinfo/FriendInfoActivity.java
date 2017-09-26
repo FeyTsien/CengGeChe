@@ -24,6 +24,7 @@ import com.ygst.cenggeche.ui.activity.friendoperate.FriendOperateActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
 import com.ygst.cenggeche.ui.view.FlowLayout;
+import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
@@ -66,7 +67,7 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
     @BindView(R.id.iv_menu)
     ImageView mIvMenu;
     @BindView(R.id.iv_avatar)
-    ImageView mIvAvatar;
+    CircleImageView mIvAvatar;
     @BindView(R.id.iv_gender)
     ImageView mIvGender;
     @BindView(R.id.tv_name)
@@ -169,28 +170,25 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
         mTvName.setText(targetName);
         //头像
         UserAvatarUri = friendInfo.getData().getUserPic();
+        int resourceId = R.mipmap.icon_my_avatar;
         //性别符号
         if (friendInfo.getData().getGender() == 0) {
             mIvGender.setImageResource(R.mipmap.icon_girl);
-            Glide.with(this)
-                    .load(UserAvatarUri)
-                    .centerCrop()
-                    .placeholder(R.mipmap.icon_avatar_girl)
-                    .into(mIvAvatar);
+            mIvAvatar.setBorderColor(getResources().getColor(R.color.colorGirl));
+            resourceId = R.mipmap.icon_avatar_girl;
         } else if (friendInfo.getData().getGender() == 1) {
             mIvGender.setImageResource(R.mipmap.icon_boy);
-            Glide.with(this)
-                    .load(UserAvatarUri)
-                    .centerCrop()
-                    .placeholder(R.mipmap.icon_avatar_boy)
-                    .into(mIvAvatar);
-        } else {
-            Glide.with(this)
-                    .load(UserAvatarUri)
-                    .centerCrop()
-                    .placeholder(R.mipmap.icon_my_avatar)
-                    .into(mIvAvatar);
+            mIvAvatar.setBorderColor(getResources().getColor(R.color.colorBoy));
+            resourceId = R.mipmap.icon_avatar_boy;
         }
+        //头像
+        Glide.with(this)
+                .load(UserAvatarUri)
+                .dontAnimate()      //不使用glide默认动画(解决圆形图片二次加载问题)
+                .centerCrop()
+                .placeholder(resourceId)
+                .into(mIvAvatar);
+
         //年龄
         mTvAge.setText(friendInfo.getData().getAge() + "岁");
         //家乡

@@ -18,6 +18,7 @@ import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.activity.friendoperate.report.ReportTypeActivity;
 import com.ygst.cenggeche.ui.activity.setnotename.SetNoteNameActivity;
+import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
 
@@ -53,7 +54,7 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
     @BindView(R.id.tv_nickname)
     TextView mTvNickname;
     @BindView(R.id.iv_avatar)
-    ImageView mIvAvatar;
+    CircleImageView mIvAvatar;
     @BindView(R.id.iv_gender)
     ImageView mIvGender;
 
@@ -111,8 +112,10 @@ public class FriendOperateActivity extends MVPBaseActivity<FriendOperateContract
                     ///显示性别
                     if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
                         mIvGender.setImageResource(R.mipmap.icon_girl);
+                        mIvAvatar.setBorderColor(getResources().getColor(R.color.colorGirl));
                     } else if (mUserInfo.getGender().equals(UserInfo.Gender.male)) {
                         mIvGender.setImageResource(R.mipmap.icon_boy);
+                        mIvAvatar.setBorderColor(getResources().getColor(R.color.colorBoy));
                     } else {
                     }
                     if (!TextUtils.isEmpty(mUserInfo.getNotename())) {

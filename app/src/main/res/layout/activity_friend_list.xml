@@ -89,9 +89,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_blacklist"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="3dp"
         android:text="好友列表"
-        android:textColor="@color/colorTheme" />
+        android:textColor="@color/colorTheme"
+        android:textSize="12sp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rl_recycle_view"

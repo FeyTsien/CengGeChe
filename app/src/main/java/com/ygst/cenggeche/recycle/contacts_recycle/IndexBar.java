@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ygst.cenggeche.utils.ColorUtil;
+import com.ygst.cenggeche.ui.activity.friendlist.ColorUtil;
 
 
 /**

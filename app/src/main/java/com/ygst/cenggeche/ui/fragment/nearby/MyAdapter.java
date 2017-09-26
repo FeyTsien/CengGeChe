@@ -42,34 +42,37 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         holder.mTvNickname.setText(mList.get(position).getNickname());
+
+//        Glide.with(context).load(mList.get(position).getUserPic()).asBitmap().centerCrop().into(new BitmapImageViewTarget(holder.mUserSmallicon) {
+//            @Override
+//            protected void setResource(Bitmap resource) {
+//                RoundedBitmapDrawable circularBitmapDrawable =
+//                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+//                circularBitmapDrawable.setCircular(true);
+//                holder.mUserSmallicon.setImageDrawable(circularBitmapDrawable);
+//            }
+//        });
+        int resourceId = R.mipmap.icon_my_avatar;
         int gender = mList.get(position).getGender();
         if (gender == 1) {
             holder.mIvGender.setImageResource(R.mipmap.icon_boy);
-            //男头像
-            Glide.with(context)
-                    .load(mList.get(position).getUserPic())
-                    .centerCrop()
-                    .placeholder(R.mipmap.icon_avatar_boy)
-                    .into(holder.mUserSmallicon);
+            resourceId = R.mipmap.icon_avatar_boy;
         } else if (gender == 0) {
             holder.mIvGender.setImageResource(R.mipmap.icon_girl);
-            //女头像
-            Glide.with(context)
-                    .load(mList.get(position).getUserPic())
-                    .centerCrop()
-                    .placeholder(R.mipmap.icon_avatar_girl)
-                    .into(holder.mUserSmallicon);
+            resourceId = R.mipmap.icon_avatar_girl;
         } else {
             holder.mIvGender.setVisibility(View.GONE);
-            //头像
-            Glide.with(context)
-                    .load(mList.get(position).getUserPic())
-                    .centerCrop()
-                    .placeholder(R.mipmap.icon_my_avatar)
-                    .into(holder.mUserSmallicon);
         }
+
+        //头像
+        Glide.with(context)
+                .load(mList.get(position).getUserPic())
+                .dontAnimate()      //不使用glide默认动画(解决圆形图片二次加载问题)
+                .centerCrop()
+                .placeholder(resourceId)
+                .into(holder.mUserSmallicon);
 
         //大背景图
         if (!TextUtils.isEmpty(mList.get(position).getPic())) {

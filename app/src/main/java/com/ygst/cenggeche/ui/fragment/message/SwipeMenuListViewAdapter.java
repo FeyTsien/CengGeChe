@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ygst.cenggeche.R;
+import com.ygst.cenggeche.ui.widget.CircleImageView;
 import com.ygst.cenggeche.ui.widget.ColorGenerator;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
 
@@ -136,8 +137,10 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
                     //显示性别
                     if (mUserInfo.getGender().equals(UserInfo.Gender.female)) {
                         holder.mIVgender.setImageResource(R.mipmap.icon_girl);
+                        holder.mIVavatar.setBorderColor(mContext.getResources().getColor(R.color.colorGirl));
                     } else if (mUserInfo.getGender().equals(UserInfo.Gender.male)) {
                         holder.mIVgender.setImageResource(R.mipmap.icon_boy);
+                        holder.mIVavatar.setBorderColor(mContext.getResources().getColor(R.color.colorBoy));
                     } else {
                     }
                 }
@@ -195,7 +198,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
     class ViewHolder {
 
         //头像
-        ImageView mIVavatar;
+        CircleImageView mIVavatar;
         //性别
         ImageView mIVgender;
         //目标用户名称
@@ -209,7 +212,7 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
         TextView mTVunreadCount;
 
         public ViewHolder(View view) {
-            mIVavatar = (ImageView) view.findViewById(R.id.iv_avatar);
+            mIVavatar = (CircleImageView) view.findViewById(R.id.iv_avatar);
             mIVgender = (ImageView) view.findViewById(R.id.iv_gender);
             mTVtargetName = (TextView) view.findViewById(R.id.tv_target_name);
             mTVlatestMessage = (TextView) view.findViewById(R.id.tv_latest_message);
