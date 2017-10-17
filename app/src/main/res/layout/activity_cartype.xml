@@ -25,51 +25,102 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_history"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_weight="1"
+                android:text="历史记录"
+                android:textColor="@color/gray"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_clear"
+                android:text="清空"
+                android:textColor="@color/gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+        <GridView
+            android:id="@+id/gv_history"
+            android:numColumns="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></GridView>
+    </LinearLayout>
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_hide"
+            android:src="@mipmap/iv_hidehistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <View
+            android:layerType="software"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            />
+    </LinearLayout>
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:id="@+id/text_bxpp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingBottom="36px"
             android:paddingLeft="10dp"
-            android:paddingTop="36px"
             android:text="选择品牌"
             android:textColor="@color/black"
-             />
+            />
 
         <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/text_bxpp"
-            android:paddingBottom="36px"
             android:paddingLeft="10dp"
-            android:paddingTop="36px"
             android:text="选择车系"
             android:textColor="@color/black"
             />
         <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/text_bxpp"
-            android:paddingBottom="36px"
             android:paddingLeft="10dp"
-            android:paddingTop="36px"
             android:text="选择颜色"
             android:textColor="@color/black"
-             />
+            />
     </LinearLayout>
 
-    <TextView
+    <View
         android:id="@+id/text_line"
+        android:layerType="software"
         android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:layout_below="@id/text_bxpp"
-        android:background="@color/black" />
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -78,6 +129,9 @@
 
 
         <ListView
+            android:divider="@null"
+            android:scrollbars="none"
+
             android:layout_weight="1"
             android:id="@+id/pp_lv"
             android:layout_width="0dp"
@@ -87,6 +141,9 @@
 
 
         <ListView
+            android:scrollbars="none"
+
+            android:divider="@null"
             android:layout_weight="1"
             android:listSelector="#FFEFECEC"
             android:id="@+id/cx_lv"
@@ -98,6 +155,8 @@
             android:paddingLeft="20px"></ListView>
 
         <ListView
+            android:scrollbars="none"
+            android:divider="@null"
             android:layout_weight="1"
             android:listSelector="#FFEFECEC"
             android:id="@+id/cx_color"

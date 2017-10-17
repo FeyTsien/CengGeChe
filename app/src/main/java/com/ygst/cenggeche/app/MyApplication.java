@@ -13,9 +13,9 @@ import android.widget.ImageView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jarek.imageselect.core.SDCardStoragePath;
 import com.jarek.imageselect.utils.SDCardUtils;
+import com.kingja.loadsir.core.LoadSir;
 import com.lqr.emoji.IImageLoader;
 import com.lqr.emoji.LQREmotionKit;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -23,6 +23,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.ygst.cenggeche.ui.loadsir.callback.CustomCallback;
+import com.ygst.cenggeche.ui.loadsir.callback.EmptyCallback;
+import com.ygst.cenggeche.ui.loadsir.callback.LoadingCallback;
+import com.ygst.cenggeche.ui.loadsir.callback.NoNetWorkCallback;
+import com.ygst.cenggeche.ui.loadsir.callback.TimeoutCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,11 +84,26 @@ public class MyApplication extends Application {
         LQREmotionKit.init(this, new IImageLoader() {
             @Override
             public void displayImage(Context context, String path, ImageView imageView) {
-                Glide.with(context).load(path).centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageView);
+                Glide.with(context).load(path).into(imageView);
             }
         });
+        loadsir();
     }
 
+
+    /**
+     * 加载反馈页管理框架
+     */
+    public void loadsir(){
+        LoadSir.beginBuilder()
+                .addCallback(new EmptyCallback())
+                .addCallback(new LoadingCallback())
+                .addCallback(new TimeoutCallback())
+                .addCallback(new CustomCallback())
+                .addCallback(new NoNetWorkCallback())
+                .setDefaultCallback(LoadingCallback.class)
+                .commit();
+    }
     //清除登陆
     public static void clearLogin() {
         LogUtils.i("clearLogin", "isTokenExpired: +++++++++++++++++++++++++++++++0005");

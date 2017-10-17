@@ -13,192 +13,261 @@
         android:layout_height="match_parent">
 
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.CollapsingToolbarLayout
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
 
-            android:background="@color/colorPageBG"
-            app:contentScrim="@android:color/transparent"
-            app:layout_scrollFlags="scroll">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
+            <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
-        </android.support.design.widget.CollapsingToolbarLayout>
+                android:layout_height="wrap_content"
 
+                android:background="@color/colorPageBG"
+                app:contentScrim="@android:color/transparent"
+                app:layout_scrollFlags="scroll">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:background="@color/white"
-            android:padding="10dp">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+            </android.support.design.widget.CollapsingToolbarLayout>
+
 
             <RelativeLayout
-                android:id="@+id/rl_avatar"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true">
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@color/white"
+                android:padding="10dp">
 
-                <com.ygst.cenggeche.ui.view.RoundImageView
-                    android:id="@+id/iv_avatar"
+                <RelativeLayout
+                    android:id="@+id/rl_avatar"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:src="@mipmap/icon_my_avatar" />
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true">
 
-                <ImageView
-                    android:id="@+id/iv_gender"
+                    <com.ygst.cenggeche.ui.view.RoundImageView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@mipmap/icon_my_avatar" />
+
+                    <ImageView
+                        android:id="@+id/iv_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/icon_boy"
+                        android:layout_alignBottom="@+id/iv_avatar"
+                        android:layout_alignRight="@+id/iv_avatar"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/rl_target"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/icon_boy"
-                    android:layout_alignBottom="@+id/iv_avatar"
-                    android:layout_alignRight="@+id/iv_avatar"/>
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@+id/rl_avatar"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:textColor="@color/colorTheme"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/butaihei"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
             </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/rl_target"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@+id/rl_avatar"
-                android:orientation="vertical">
+        </android.support.design.widget.AppBarLayout>
 
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:textColor="@color/colorTheme"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textColor="@color/butaihei"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include layout="@layout/activity_friend_info_bottom" />
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:background="@drawable/linear_whitebg_border"
-            android:layout_alignParentBottom="true"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="vertical"
-            >
-
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
             <LinearLayout
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-
+                <include layout="@layout/activity_friend_info_bottom" />
                 <LinearLayout
-                    android:gravity="center_vertical"
-
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/linear_whitebg_alltravel_border"
+                    android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@mipmap/iv_release_date"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical"
+                    >
+
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <LinearLayout
+                            android:gravity="center_vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:src="@mipmap/iv_note"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:gravity="center_vertical"
+                                android:id="@+id/tv_note_date"
+                                android:layout_marginLeft="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+
+                        </LinearLayout>
+                        <View
+                            android:layerType="software"
+                            android:layout_width="match_parent"
+                            android:layout_height="5dp"
+                            android:background="@drawable/dish_line"
+                            />
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+
+                            android:gravity="center_vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:src="@mipmap/iv_release_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:singleLine="true"
+
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/tv_release_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="8月15（今天）09:30"
+                                android:textColor="@color/text_cengche"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+
+                            android:gravity="center_vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:src="@mipmap/iv_start_location"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:layout_marginLeft="10dp"
+                                android:singleLine="true"
+
+                                android:id="@+id/tv_start_location"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_cengche"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+
+                            android:gravity="center_vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:src="@mipmap/iv_end_location"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/tv_end_location"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:textColor="@color/text_cengche"
+                                />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+                            android:visibility="gone"
+                            android:id="@+id/linear_usercar_type"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:layout_gravity="center_vertical"
+                                android:src="@mipmap/iv_cengchetype"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/tv_usercar_type"
+                                android:hint="车辆信息"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layerType="software"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray"
+                        />
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:id="@+id/tv_user_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                    <TextView
-                        android:singleLine="true"
 
-                        android:layout_marginLeft="10dp"
-                        android:id="@+id/tv_release_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="8月15（今天）09:30"
-                        android:textColor="@color/text_cengche"
-                        />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@mipmap/iv_start_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:singleLine="true"
-
-                        android:id="@+id/tv_start_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/text_cengche"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:src="@mipmap/iv_end_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:id="@+id/tv_end_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="宋家庄"
-                        android:singleLine="true"
-                        android:textColor="@color/text_cengche"
-                        />
-
+                    <LinearLayout
+                        android:background="@drawable/down_corner_backgroud"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:background="@color/colorTheme"
+                            android:textColor="@color/white"
+                            android:id="@+id/btn_together_go"
+                            android:text="申请同行"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
-        </LinearLayout>
-        <Button
-
-            android:background="@drawable/button_bg_click"
-            android:textColor="@color/white"
-            android:id="@+id/btn_together_go"
-            android:text="申请同行"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-</LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     </android.support.design.widget.CoordinatorLayout>
-    </LinearLayout>
+</LinearLayout>

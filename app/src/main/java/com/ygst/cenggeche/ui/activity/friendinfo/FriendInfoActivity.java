@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.UserBean;
@@ -184,9 +185,10 @@ public class FriendInfoActivity extends MVPBaseActivity<FriendInfoContract.View,
         //头像
         Glide.with(this)
                 .load(UserAvatarUri)
-                .dontAnimate()      //不使用glide默认动画(解决圆形图片二次加载问题)
-                .centerCrop()
-                .placeholder(resourceId)
+                .apply(new RequestOptions()
+                        .dontAnimate()     //不使用glide默认动画(解决圆形图片二次加载问题)
+                        .centerCrop()
+                        .placeholder(resourceId))
                 .into(mIvAvatar);
 
         //年龄

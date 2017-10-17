@@ -40,7 +40,7 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent">
 
-                <cn.jmessage.android.uikit.chatting.CircleImageView
+                <com.ygst.cenggeche.ui.view.RoundImageView
                     android:id="@+id/user_smallicon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -66,14 +66,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="昵称呀"
                      />
 
                 <TextView
                     android:id="@+id/tv_userage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8月15号 08：:30 接受"
                      />
 
             </LinearLayout>
@@ -106,7 +104,6 @@
             android:id="@+id/tv_start_location"
             android:layout_margin="5dp"
             android:drawableLeft="@mipmap/iv_start_location"
-            android:text="嘉捷企业汇"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -114,7 +111,6 @@
             android:layout_margin="5dp"
             android:id="@+id/tv_end_location"
             android:drawableLeft="@mipmap/iv_end_location"
-            android:text="天安门"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

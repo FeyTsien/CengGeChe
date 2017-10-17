@@ -1,7 +1,6 @@
 package com.ygst.cenggeche.ui.activity.friendlist;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,12 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.FriendListBean;
-import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.widget.ColorGenerator;
 import com.ygst.cenggeche.ui.widget.TextDrawable;
-import com.ygst.cenggeche.utils.JMessageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +30,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
     // declare the color generator and drawable builder
     private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
     private TextDrawable.IBuilder mDrawableBuilder = TextDrawable.builder().round();
+
+    public OnRecyclerViewItemClickListener mOnItemClickListener = null;
+    private OnRecyclerItemLongListener mOnItemLongListener = null;
 
     public ContactAdapter(Context context) {
         this.mContext = context;
@@ -86,29 +87,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
             }
             Glide.with(mContext)
                     .load(bean.getUserPic())
-                    .dontAnimate()      //不使用glide默认动画(解决圆形图片二次加载问题)
-                    .centerCrop()
-                    .placeholder(resourceId)
+                    .apply(new RequestOptions().placeholder(resourceId))
                     .into(holder.iv_img);
-
-//            if(!TextUtils.isEmpty(bean.getUserPic())){
-//                Uri uri = Uri.parse(bean.getUserPic());
-//                holder.iv_img.setImageURI(uri);
-//            }else {
-//                TextDrawable drawable = mDrawableBuilder.build(String.valueOf(friendName.charAt(0)), mColorGenerator.getColor(friendName));
-//                holder.iv_img.setImageDrawable(drawable);
-//            }
         }
-
-        holder.tv_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(JMessageUtils.TARGET_USERNAME, bean.getFriendusername());
-                intent.setClass(mContext, FriendInfoActivity.class);
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -116,7 +97,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
         return mListDataBean.size();
     }
 
-    public static class MyRecycleHolder extends RecyclerView.ViewHolder {
+    public class MyRecycleHolder extends RecyclerView.ViewHolder {
         public final TextView tv_name;
         public final ImageView iv_img;
 
@@ -124,6 +105,44 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyRecycl
             super(itemView);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             iv_img = (ImageView) itemView.findViewById(R.id.iv_img);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(v, getAdapterPosition());
+                    }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mOnItemLongListener != null) {
+                        mOnItemLongListener.onItemLongClick(v, getAdapterPosition());
+                    }
+                    return true;
+                }
+            });
         }
+    }
+
+    //define interface
+    public interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view, int position);
+
+    }
+
+    public interface OnRecyclerItemLongListener {
+        void onItemLongClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnRecyclerItemLongListener listener) {
+        this.mOnItemLongListener = listener;
     }
 }

@@ -1,6 +1,7 @@
 package com.ygst.cenggeche.ui.activity.friendlist;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +18,10 @@ import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.recycle.contacts_recycle.SideBar;
 import com.ygst.cenggeche.recycle.contacts_recycle.itemAnimator.SlideInOutLeftItemAnimator;
 import com.ygst.cenggeche.ui.activity.friendblacklist.FriendBlackListActivity;
+import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.activity.newfriendlist.NewFriendListActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -106,6 +109,15 @@ public class FriendListActivity extends MVPBaseActivity<FriendListContract.View,
         rl_recycle_view.setItemAnimator(new SlideInOutLeftItemAnimator(rl_recycle_view));
 //        //添加分割线
         rl_recycle_view.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mAdapter.setOnItemClickListener(new ContactAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent();
+                intent.putExtra(JMessageUtils.TARGET_USERNAME, mListData.get(position).getFriendusername());
+                intent.setClass(FriendListActivity.this, FriendInfoActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void initEvents() {

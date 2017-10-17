@@ -1,53 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPageBG"
+    android:background="#f4ecfe"
     android:orientation="vertical">
 
-    <include layout="@layout/app_toolbar_cengche"/>
+    <include layout="@layout/app_toolbar_cengche" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_weight="1"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipChildren="false"
             android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/ll_cenglayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false">
-
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/tab_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
+                android:layout_marginBottom="17dp"
                 android:clipChildren="false">
 
             </android.support.v4.view.ViewPager>
 
-
+            <LinearLayout
+                android:id="@+id/ll_cengche"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </RelativeLayout>
-            <include layout="@layout/layout_empty"></include>
 
-        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="17dp"
-            android:layout_marginTop="17dp">
+            android:layout_marginBottom="17dp">
 
             <ImageView
                 android:id="@+id/iv_release_plan"
@@ -71,12 +66,12 @@
                     android:src="@mipmap/iv_cengtache" />
 
                 <ImageView
-                    android:visibility="gone"
                     android:id="@+id/iv_cengtache"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/iv_tasahgnta" />
+                    android:src="@mipmap/iv_tasahgnta"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -90,7 +85,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-        <include layout="@layout/layout_empty"></include>
 
 </LinearLayout>

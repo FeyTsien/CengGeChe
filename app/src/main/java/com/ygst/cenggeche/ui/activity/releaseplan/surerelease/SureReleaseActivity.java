@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.choosepic.ChoosePicActivity;
 import com.ygst.cenggeche.ui.activity.travelinfo.TravelInfoActivity;
-import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.TakePhotoUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UploagImgUrils;
@@ -290,7 +289,7 @@ public class SureReleaseActivity extends MVPBaseActivity<SureReleaseContract.Vie
     @Override
     public void uploadImgSuccess(String picpath) {
         uppath = picpath;
-        Glide.with(SureReleaseActivity.this).load(picpath).into(iv_chooseimg);
+        Glide.with(SureReleaseActivity.this).load(picpath).apply(new RequestOptions().placeholder(R.mipmap.icon_nearby_item_bg)).into(iv_chooseimg);
 
 
     }

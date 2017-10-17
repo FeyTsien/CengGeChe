@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.widget.Button;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,14 +25,9 @@ import com.ygst.cenggeche.bean.CheckPeerBean;
 import com.ygst.cenggeche.bean.UserDetailsInfoBean;
 import com.ygst.cenggeche.mvp.MVPBaseActivity;
 import com.ygst.cenggeche.ui.activity.friendinfo.RVAdapter;
-import com.ygst.cenggeche.ui.activity.friendoperate.FriendOperateActivity;
-import com.ygst.cenggeche.ui.activity.mychat.MyChatActivity;
-import com.ygst.cenggeche.ui.activity.peerrequest.PeerRequestActivity;
-import com.ygst.cenggeche.ui.activity.releaseplan.ReleaseplanActivity;
 import com.ygst.cenggeche.ui.activity.suretravel.SureTravelActivity;
 import com.ygst.cenggeche.ui.view.FlowLayout;
 import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.JMessageUtils;
 import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 import com.ygst.cenggeche.webview.WebViewActivity;
@@ -44,8 +39,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.ygst.cenggeche.R.id.btn_together_go;
-import static com.ygst.cenggeche.R.id.start;
-import static com.ygst.cenggeche.R.id.up;
 
 
 /**
@@ -58,8 +51,8 @@ public class AllTravelInfoActivity extends MVPBaseActivity<AllTravelInfoContract
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @BindView(btn_together_go)
-    Button mBtnSendMsg;
+    @BindView(R.id.btn_together_go)
+    TextView mBtnSendMsg;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.iv_menu)
@@ -94,6 +87,19 @@ public class AllTravelInfoActivity extends MVPBaseActivity<AllTravelInfoContract
     RelativeLayout rlAvatar;
     @BindView(R.id.rl_target)
     LinearLayout rlTarget;
+    @BindView(R.id.linear_usercar_type)
+    LinearLayout linearUsercarType;
+
+    @BindView(R.id.tv_note_date)
+    TextView tvNoteDate;
+    @BindView(R.id.tv_usercar_type)
+    TextView tvUsercarType;
+    @BindView(R.id.tv_user_comment)
+    TextView tvUserComment;
+
+
+
+
     private UserDetailsInfoBean userDetailsInfoBean;
     private String request;
     private String uid;
@@ -102,7 +108,7 @@ public class AllTravelInfoActivity extends MVPBaseActivity<AllTravelInfoContract
     private String sid;
     private final String URL_OWNER_AUTH= UrlUtils.URL_H5+"/cenggeche/pages/carrz/carrz.html";
 
-    @OnClick(R.id.btn_together_go)
+    @OnClick(btn_together_go)
     public void sendmessage() {
         if(userDetailsInfoBean.getData().getUid()+""!=null) {
             int userStatus = AppData.getUserStatus();
@@ -188,6 +194,7 @@ public class AllTravelInfoActivity extends MVPBaseActivity<AllTravelInfoContract
         tvStartLocation.setText(StartAddr);
         tvEndLocation.setText(EndAddr);
         mPresenter.getUserInfo(sid);
+//
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -198,6 +205,19 @@ public class AllTravelInfoActivity extends MVPBaseActivity<AllTravelInfoContract
     public void getUserInfoSuccess(UserDetailsInfoBean userDetailsInfoBean) {
         this.userDetailsInfoBean =userDetailsInfoBean;
         setFriendInfo(userDetailsInfoBean);
+        tvNoteDate.setText(userDetailsInfoBean.getData().getPostedTime()+"发布");
+        tvUserComment.setText(userDetailsInfoBean.getData().getComments());
+        //判断车辆信息是否为空
+        if(userDetailsInfoBean.getData().getBrand()!=null){
+            linearUsercarType.setVisibility(View.VISIBLE);
+            if(TextUtils.isEmpty(userDetailsInfoBean.getData().getBrand())){
+                linearUsercarType.setVisibility(View.GONE);
+            }else {
+                tvUsercarType.setText(userDetailsInfoBean.getData().getBrand() + "-" + userDetailsInfoBean.getData().getColor());
+            }
+        }else{
+            linearUsercarType.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -252,7 +272,6 @@ public class AllTravelInfoActivity extends MVPBaseActivity<AllTravelInfoContract
             intent.putExtra("id", "");
             intent.putExtra("uid", uid + "");
             intent.putExtra("sid", sid + "");
-
         }
 
         startActivity(intent);
@@ -281,7 +300,6 @@ public class AllTravelInfoActivity extends MVPBaseActivity<AllTravelInfoContract
         //头像
         Glide.with(this)
                 .load(friendInfo.getUser().getUserPic())
-                .centerCrop()
                 .into(mIvAvatar);
         //性别符号
         if (friendInfo.getUser().getGender() == 0) {

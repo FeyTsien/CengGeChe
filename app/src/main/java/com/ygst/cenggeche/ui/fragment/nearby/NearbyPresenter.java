@@ -21,7 +21,7 @@ public class NearbyPresenter extends BasePresenterImpl<NearbyContract.View> impl
     private String TAG = "NearbyPresenter";
 
     @Override
-    public void getnearBy(String lit, String lat, final int page) {
+    public void getNearby(String lit, String lat, final int page) {
         Map<String, String> map = new HashMap<>();
 
         map.put("lit", lit);

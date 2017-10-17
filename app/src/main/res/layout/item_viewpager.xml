@@ -4,135 +4,91 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/shape_bg_item"
-    android:orientation="vertical"
-    >
+    android:elevation="10dp"
+    android:orientation="vertical">
 
 
-
-    <!-- 设置参照物 -->
-    <View
-        android:id="@+id/strut"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerVertical="true"/>
+    <!--&lt;!&ndash; 设置参照物 &ndash;&gt;-->
+    <!--<View-->
+        <!--android:id="@+id/strut"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_centerVertical="true" />-->
 
     <RelativeLayout
         android:id="@+id/rl_layout"
-        android:layout_weight="2.2"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="2.2">
 
         <com.ygst.cenggeche.ui.view.RoundImageView
             android:id="@+id/iv_title_pic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:scaleType="centerCrop"
             app:type="round"/>
 
         <TextView
-            android:layout_alignParentBottom="true"
             android:id="@+id/tv_exper_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:background="#70000000"
-            android:padding="5dp"
+            android:padding="10dp"
             android:text="蹭个车呗"
             android:textColor="@android:color/white"
-            android:typeface="sans"
-            />
+            android:textSize="12sp"/>
     </RelativeLayout>
 
 
+    <LinearLayout
+        android:id="@+id/ll_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:orientation="vertical">
 
-
-        <LinearLayout
-            android:id="@+id/ll_linear"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:singleLine="true"
-                    android:id="@+id/tv_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="用户名"
-                    android:textColor="@color/text_user_name"
-                    />
-            </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:singleLine="true"
+            android:textColor="@color/colorTheme" />
 
+        <TextView
+            android:id="@+id/tv_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@mipmap/iv_release_date"
+            android:drawablePadding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/text_cengche"
+            android:textSize="12sp" />
 
-            <LinearLayout
-                android:gravity="center_vertical"
+        <TextView
+            android:id="@+id/tv_start_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@mipmap/iv_start_location"
+            android:drawablePadding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/text_cengche"
+            android:textSize="12sp" />
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:src="@mipmap/iv_release_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:singleLine="true"
-
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/tv_release_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="8月15（今天）09:30"
-                    android:textColor="@color/text_cengche"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:src="@mipmap/iv_start_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:singleLine="true"
-
-                    android:id="@+id/tv_start_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="嘉捷双子座"
-                    android:textColor="@color/text_cengche"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:gravity="center_vertical"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:src="@mipmap/iv_end_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/tv_end_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="宋家庄"
-                    android:singleLine="true"
-                    android:textColor="@color/text_cengche"
-                    />
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-
+        <TextView
+            android:id="@+id/tv_end_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@mipmap/iv_end_location"
+            android:drawablePadding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/text_cengche"
+            android:textSize="12sp" />
+    </LinearLayout>
 
 </LinearLayout>

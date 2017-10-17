@@ -1,10 +1,7 @@
 package com.ygst.cenggeche.ui.fragment.nearby;
 
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,26 +9,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.kingja.loadsir.callback.Callback;
+import com.kingja.loadsir.core.LoadService;
+import com.kingja.loadsir.core.LoadSir;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.NearByBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
-import com.ygst.cenggeche.ui.activity.friendinfo.FriendInfoActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
+import com.ygst.cenggeche.ui.activity.userinfo.UserInfoActivity;
+import com.ygst.cenggeche.ui.loadsir.PostUtil;
+import com.ygst.cenggeche.ui.loadsir.callback.EmptyCallback;
+import com.ygst.cenggeche.ui.loadsir.callback.LoadingCallback;
+import com.ygst.cenggeche.ui.loadsir.callback.NoNetWorkCallback;
 import com.ygst.cenggeche.ui.view.refresh.OnRefreshListener;
 import com.ygst.cenggeche.ui.view.refresh.PullRefreshLayout;
 import com.ygst.cenggeche.utils.JMessageUtils;
+import com.ygst.cenggeche.utils.NetWorkUtil;
 import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import cn.jpush.im.android.api.JMessageClient;
 
 
@@ -42,13 +47,14 @@ import cn.jpush.im.android.api.JMessageClient;
 
 public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyPresenter> implements NearbyContract.View {
 
-    private View mNearByView;
+    private View mRootView;
+    private LoadService loadService;
+    private LinearLayout LlNearby;
     private String TAG = this.getClass().getSimpleName();
     private RecyclerView mRecyclerView;
     private PullRefreshLayout mRefreshLayout;
     private MyAdapter mNearAdapter;
     private int PAGE = 1;
-    private int PAGET = 0;
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
     private double Lit, LAT, ACC;
@@ -56,37 +62,49 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getPermission();
-        if (mNearByView == null) {
-            mNearByView = inflater.inflate(R.layout.fragment_nearby1, container, false);
-            ButterKnife.bind(this, mNearByView);
-            initData();
-            initViews();
-        }
-        return mNearByView;
+        mRootView = inflater.inflate(R.layout.fragment_nearby1, container, false);
+        LlNearby = (LinearLayout) mRootView.findViewById(R.id.ll_nearby);
+        LoadSir loadSir = new LoadSir.Builder()
+                .addCallback(new NoNetWorkCallback())
+                .addCallback(new EmptyCallback())
+                .addCallback(new LoadingCallback())
+                .setDefaultCallback(LoadingCallback.class)
+                .build();
+        loadService = loadSir.register(LlNearby, new Callback.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+                loadService.showCallback(LoadingCallback.class);
+                getNearby(PAGE);
+            }
+        });
+        initData();
+        initViews();
+        return mRootView;
     }
 
     private void initData() {
         mList = new ArrayList<>();
         initLocation();
         startLocation();
-        mPresenter.getnearBy(AppData.getLit(), AppData.getLat(), PAGE);
+        getNearby(PAGE);
     }
 
     private void initViews() {
-        mRecyclerView = (RecyclerView) mNearByView.findViewById(R.id.id_recyclerview);
+        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.id_recyclerview);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+
 //        //设置Item增加、移除动画
 //        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        //添加分割线
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL));
-        mRefreshLayout = (PullRefreshLayout) mNearByView.findViewById(R.id.refresh_layout);
+        mRefreshLayout = (PullRefreshLayout) mRootView.findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onPullDownRefresh() {
                 //下拉刷新
                 PAGE = 1;
-                mPresenter.getnearBy(AppData.getLit(), AppData.getLat(), PAGE);
+                getNearby(PAGE);
                 mRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -100,10 +118,10 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
                 //上拉加载
                 if (mList.size() % 10 == 0) {
                     PAGE = (int) (mList.size() / 10) + 1;
-                    mPresenter.getnearBy(AppData.getLit(), AppData.getLat(), PAGE);
+                    getNearby(PAGE);
                 } else {
                     PAGE = (int) (mList.size() / 10) + 2;
-                    mPresenter.getnearBy(AppData.getLit(), AppData.getLat(), PAGE);
+                    getNearby(PAGE);
                 }
                 mRefreshLayout.postDelayed(new Runnable() {
                     @Override
@@ -123,13 +141,27 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
                 } else {
-                    //去发消息
-                    Intent intent = new Intent(getActivity(), FriendInfoActivity.class);
+                    Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                     intent.putExtra(JMessageUtils.TARGET_USERNAME, mList.get(position).getUsername());
                     startActivity(intent);
                 }
             }
         });
+    }
+
+    /**
+     * 获取附近的人列表
+     */
+    private void getNearby(int page) {
+        if (!NetWorkUtil.isNetworkAvailable(getContext()) || !NetWorkUtil.checkNetState(getContext())) {
+            //当前网络不可用，展示此提示页
+            PostUtil.postCallbackDelayed(loadService, NoNetWorkCallback.class);
+        } else {
+            mPresenter.getNearby(AppData.getLit(),AppData.getLat(), page);
+//            mPresenter.getNearby("116.5406130","39.7665020", page);
+            //不展示提示页
+            PostUtil.postSuccessDelayed(loadService);
+        }
     }
 
     @Override
@@ -144,17 +176,22 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
     }
 
     @Override
-    public void getnearbySuccess(NearByBean nearbybean,int page) {
+    public void getnearbySuccess(NearByBean nearbybean, int page) {
         mRefreshLayout.onRefreshComplete();
         if (PAGE > 1) {
-            if(PAGE ==page){
-                PAGE =1;
+            if (PAGE == page) {
+                PAGE = 1;
                 mList.addAll(nearbybean.getData());
             }
         } else {
             mList.clear();
-            ;
             mList.addAll(nearbybean.getData());
+        }
+
+        if (mList.size() > 0) {
+            PostUtil.postSuccessDelayed(loadService);
+        } else {
+            PostUtil.postCallbackDelayed(loadService, EmptyCallback.class);
         }
         mNearAdapter.notifyDataSetChanged();
     }
@@ -245,8 +282,7 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
                 Log.i(TAG, "result： " + result);
                 AppData.savaLit(Lit + "");
                 AppData.savaLat(LAT + "");
-                mPresenter.getnearBy(Lit + "", LAT + "", PAGE);
-//                mPresenter.getnearBy(location.getLongitude() + "", location.getLatitude() + "", PAGE);
+                getNearby(PAGE);
             } else {
 
             }
@@ -337,42 +373,4 @@ public class NearbyFragment extends MVPBaseFragment<NearbyContract.View, NearbyP
             locationOption = null;
         }
     }
-
-    //
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
-//        destroyLocation();
-//    }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
-//        mMapView.onResume();
-//
-//    }
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
-//        mMapView.onPause();
-//    }
-//
-
-    public void getPermission() {
-        PackageManager packageManager = getActivity().getPackageManager();
-        boolean permission1 = (PackageManager.PERMISSION_GRANTED ==
-                packageManager.checkPermission("android.permission.ACCESS_FINE_LOCATION", "com.ygst.cenggeche"));
-        boolean permission3 = (PackageManager.PERMISSION_GRANTED ==
-                packageManager.checkPermission("android.permission.ACCESS_LOCATION_EXTRA_COMMANDS", "com.ygst.cenggeche"));
-        if (permission1 && permission3) {
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS}, 1);
-            }
-        }
-
-    }
-
 }

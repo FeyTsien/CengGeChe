@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.bean.ApplyBean;
 import com.ygst.cenggeche.ui.widget.MyTextDrawable;
@@ -70,9 +71,10 @@ public class SwipeMenuListViewAdapter extends BaseAdapter {
             TextDrawable drawable = MyTextDrawable.getTextDrawable(applyName);
             Glide.with(mContext)
                     .load(newFriend.getUserPic())
-                    .dontAnimate()      //不使用glide默认动画(解决圆形图片二次加载问题)
-                    .centerCrop()
-                    .placeholder(drawable)
+                    .apply(new RequestOptions()
+                            .dontAnimate()//不使用glide默认动画(解决圆形图片二次加载问题)
+                            .centerCrop()
+                            .placeholder(drawable))
                     .into(holder.mIvAvatar);
 //
 //            if(!TextUtils.isEmpty(newFriend.getFromAvatar())){

@@ -46,7 +46,10 @@ public class CommonUtil {
                     friendName = bean.getFriendusername();
                 }
             String tag = Pinyin.toPinyin(friendName.substring(0, 1).charAt(0)).substring(0, 1);
-            if (tag.matches("[A-Z]")) {
+            if(tag.matches("[a-z]")){
+                tag = tag.toUpperCase();//将小写字母转成大写（toLowerCase()//小写转大写）
+                bean.setIndexTag(tag);
+            }else  if (tag.matches("[A-Z]")) {
                 bean.setIndexTag(tag);
             } else {
                 bean.setIndexTag("#");

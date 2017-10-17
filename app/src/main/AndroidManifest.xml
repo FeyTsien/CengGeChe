@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ygst.cenggeche">
 
     <!-- Required -->
@@ -58,7 +59,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
 
         <!-- 高德地图 -->
         <meta-data
@@ -106,8 +108,6 @@
         <activity android:name=".ui.activity.registerinfo.RegisterInfoActivity" />
         <!--重置密码页-->
         <activity android:name=".ui.activity.resetpwd.ResetPwdActivity" />
-        <!--主界面-->
-        <activity android:name=".ui.activity.main.MainActivity" />
         <!--主界面1-->
         <activity android:name=".ui.activity.main.MainActivity1" />
         <!--系统通知-->
@@ -129,6 +129,8 @@
         <activity android:name=".ui.activity.newfriendlist.NewFriendListActivity" />
         <!--好友详细信息-->
         <activity android:name=".ui.activity.friendinfo.FriendInfoActivity" />
+        <!--用户（范围是全部用户）详细信息-->
+        <activity android:name=".ui.activity.userinfo.UserInfoActivity" />
         <!--展示大图-->
         <activity android:name=".ui.activity.friendinfo.BigPicActivity" />
         <!--好友操作-->
@@ -150,7 +152,9 @@
         <activity android:name=".ui.activity.travelinfo.TravelInfoActivity" />
 
         <!-- 确定带上他信息 -->
-        <activity android:name=".ui.activity.suretravel.SureTravelActivity" />
+        <activity android:name=".ui.activity.suretravel.SureTravelActivity"
+
+            />
 
         <!-- 选择地址 -->
         <activity android:name=".ui.activity.suretravel.SureAddrActivity" />
@@ -165,7 +169,9 @@
 
 
         <!-- 确定发布信息 -->
-        <activity android:name=".ui.activity.releaseplan.surerelease.SureReleaseActivity" />
+        <activity
+            android:name=".ui.activity.releaseplan.surerelease.SureReleaseActivity"
+            android:windowSoftInputMode="adjustResize" />
         <!-- 获取车辆信息 -->
         <activity android:name=".ui.activity.releaseplan.cartype.CartypeActivity" />
 

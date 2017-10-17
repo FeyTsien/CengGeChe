@@ -80,7 +80,7 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
     private ListView mHisTtoryList;
     private Myadapter myadapter;
     private List searchist;
-    public static final String SEARCH_HISTORY = "search_history";
+    public static final String SEARCH_HISTORY = "search_history_addr";
     private ArrayList<String> mOriginalValues;//历史记录的集合
     private SharedPreferences sp;
     private LinearLayout historyLayout;
@@ -174,7 +174,6 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
         poiSearch.setOnPoiSearchListener(this);
         poiSearch.searchPOIAsyn();
         PoiSearch.Query query = poiSearch.getQuery();
-        int pageSize = query.getPageSize();
         InputTask.getInstance(this, mAdapter).onSearch(str, "");
 
     }
@@ -202,7 +201,6 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
         } else {
             ToastUtil.show(this.getApplicationContext(), rcode);
         }
-        Log.i(TAG,"====="+rcode+result.toString()+"---"+result.getPois().size());
 
     }
 
@@ -232,14 +230,11 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
             inputTips.setInputtipsListener(this);
             inputTips.requestInputtipsAsyn();
         }
-        Log.i(TAG,"====="+newText+"---");
 
     }
 
     @Override
     public void onGetInputtips(List<Tip> tipList, int rCode) {
-        Log.i(TAG,"===recode=="+rCode+"==");
-
         if (rCode == AMapException.CODE_AMAP_SUCCESS) {
             listString = new ArrayList<String>();
             listString.clear();
@@ -278,39 +273,15 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
         if (savehistory.length() < 1) {
             return;
         }
-        String longhistory = sp.getString(SEARCH_HISTORY, "");
-        String[] tmpHistory = longhistory.split(",");
-        ArrayList<String> history = new ArrayList<String>(
-                Arrays.asList(tmpHistory));
-        if (history.size() > 0) {
-            int i;
-            for (i = 0; i < history.size(); i++) {
-                if (savehistory.equals(history.get(i))) {
-                    history.remove(i);
-                    break;
-                }
-            }
-            history.add(0, savehistory);
-        }
-
-        //保存搜索的历史记录
-        if (history.size() > 0) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < history.size(); i++) {
-                sb.append(history.get(i) + ",");
-            }
-            sp.edit().putString(SEARCH_HISTORY, sb.toString()).commit();
-        } else {
-            sp.edit().putString(SEARCH_HISTORY, savehistory + ",").commit();
-        }
+        String oldText = sp.getString(SEARCH_HISTORY,"");
+        sp.edit().putString(SEARCH_HISTORY, savehistory + "," + oldText).commit();
     }
 
     /**
      * 读取历史搜索记录
      */
     public void initSearchHistory() {
-        SharedPreferences sp = getSharedPreferences(
-                SEARCH_HISTORY, 0);
+       sp = getSharedPreferences(SEARCH_HISTORY, 0);
         String longhistory = sp.getString(SEARCH_HISTORY, "");
         String[] hisArrays = longhistory.split(",");
         mOriginalValues = new ArrayList<String>();
@@ -319,7 +290,6 @@ public class RetrievalActivity extends MVPBaseActivity<RetrievalContract.View, R
         }
         for (int i = 0; i < hisArrays.length; i++) {
             mOriginalValues.add(hisArrays[i]);
-            LogUtils.i(TAG,mOriginalValues.size()+"---"+mOriginalValues.get(i));
         }
 
     }

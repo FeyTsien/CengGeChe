@@ -29,6 +29,7 @@
                 android:padding="10dp"
                 android:id="@+id/tv_mine_release"
                 android:text="行程信息"
+                android:textColor="@color/white"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -44,7 +45,6 @@
             android:gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-
             android:orientation="vertical"
             android:paddingTop="10dp">
 
@@ -129,28 +129,29 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
                 android:layout_marginLeft="10dp"
-                android:text="展示图片"
+                android:text="展示图片(有照片更能引起别人的关注哟)"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <RelativeLayout
                 android:id="@+id/rl_chooseimg"
-                android:background="@drawable/spuare_white_backgroud"
+                android:background="@drawable/linear_whitebg_border"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
+                    android:layout_margin="10dp"
                     android:id="@+id/iv_chooseimg"
-                    android:src="@mipmap/icon_my_avatar"
+                    android:src="@mipmap/icon_nearby_item_bg"
                     android:scaleType="centerCrop"
                     android:layout_width="70dp"
                     android:layout_height="70dp" />
@@ -179,14 +180,13 @@
                     android:layout_height="wrap_content" />
 
                 <RelativeLayout
+                    android:background="@drawable/linear_whitebg_border"
                     android:layout_width="match_parent"
                     android:layout_height="100dp">
 
                     <EditText
                         android:id="@+id/et_remark"
-                        android:layout_marginLeft="10dp"
                         android:background="@color/white"
-                        android:layout_marginRight="10dp"
                         android:paddingTop="1dp"
                         android:hint="说些什么吧"
                         android:maxLength="50"
@@ -210,7 +210,9 @@
 
             <Button
                 android:textColor="@color/white"
-                android:layout_margin="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:id="@+id/btn_nowrelease"
                 android:text="立即发布"
                 android:background="@drawable/linear_votletbg_border"

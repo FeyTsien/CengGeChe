@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.ui.view.ikninephotoview.IKNinePhotoViewAdapter;
 import com.ygst.cenggeche.ui.view.ikninephotoview.IKNinePhotoViewHolder;
@@ -32,7 +32,7 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
     private int count;
     private List<String> mListPic;
 
-    public MyAdapter(Context context,List<String> listPic) {
+    public MyAdapter(Context context, List<String> listPic) {
         super();
         mContext = context;
         mListPic = listPic;
@@ -50,16 +50,17 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
     public void displayView(final MyHolder holder, final int position) {
         Glide.with(mContext)
                 .load(mListPic.get(position))
-                .centerCrop()
-                .placeholder(R.mipmap.icon_my_avatar)
+                .apply(new RequestOptions()
+                        .centerCrop()
+                        .placeholder(R.mipmap.icon_my_avatar))
                 .into(holder.mImageView);
 
         holder.getItemView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("click", position + "");
-                Intent intent = new Intent(mContext,BigPicActivity.class);
-                intent.putExtra("pic_uri",mListPic.get(position));
+                Intent intent = new Intent(mContext, BigPicActivity.class);
+                intent.putExtra("pic_uri", mListPic.get(position));
                 mContext.startActivity(intent);
             }
         });
@@ -77,7 +78,7 @@ public class MyAdapter extends IKNinePhotoViewAdapter<MyAdapter.MyHolder> {
 
         public MyHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

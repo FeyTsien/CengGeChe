@@ -2,6 +2,7 @@ package com.ygst.cenggeche.ui.activity.friendblacklist;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.google.gson.Gson;
+import com.ygst.cenggeche.bean.CodeBean;
 import com.ygst.cenggeche.bean.FriendListBean;
 import com.ygst.cenggeche.manager.HttpManager;
 import com.ygst.cenggeche.mvp.BasePresenterImpl;
@@ -53,6 +54,40 @@ public class FriendBlackListPresenter extends BasePresenterImpl<FriendBlackListC
                         ToastUtil.show(mView.getContext(), friendListBean.getMsg());
                     }
                     LogUtils.i(TAG, "code:" + friendListBean.getCode());
+                }
+            }
+        }, map);
+    }
+
+    @Override
+    public void removeBlackList(String myusername, String targetUsername, final int position) {
+        Map<String, String> map = new HashMap<>();
+        map.put("myusername", myusername);
+        map.put("targetUsername", targetUsername);
+        HttpManager.getHttpManager().postMethod(UrlUtils.REMOVE_BLACKLIST, new Observer<String>() {
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtils.i(TAG, "onError:+ ++++++++++++++" + e.toString());
+            }
+
+            @Override
+            public void onNext(String s) {
+                LogUtils.i(TAG, "onNext:+ ++++++++++++++" + s);
+                Gson gson = new Gson();
+                CodeBean codeBean = gson.fromJson(s, CodeBean.class);
+                if ("0000".equals(codeBean.getCode())) {
+                    if (mView != null)
+                        mView.removeBlackListSuccess(position);
+                } else {
+                    if (mView != null)
+                        mView.removeBlackListError();
+                    ToastUtil.show(mView.getContext(), codeBean.getMsg());
                 }
             }
         }, map);

@@ -1,12 +1,8 @@
 package com.ygst.cenggeche.ui.fragment.me;
 
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +13,7 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.utils.LogUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.ACache;
 import com.ygst.cenggeche.app.AppData;
@@ -24,7 +21,6 @@ import com.ygst.cenggeche.bean.MyInfoBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
 import com.ygst.cenggeche.ui.activity.setting.SettingActivity;
 import com.ygst.cenggeche.utils.CommonUtils;
-import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 import com.ygst.cenggeche.webview.WebViewActivity;
 
@@ -45,9 +41,6 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
     private final String URL_OWNER_AUTH = UrlUtils.URL_H5 + "/cenggeche/pages/carrz/carrz.html";
     //车主认证状态
     private int userStatus;
-    //读取存储器和相机权限
-    String[] permission_read_camera = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.CAMERA"};
-    private static final int REQUEST_PERMISSION_READ_CAMERA = 1002;
 
     private String TAG = "MeFragment";
     public ACache mCache;
@@ -68,10 +61,6 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         LogUtils.i(TAG, "MeFragment-----onCreate");
-        //开启读取文件，相机权限
-        if (ContextCompat.checkSelfPermission(getContext(), permission_read_camera[0]) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), permission_read_camera, REQUEST_PERMISSION_READ_CAMERA);
-        }
         super.onCreate(savedInstanceState);
     }
 
@@ -151,9 +140,10 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
         //头像
         Glide.with(this)
                 .load(dataBean.getUserPic())
-                .dontAnimate()  //不使用glide默认动画(解决圆形图片二次加载问题)
-                .centerCrop()
-                .placeholder(resourceId)
+                .apply(new RequestOptions()
+                        .dontAnimate()  //不使用glide默认动画(解决圆形图片二次加载问题)
+                        .centerCrop()
+                        .placeholder(resourceId))
                 .into(mIvAvatar);
         //名字
         if (!TextUtils.isEmpty(dataBean.getNickname())) {
@@ -201,22 +191,6 @@ public class MeFragment extends MVPBaseFragment<MeContract.View, MePresenter> im
                 break;
             case R.id.tv_setting:
                 CommonUtils.startActivity(getActivity(), SettingActivity.class);
-                break;
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_PERMISSION_READ_CAMERA:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                } else {
-                    // 权限被用户拒绝了，洗洗睡吧。
-                    ToastUtil.show(getActivity(), "还没有查看照片功能，请去设置中开启。");
-                }
                 break;
         }
     }

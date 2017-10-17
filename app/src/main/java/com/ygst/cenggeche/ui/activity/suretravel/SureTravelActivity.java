@@ -70,7 +70,7 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
     private PickValueView pickValueView;
     private LinearLayout mChooseLayout;
 
-    private static  String  CHOOSETIME="今天-0时:0分";
+    private static  String  CHOOSETIME="今天-00时:00分";
     private Intent intent;
     private LinearLayout mLl_jumpLayout;
     private String comment;
@@ -284,14 +284,13 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
                             intents.putExtra("sid",sid+"");
                             intents.putExtra("cartype",cartype);
                             intents.putExtra("TYPECAR",mStringType);
-
                             intents.putExtra("STATEUSER",cartype);
-
-
                             LogUtils.i(TAG,strokeFlag+"strokeFlag：==="+sid);
+                            intents.putExtra("ISJUMP","NO");
 
                             startActivity(intents);
                             finish();
+
                         }
                     }
                 }
@@ -308,7 +307,6 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
                 break;
 
             case R.id.tv_jump:
-
 
                 if(REQUEST!=null){
                     int i = Integer.parseInt(REQUEST);
@@ -345,8 +343,7 @@ public class SureTravelActivity extends MVPBaseActivity<SureTravelContract.View,
                         intents.putExtra("ISJUMP","ISJUMP");
 
                         startActivity(intents);
-                    }{
-
+                        finish();
                     }
                 }
                 break;

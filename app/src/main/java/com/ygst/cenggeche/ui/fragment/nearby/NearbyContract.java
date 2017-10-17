@@ -18,6 +18,6 @@ public class NearbyContract {
     }
 
     interface  Presenter extends BasePresenter<View> {
-        void getnearBy(String lit, String lat, int page);
+        void getNearby(String lit, String lat, int page);
     }
 }

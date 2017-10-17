@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.AllStrokeBean;
@@ -21,7 +22,7 @@ import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static cn.jpush.im.android.tasks.GetUserInfoListTask.IDType.uid;
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 /**
@@ -31,20 +32,20 @@ import static cn.jpush.im.android.tasks.GetUserInfoListTask.IDType.uid;
 public class MyViewPagerAdapter extends PagerAdapter {
 
     private LinkedList<View> mViewCache = null;
-    private  Context context;
+    private Context context;
     private ArrayList<AllStrokeBean.DataBean> list;
-    private String TAG=this.getClass().getSimpleName();
-    public MyViewPagerAdapter(Context context, ArrayList<AllStrokeBean.DataBean> list){
-        this.context=context;
-        this.list=list;
+    private String TAG = this.getClass().getSimpleName();
+
+    public MyViewPagerAdapter(Context context, ArrayList<AllStrokeBean.DataBean> list) {
+        this.context = context;
+        this.list = list;
         mViewCache = new LinkedList<>();
     }
 
 
-
     @Override
     public int getCount() {
-        Log.i(TAG,list.size()+"==");
+        Log.i(TAG, list.size() + "==");
         return list.size();
     }
 
@@ -82,12 +83,11 @@ public class MyViewPagerAdapter extends PagerAdapter {
         holder.tvStartLocation.setText(list.get(position).getStartAddr());
         holder.tvEndLocation.setText(list.get(position).getEndAddr());
         holder.tvReleaseDate.setText(list.get(position).getDeparTime());
-        if(list.get(position).getComments().length()>0){
-            holder.tvName.setText(list.get(position).getComments());
-        }else{
-            holder.tvName.setVisibility(View.GONE);
-        }
-        Glide.with(context).load(list.get(position).getBackgroundPic()).into( holder.ivPic);
+        holder.tvName.setText(list.get(position).getComments());
+        Glide.with(context)
+                .load(list.get(position).getBackgroundPic())
+                .transition(withCrossFade())
+                .apply(new RequestOptions().centerCrop()).into(holder.ivPic);
 //			/* 动态设置view 横线 让它和上方的文字等宽*/
         holder.tvName.measure(0, 0);
         int measuredWidth = holder.tvName.getMeasuredWidth();
@@ -98,14 +98,14 @@ public class MyViewPagerAdapter extends PagerAdapter {
         holder.ivPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jumpuserInfo(list,position);
+                jumpuserInfo(list, position);
             }
         });
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jumpuserInfo(list,position);
+                jumpuserInfo(list, position);
             }
         });
 
@@ -124,26 +124,26 @@ public class MyViewPagerAdapter extends PagerAdapter {
     public final class ViewHolder {
 
         public TextView tvName;
-        public TextView tvEndLocation,tvStartLocation,tvUserName,tvReleaseDate;
+        public TextView tvEndLocation, tvStartLocation, tvUserName, tvReleaseDate;
         public ImageView ivPic;
         public View vLine;
         public LinearLayout relativeLayout;
     }
 
-    public void jumpuserInfo(ArrayList<AllStrokeBean.DataBean> list,int position){
+    public void jumpuserInfo(ArrayList<AllStrokeBean.DataBean> list, int position) {
 
-        if(AppData.isLoginEd()){
-            Intent intent=new Intent(context, AllTravelInfoActivity.class);
-            intent.putExtra("SID",list.get(position).getId()+"");
-            intent.putExtra("EndAddr",list.get(position).getEndAddr());
-            intent.putExtra("StartAddr",list.get(position).getStartAddr());
-            intent.putExtra("PostedTime",list.get(position).getDeparTime());
-            intent.putExtra("REQUEST",2+"");
-            intent.putExtra("uid",list.get(position).getUid()+"");
+        if (AppData.isLoginEd()) {
+            Intent intent = new Intent(context, AllTravelInfoActivity.class);
+            intent.putExtra("SID", list.get(position).getId() + "");
+            intent.putExtra("EndAddr", list.get(position).getEndAddr());
+            intent.putExtra("StartAddr", list.get(position).getStartAddr());
+            intent.putExtra("PostedTime", list.get(position).getDeparTime());
+            intent.putExtra("REQUEST", 2 + "");
+            intent.putExtra("uid", list.get(position).getUid() + "");
 
             context.startActivity(intent);
-        }else{
-            Intent intent=new Intent(context, LoginActivity.class);
+        } else {
+            Intent intent = new Intent(context, LoginActivity.class);
             context.startActivity(intent);
         }
 

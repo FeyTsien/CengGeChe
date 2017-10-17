@@ -11,7 +11,6 @@ import java.lang.reflect.ParameterizedType;
  * MVPPlugin
  *  邮箱 784787081@qq.com
  */
-
 public abstract class MVPBaseFragment<V extends BaseView,T extends BasePresenterImpl<V>> extends Fragment implements BaseView{
     public T mPresenter;
     @Override

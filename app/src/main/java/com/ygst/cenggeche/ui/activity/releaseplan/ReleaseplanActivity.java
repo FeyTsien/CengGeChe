@@ -49,7 +49,6 @@ import com.ygst.cenggeche.utils.UrlUtils;
 import com.ygst.cenggeche.webview.WebViewActivity;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,6 +56,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+
 
 /**
  * MVPPlugin
@@ -88,7 +89,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
     private PickValueView pickValueView;
     private TextView mTvCancel;
     private TextView mTvFinish;
-    private static  String  CHOOSETIME="今天-0:0";
+    private static  String  CHOOSETIME="今天-00:00";
     private boolean isShao=false;
     //车主认证
     private final String URL_OWNER_AUTH= UrlUtils.URL_H5+"/cenggeche/pages/carrz/carrz.html";
@@ -289,6 +290,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                 break;
         }
     }
+
     //点击蹭车 判断是否车主认证
     private void onclickchengche() {
         judgesex();
@@ -405,6 +407,12 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
             }
         }
         pickValueView.setValueData(left,left[0],middle,middle[0],right,right[0]);
+        Calendar calendar= Calendar.getInstance();
+            int hours=calendar.get(Calendar.HOUR_OF_DAY);
+            int minute=calendar.get(Calendar.MINUTE);
+
+
+
     }
     //得到当前时间
     public String getTime(){
@@ -423,6 +431,81 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         }
 
     }
+
+    //时间滚轮选择时间
+    @Override
+    public void onSelected(PickValueView view, Object leftValue, Object middleValue, Object rightValue) {
+        String hour = middleValue.toString().substring(0, middleValue.toString().length() - 1);
+        String minu = rightValue.toString().substring(0, rightValue.toString().length() - 1);
+
+        CHOOSETIME =leftValue.toString()+"-"+hour+":"+minu;
+//        if(leftValue.toString().equals("今天")){
+//            //获得当前时间的月份，月份从0开始所以结果要加1
+//            Calendar calendar= Calendar.getInstance();
+//            int hours=calendar.get(Calendar.HOUR_OF_DAY);
+//            int minute=calendar.get(Calendar.MINUTE);
+//            String left[]=new String[]{"今天","明天"};
+//            int hoursleng=24-hours;
+//            int minutelength=60-minute;
+//            String middle[]=new String[hoursleng];
+//            String right[]=new String[minutelength];
+//            for (int i = hours; i <hoursleng ; i++) {
+//                if(i<10){
+//                    middle[i] = "0"+i+"时";
+//                }else{
+//                    middle[i] = i+"时";
+//                }
+//            }
+//            for (int i = minute; i <minutelength ; i++) {
+//                if(i<10){
+//                    right[i] = "0"+i+"分";
+//                }else{
+//                    right[i] = i+"分";
+//                }
+//            }
+//            pickValueView.setValueData(left,left[0],middle,middle[0],right,right[0]);
+//
+//        }
+        Log.i(TAG,leftValue.toString()+"-"+middleValue.toString()+":"+rightValue.toString());
+
+    }
+
+    //判断时间是否是当前时间的二十分钟
+    public boolean judgeTime() {
+        String[] split = CHOOSETIME.split("-");
+        if(split[0].equals("今天")){
+            String s = split[1];
+            split[1].replaceAll("时","");
+            split[1].replaceAll("分","");
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");//可以方便地修改日期格式
+
+            String hehe = dateFormat.format(now);
+            LogUtils.i(TAG,now+"=hehe="+split[1]);
+            String[] split1 = split[1].split(":");
+            int shi = Integer.parseInt(split1[0]);
+            int fen = Integer.parseInt(split1[1]);
+            Calendar calendar= Calendar.getInstance();
+            //获得当前时间的月份，月份从0开始所以结果要加1
+            int month=calendar.get(Calendar.HOUR_OF_DAY);
+            int minute=calendar.get(Calendar.MINUTE);
+            LogUtils.i(TAG,shi+"=hehe="+fen+"==="+minute+"==="+month);
+            if(shi<month){
+                ToastUtil.show(ReleaseplanActivity.this,"行程发布必须比当前时间快二十分钟哟");
+                return false;
+            }else if(shi==month){
+                if(fen<minute+20){
+                    ToastUtil.show(ReleaseplanActivity.this,"行程发布必须比当前时间快二十分钟哟");
+                    return  false;
+                }
+            }
+
+
+        }
+        return true;
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -609,15 +692,7 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
                     sb.append("兴趣点    : " + location.getPoiName() + "\n");
                     //定位完成的时间
                     //绘制marker
-//                    if(location.getCity()!=null) {
-//                        AppData.saveLocation(location.getCity());
-                    mEtStartAction.setText(location.getAddress());
-//                    } else {
-//                        AppData.saveLocation("北京");
-//                        mEtStartAction.setText(location.getAddress());
-//
-//                    }
-
+//                    mEtStartAction.setText(location.getAddress());
                 } else {
                     //定位失败
                     sb.append("定位失败" + "\n");
@@ -798,49 +873,6 @@ public class ReleaseplanActivity extends MVPBaseActivity<ReleaseplanContract.Vie
         }
     }
 
-    @Override
-    public void onSelected(PickValueView view, Object leftValue, Object middleValue, Object rightValue) {
-        String hour = middleValue.toString().substring(0, middleValue.toString().length() - 1);
-        String minu = rightValue.toString().substring(0, rightValue.toString().length() - 1);
-
-        CHOOSETIME =leftValue.toString()+"-"+hour+":"+minu;
-        Log.i(TAG,leftValue.toString()+"-"+middleValue.toString()+":"+rightValue.toString());
-
-    }
-
-    public boolean judgeTime() {
-        String[] split = CHOOSETIME.split("-");
-        if(split[0].equals("今天")){
-            String s = split[1];
-            split[1].replaceAll("时","");
-            split[1].replaceAll("分","");
-            Date now = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");//可以方便地修改日期格式
-
-            String hehe = dateFormat.format(now);
-            LogUtils.i(TAG,now+"=hehe="+split[1]);
-            String[] split1 = split[1].split(":");
-            int shi = Integer.parseInt(split1[0]);
-            int fen = Integer.parseInt(split1[1]);
-            Calendar calendar= Calendar.getInstance();
-            //获得当前时间的月份，月份从0开始所以结果要加1
-            int month=calendar.get(Calendar.HOUR_OF_DAY);
-            int minute=calendar.get(Calendar.MINUTE);
-            LogUtils.i(TAG,shi+"=hehe="+fen+"==="+minute+"==="+month);
-            if(shi<month){
-                ToastUtil.show(ReleaseplanActivity.this,"行程发布必须比当前时间快二十分钟哟");
-                return false;
-            }else if(shi==month){
-                    if(fen<minute+20){
-                     ToastUtil.show(ReleaseplanActivity.this,"行程发布必须比当前时间快二十分钟哟");
-                        return  false;
-                    }
-            }
-
-
-        }
-        return true;
-    }
 
 
 }

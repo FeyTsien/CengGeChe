@@ -2,9 +2,13 @@ package com.ygst.cenggeche.ui.activity.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +29,7 @@ import com.ygst.cenggeche.ui.fragment.message.MessageFragment;
 import com.ygst.cenggeche.ui.fragment.nearby.NearbyFragment;
 import com.ygst.cenggeche.utils.CommonUtils;
 import com.ygst.cenggeche.utils.JMessageUtils;
+import com.ygst.cenggeche.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,7 @@ import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * 主页面
@@ -56,7 +62,7 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
     private MyViewPager mViewPager;
     private FragmentAdapter adapter;
     //ViewPage选项卡页面集合
-    private List<Fragment> mListFragments;
+    private List<Fragment> mListFragments = new ArrayList<>();;
     //Tab标题集合
     private List<String> mTitles;
     /**
@@ -64,8 +70,14 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
      */
     private int[] mImgs = new int[]{R.drawable.selector_tab_cengche, R.drawable.selector_tab_nearby, R.drawable.selector_tab_message,
             R.drawable.selector_tab_me};
-
     TextView mTextViewAllUnreadCount;
+    //读取存储器，相机和定位权限
+    String[] permission_read_camera = {"android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.CAMERA",
+            "android.permission.ACCESS_FINE_LOCATION",
+            "android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"};
+    private static final int REQUEST_PERMISSION= 1005;
+
 
     @Override
     protected int getLayoutId() {
@@ -77,6 +89,10 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
         super.onCreate(savedInstanceState);
         instance = this;
         ButterKnife.bind(this);
+        //开启读取文件，相机，定位权限
+        if (ContextCompat.checkSelfPermission(getContext(), permission_read_camera[0]) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permission_read_camera, REQUEST_PERMISSION);
+        }
         JMessageClient.registerEventReceiver(this);
         initView();
         //每次进入此页获取是否有最新版本
@@ -97,25 +113,22 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
             mTitles.add(titles[i]);
         }
 
-        Fragment fmCengChe = new CengCheFragment();
-        Fragment fmNearby = new NearbyFragment();
-        Fragment fmMessage = new MessageFragment();
-        Fragment fmMe = new MeFragment();
-        mListFragments = new ArrayList<>();
-        mListFragments.add(fmCengChe);
-        mListFragments.add(fmNearby);
-        mListFragments.add(fmMessage);
-        mListFragments.add(fmMe);
+        mListFragments.add(new CengCheFragment());
+        mListFragments.add(new NearbyFragment());
+        mListFragments.add(new MessageFragment());
+        mListFragments.add(new MeFragment());
 
         adapter = new FragmentAdapter(getSupportFragmentManager(), mListFragments, mTitles);
         mViewPager.setAdapter(adapter);//给ViewPager设置适配器
+        mViewPager.setOffscreenPageLimit(3);//缓存当前界面每一侧的界面数(此方案适用于界面数较少的情况，避免缓存界面太多导致内存吃紧。)
         mTabLayout.setupWithViewPager(mViewPager);//将TabLayout和ViewPager关联起来
+        mTabLayout.setSelectedTabIndicatorHeight(1);//tablayout底部线的高度
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-        mTabLayout.setSelectedTabIndicatorHeight(1);
         for (int i = 0; i < adapter.getCount(); i++) {
             //获得到对应位置的Tab
             TabLayout.Tab itemTab = mTabLayout.getTabAt(i);
-//            TabLayout.Tab tab = mTabLayout.newTab();
             if (itemTab != null) {
                 //设置自定义的标题
                 itemTab.setCustomView(R.layout.item_tab);
@@ -128,7 +141,7 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
                 }
             }
         }
-        mTabLayout.getTabAt(0).getCustomView().setSelected(true);
+//        mTabLayout.getTabAt(0).getCustomView().setSelected(true);
         mTabLayout.setOnTabSelectedListener(mOnTabSelectedListener);
     }
 
@@ -222,6 +235,21 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_PERMISSION:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    // 权限被用户拒绝了，洗洗睡吧。
+                    ToastUtil.show(this, "还没有此功能，请去设置中开启。");
+                }
+                break;
+        }
+    }
+
     /**
      * 显示全部未读消息数
      */
@@ -230,21 +258,14 @@ public class MainActivity1 extends MVPBaseActivity<MainContract.View, MainPresen
         if (JMessageClient.getAllUnReadMsgCount() > 0) {
             mTextViewAllUnreadCount.setVisibility(View.VISIBLE);
             mTextViewAllUnreadCount.setText("" + JMessageClient.getAllUnReadMsgCount());
+            AppData.savaBadgeCount(JMessageClient.getAllUnReadMsgCount());
+            int badgeCount = AppData.getBadgeCount();
+            ShortcutBadger.applyCount(getContext(), badgeCount);
         } else {
             mTextViewAllUnreadCount.setVisibility(View.GONE);
         }
     }
 
-    public static final String SET_DOWNLOAD_PROGRESS = "set_download_progress";
-    public static final String IS_DOWNLOAD_PROGRESS_EXISTS = "is_download_progress_exists";
-    public static final String CREATE_GROUP_CUSTOM_KEY = "create_group_custom_key";
-    public static final String CUSTOM_MESSAGE_STRING = "custom_message_string";
-    public static final String CUSTOM_FROM_NAME = "custom_from_name";
-    public static final String DOWNLOAD_INFO = "download_info";
-    public static final String INFO_UPDATE = "info_update";
-    public static final String DOWNLOAD_ORIGIN_IMAGE = "download_origin_image";
-    public static final String DOWNLOAD_THUMBNAIL_IMAGE = "download_thumbnail_image";
-    public static final String IS_UPLOAD = "is_upload";
     public static final String LOGOUT_REASON = "logout_reason";
 
     /**

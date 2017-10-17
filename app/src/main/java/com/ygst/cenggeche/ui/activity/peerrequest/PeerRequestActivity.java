@@ -90,7 +90,6 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
     private String mStartlocation;
     private String mTime;
     private String mType;
-    private int stateuser;
     private String TAG="PeerRequestActivity";
     private String mCarColor;
     private String mCarType;
@@ -167,7 +166,6 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
             }
             Log.i(TAG,filepath+"===="+id);
             if(UserStatus.equals("1")){
-                LogUtils.i(TAG,stateuser+"--IsPicForDatastateuser");
                 mPresenter.getSureRelease(1+"",sid,userid,id,mStartlocation,meEndlocation,mTime,"","",mStrokeFlag,comments,filepath);
             }else if(UserStatus.equals("2")){
                 //资料中选取，跳过车辆信息
@@ -181,10 +179,8 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
         }else{
             if(uppath!=null){
                 if(UserStatus.equals("1")){//为乘客 做别人的车
-                    LogUtils.i(TAG,stateuser+"--stateuser");
                     mPresenter.getSureRelease(1+"",sid,userid,id,mStartlocation,meEndlocation,mTime,"","",mStrokeFlag,comments,uppath);
                 }else if(UserStatus.equals("2")){//车主 带别人
-                    LogUtils.i(TAG,stateuser+"--stateuser");
                     //判断是否为跳过
                     if(ISJUMP.equals("ISJUMP")){
                         mPresenter.getSureRelease(2+"",sid,userid,id,mStartlocation,meEndlocation,mTime,"","",mStrokeFlag,comments,uppath);
@@ -212,8 +208,7 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
         ButterKnife.bind(this);
         mTvTitle.setText("申请同行");
         Intent intent = getIntent();
-        stateuser = intent.getIntExtra("STATEUSER",1);
-
+        ISJUMP = intent.getStringExtra("ISJUMP");
         mTime = intent.getStringExtra("TIME");
         meEndlocation = intent.getStringExtra("ENDLOACTION");
         mStartlocation = intent.getStringExtra("STARTLOACTION");
@@ -222,7 +217,21 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
         userid = intent.getStringExtra("uid");
         sid = intent.getStringExtra("sid");
         UserStatus = intent.getStringExtra("cartype");
-        ISJUMP = intent.getStringExtra("ISJUMP");
+        if(UserStatus.equals("1")){
+            mLl_Cartype.setVisibility(View.GONE);
+        }else if(UserStatus.equals("2")){
+            mType = intent.getStringExtra("TYPECAR");
+            if(mType!=null){
+                String[] split = mType.split("-");
+                mCarType = split[0]+split[1];
+                mCarColor = split[2];
+                mLl_Cartype.setVisibility(View.VISIBLE);
+                mTv_cartype.setText(mType);
+            }
+
+
+            LogUtils.i(TAG,mCarType+"mCarType"+"===="+mCarColor+":mCarColor");
+        }
 
         LogUtils.i(TAG,UserStatus+"h=="+userid+"--sid:"+sid+"---id"+id);
 
@@ -231,17 +240,7 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
         mTv_start_location.setText(mStartlocation);
         //捎人
         mTv_start_location.setText(mStartlocation);
-        if(stateuser ==1){
-            mLl_Cartype.setVisibility(View.GONE);
-        }else{
-            String type = intent.getStringExtra("TYPE");
-            mType = intent.getStringExtra("TYPECAR");
-            String[] split = mType.split("-");
-            mCarType = split[0]+split[1];
-            mCarColor = split[2];
-            mLl_Cartype.setVisibility(View.VISIBLE);
-            mTv_cartype.setText(mType);
-        }
+
         //输入框的监听
         mEt_descriable.addTextChangedListener(new TextWatcher() {
             @Override
@@ -326,7 +325,8 @@ public class PeerRequestActivity extends MVPBaseActivity<PeerRequestContract.Vie
 
     @Override
     public void sureReleaseSuccess() {
-        CommonUtils.startActivity(PeerRequestActivity.this, TravelInfoActivity.class);
+        Intent intent=new Intent(PeerRequestActivity.this, TravelInfoActivity.class);
+        startActivity(intent);
         finish();
     }
 

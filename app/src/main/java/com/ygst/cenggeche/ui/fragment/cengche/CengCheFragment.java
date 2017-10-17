@@ -1,7 +1,6 @@
 package com.ygst.cenggeche.ui.fragment.cengche;
 
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,25 +10,30 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.blankj.utilcode.utils.LogUtils;
-import com.blankj.utilcode.utils.ToastUtils;
+import com.kingja.loadsir.callback.Callback;
+import com.kingja.loadsir.core.LoadService;
+import com.kingja.loadsir.core.LoadSir;
 import com.ygst.cenggeche.R;
 import com.ygst.cenggeche.app.AppData;
 import com.ygst.cenggeche.bean.AllStrokeBean;
 import com.ygst.cenggeche.bean.CheckPeerBean;
 import com.ygst.cenggeche.mvp.MVPBaseFragment;
-import com.ygst.cenggeche.ui.activity.alltravelinfo.AllTravelInfoActivity;
 import com.ygst.cenggeche.ui.activity.login.LoginActivity;
 import com.ygst.cenggeche.ui.activity.releaseplan.ReleaseplanActivity;
 import com.ygst.cenggeche.ui.activity.suretravel.SureTravelActivity;
 import com.ygst.cenggeche.ui.activity.travelinfo.TravelInfoActivity;
+import com.ygst.cenggeche.ui.loadsir.PostUtil;
+import com.ygst.cenggeche.ui.loadsir.callback.EmptyCallback;
+import com.ygst.cenggeche.ui.loadsir.callback.LoadingCallback;
+import com.ygst.cenggeche.ui.loadsir.callback.NoNetWorkCallback;
 import com.ygst.cenggeche.ui.view.ZoomOutPageTransformer;
 import com.ygst.cenggeche.utils.CommonUtils;
+import com.ygst.cenggeche.utils.NetWorkUtil;
 import com.ygst.cenggeche.utils.ToastUtil;
 import com.ygst.cenggeche.utils.UrlUtils;
 import com.ygst.cenggeche.webview.WebViewActivity;
@@ -49,12 +53,15 @@ import static android.R.attr.id;
 
 public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengChePresenter> implements CengCheContract.View {
 
+    private LoadService loadService;
+    private View mCengCheView;
+    private ViewPager mViewPager;
+    @BindView(R.id.ll_cengche)
+    LinearLayout mLlCengChe;
     @BindView(R.id.btn_cengche)
     Button btnCengche;
     @BindView(R.id.btn_shaoren)
     Button btnShaoren;
-    private View mCengCheView;
-    private ViewPager mViewPager;
     @BindView(R.id.iv_trip_info)
     ImageView ivTripInfo;
     @BindView(R.id.iv_release_plan)
@@ -63,13 +70,11 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     ImageView ivTakeHer;
     @BindView(R.id.iv_cengtache)
     ImageView ivCengTaChe;
-    @BindView(R.id.rl_empty)
-    RelativeLayout rlEmpty;
-    @BindView(R.id.ll_cenglayout)
-    RelativeLayout ll_cenglayout;
+
 
     private ArrayList<AllStrokeBean.DataBean> list;
     private MyViewPagerAdapter mAdapter;
+    private int TYPE = 2;
     private int PAGE = 1;
 
     private int currentPage;
@@ -80,10 +85,10 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     private String postedTime;
     private String startAddr;
     public static int PERSONSTATUS = 0;//判断是蹭车 1还是捎人2的状态
-    private int ChangeStatus=1;//头部切换 蹭车1 捎人2 的状态判断
+    private int ChangeStatus = 1;//头部切换 蹭车1 捎人2 的状态判断
     private int uid;
-    private String TAG=this.getClass().getSimpleName();
-    private final String URL_OWNER_AUTH= UrlUtils.URL_H5+"/cenggeche/pages/carrz/carrz.html";
+    private String TAG = this.getClass().getSimpleName();
+    private final String URL_OWNER_AUTH = UrlUtils.URL_H5 + "/cenggeche/pages/carrz/carrz.html";
 
     //点击事件的处理
     @OnClick({R.id.iv_take_her, R.id.iv_release_plan, R.id.iv_trip_info, R.id.iv_cengtache})
@@ -96,24 +101,30 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                     break;
                 case R.id.iv_take_her://蹭他车的点击事件
                     PERSONSTATUS = 1;
-                    if(AppData.getGenders().equals("1")){
-                        ToastUtil.show(getActivity(),"男性用户不能蹭车");
+                    if (AppData.getGenders().equals("1")) {
+                        ToastUtil.show(getActivity(), "男性用户不能蹭车");
                         return;
                     }
-                    mPresenter.checkApplyPeerInfo(1 + "", sid + "");
+
+                    if (list.size() == 0) {
+                        ToastUtil.show(getActivity(), "当前没有用户");
+                    } else {
+                        mPresenter.checkApplyPeerInfo(1 + "", sid + "");
+                    }
+
+
                     break;
                 case R.id.iv_trip_info:
                     CommonUtils.startActivity(getActivity(), TravelInfoActivity.class);
                     break;
                 case R.id.iv_cengtache://带上她的点击事件
                     int userStatus = AppData.getUserStatus();
-                    if(userStatus!=1){
+                    if (userStatus != 1) {
                         CommonUtils.showInfoDialog(getActivity(), "您还没有车主认证？", "提示", "确定", "取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String  url3 = URL_OWNER_AUTH+"?deviceId="+AppData.getAndroidId()+"&os="+"android"+"&uid="+AppData.getUid();
-
-                                WebViewActivity.loadUrl(getActivity(),url3,"");
+                                String url3 = URL_OWNER_AUTH + "?deviceId=" + AppData.getAndroidId() + "&os=" + "android" + "&uid=" + AppData.getUid();
+                                WebViewActivity.loadUrl(getActivity(), url3, "");
                             }
                         }, new DialogInterface.OnClickListener() {
                             @Override
@@ -125,7 +136,11 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                     }
 
                     PERSONSTATUS = 2;
-                    mPresenter.checkApplyPeerInfo(2 + "", sid + "");
+                    if (list.size() == 0) {
+                        ToastUtil.show(getActivity(), "当前没有用户");
+                    } else {
+                        mPresenter.checkApplyPeerInfo(2 + "", sid + "");
+                    }
                     break;
 
             }//跳转到登录界面
@@ -135,14 +150,42 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mCengCheView = inflater.inflate(R.layout.fragment_cengche, container, false);
         ButterKnife.bind(this, mCengCheView);
-        mPresenter.getAllinfo(2 + "", PAGE);
+
+        LoadSir loadSir = new LoadSir.Builder()
+                .addCallback(new NoNetWorkCallback())
+                .addCallback(new EmptyCallback())
+                .addCallback(new LoadingCallback())
+                .setDefaultCallback(LoadingCallback.class)
+                .build();
+        loadService = loadSir.register(mLlCengChe, new Callback.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+                loadService.showCallback(LoadingCallback.class);
+                getAllinfo(TYPE, PAGE);
+            }
+        });
         initView();
+        getAllinfo(TYPE, PAGE);
 
         return mCengCheView;
+    }
+
+    private void getAllinfo(int type, int page) {
+
+        loadService.showCallback(LoadingCallback.class);
+        if (!NetWorkUtil.isNetworkAvailable(getContext()) || !NetWorkUtil.checkNetState(getContext())) {
+            //当前网络不可用，展示此提示页
+            PostUtil.postCallbackDelayed(loadService, NoNetWorkCallback.class);
+        } else {
+            mPresenter.getAllinfo("" + type, page);
+            //不展示提示页
+            PostUtil.postSuccessDelayed(loadService);
+        }
     }
 
     //初始化控件
@@ -200,10 +243,12 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
 
                             if (currentPage == list.size() - 1) {
                                 ++PAGE;
-                                if(ChangeStatus==2){
-                                    mPresenter.getAllinfo(1 + "", PAGE);
-                                }else if(ChangeStatus==1){
-                                    mPresenter.getAllinfo(2 + "", PAGE);
+                                if (ChangeStatus == 2) {
+                                    TYPE = 1;
+                                    getAllinfo(TYPE, PAGE);
+                                } else if (ChangeStatus == 1) {
+                                    TYPE = 2;
+                                    getAllinfo(TYPE, PAGE);
                                 }
                             }
                         }
@@ -222,13 +267,12 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     public void getAllInfoSuccess(AllStrokeBean allStrokeBean) {
         this.allStrokeBean = allStrokeBean;
         list.addAll(allStrokeBean.getData());
+
         Log.i(TAG, list.size() + "===数据多少==");
         if (list.size() == 0) {
-            ToastUtil.show(getActivity(), "没有数据了哟");
-            ll_cenglayout.setVisibility(View.GONE);
-            rlEmpty.setVisibility(View.VISIBLE);
-
+            PostUtil.postCallbackDelayed(loadService, EmptyCallback.class);
         } else {
+            PostUtil.postSuccessDelayed(loadService);
             sid = list.get(0).getId();
             endAddr = list.get(0).getEndAddr();
             postedTime = list.get(0).getDeparTime();
@@ -237,9 +281,6 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
             uid = list.get(0).getUid();
 
             LogUtils.i(TAG, "endAddr:" + endAddr + "==" + startAddr + "startAddr");
-            ll_cenglayout.setVisibility(View.VISIBLE);
-            rlEmpty.setVisibility(View.GONE);
-
         }
         setData();
 
@@ -249,8 +290,6 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     @Override
     public void getAllInfoFail() {
         Log.i(TAG, "fails");
-        rlEmpty.setVisibility(View.VISIBLE);
-        ll_cenglayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -278,7 +317,6 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     }
 
 
-
     //检测是否申请同行成功与否
     @Override
     public void checkApplyPeerSuccess(CheckPeerBean checkPeerBean) {
@@ -291,8 +329,8 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
             intent.putExtra("CARTYPE", 2 + "");//CARTYPE==2 是捎人
             int userStatus = AppData.getUserStatus();
             if (userStatus != 1) {
-                ToastUtil.show(getActivity(),"你还没有车主认证");
-                return ;
+                ToastUtil.show(getActivity(), "你还没有车主认证");
+                return;
             }
         }
 
@@ -354,7 +392,7 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_cengche:
-                ChangeStatus=1;
+                ChangeStatus = 1;
                 ivCengTaChe.setVisibility(View.GONE);
                 ivTakeHer.setVisibility(View.VISIBLE);
                 btnCengche.setTextColor(getResources().getColor(R.color.colorTheme));
@@ -362,11 +400,13 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                 btnShaoren.setTextColor(getResources().getColor(R.color.white));
                 btnShaoren.setBackgroundResource(R.drawable.button_shaoren2);
                 list.clear();
-                mPresenter.getAllinfo(2 + "", PAGE);
+
+                TYPE = 2;
+                getAllinfo(TYPE, PAGE);
                 setData();
                 break;
             case R.id.btn_shaoren:
-                ChangeStatus=2;
+                ChangeStatus = 2;
 
                 ivCengTaChe.setVisibility(View.VISIBLE);
                 ivTakeHer.setVisibility(View.GONE);
@@ -376,7 +416,9 @@ public class CengCheFragment extends MVPBaseFragment<CengCheContract.View, CengC
                 btnCengche.setTextColor(getResources().getColor(R.color.white));
                 btnCengche.setBackgroundResource(R.drawable.button_cengche2);
                 list.clear();
-                mPresenter.getAllinfo(1 + "", PAGE);
+
+                TYPE = 1;
+                getAllinfo(TYPE, PAGE);
                 setData();
 //                mAdapter.notifyDataSetChanged();
                 break;

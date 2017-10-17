@@ -219,6 +219,15 @@ public class AppData {
         return SharedPreferencesUtils.getInt("UNREADCOUNT", 0);
     }
 
+    // 保存角标未读取条数
+    public static void savaBadgeCount(int count) {
+        SharedPreferencesUtils.saveInt("BADGE_COUNT", count);
+    }
+    // 获取角标未读取条数
+    public static int getBadgeCount(){
+        return SharedPreferencesUtils.getInt("BADGE_COUNT", 0);
+    }
+
     /**
      * 保存当前城市
      */

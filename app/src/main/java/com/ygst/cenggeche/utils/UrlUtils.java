@@ -2,6 +2,7 @@ package com.ygst.cenggeche.utils;
 
 public class UrlUtils {
     //BaseUrl本地
+
 //    public static String BASEURl_BENDI = "http://192.168.0.133";
     public static String BASEURl_BENDI = "http://gqj19940824.vicp.io/";
 
@@ -58,6 +59,8 @@ public class UrlUtils {
     public static String GET_USER_INFO = "user/getUserInfo.do";
     //获取好友信息接口
     public static String GET_FRIEND_INFO = "user/getFriendsInfo.do";
+    //获取用户信息接口（包括行程信息）
+    public static String GET_STROKE_AND_USERINFO = "stroke/getStrokeAndUserByUserName.do";
     //重置密码接口
     public static String RESET_PASS = "user/resetPass.do";
     //申请好友
